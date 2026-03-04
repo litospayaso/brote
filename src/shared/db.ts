@@ -26,6 +26,7 @@ export interface UserStatus {
   sleepHours: number;
   energyLevel: number;
   hungerLevel: number;
+  thoughts?: string;
 }
 
 export interface Meal {
@@ -191,7 +192,8 @@ export class DBService {
             steps: 0,
             sleepHours: 0,
             energyLevel: 0,
-            hungerLevel: 0
+            hungerLevel: 0,
+            thoughts: ''
           });
         }
       };

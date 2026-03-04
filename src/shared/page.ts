@@ -187,7 +187,7 @@ export default class Page<api = {}> extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 2000;
       backdrop-filter: blur(2px);
     }
     .modal {
@@ -201,6 +201,8 @@ export default class Page<api = {}> extends LitElement {
       text-align: center;
       border: 1px solid var(--card-border);
       position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .modal-header {
       display: flex;

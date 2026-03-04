@@ -26158,7 +26158,20 @@
       cameraError: "Acceso a la c\xE1mara denegado o error al iniciar el esc\xE1ner. Por favor, comprueba los permisos.",
       retry: "Reintentar",
       goBack: "Volver",
-      unknownProduct: "Producto desconocido"
+      unknownProduct: "Producto desconocido",
+      dailyStatus: "Estado diario",
+      basalCalories: "Calor\xEDas basales",
+      exerciseCalories: "Calor\xEDas ejercicio",
+      stepsTaken: "Pasos dados",
+      sleepHours: "Horas de sue\xF1o",
+      energyLevel: "Nivel de energ\xEDa",
+      hungerLevel: "Nivel de saciedad",
+      thoughtsPlaceholder: "escribe aqu\xED tus pensamientos...",
+      save: "Guardar",
+      kcal: "kcal",
+      stepsSuffix: "pasos",
+      hoursSuffix: "h",
+      dailyBasalCalories: "Calor\xEDas basales diarias por defecto"
     },
     en: {
       search: "Search",
@@ -26289,7 +26302,20 @@
       cameraError: "Camera access denied or error starting scanner. Please check permissions.",
       retry: "Retry",
       goBack: "Go Back",
-      unknownProduct: "Unknown Product"
+      unknownProduct: "Unknown Product",
+      dailyStatus: "Daily Status",
+      basalCalories: "Basal Calories",
+      exerciseCalories: "Exercise Calories",
+      stepsTaken: "Steps taken",
+      sleepHours: "Sleep hours",
+      energyLevel: "Energy level",
+      hungerLevel: "Satiety level",
+      thoughtsPlaceholder: "write here your thoughts...",
+      save: "Save",
+      kcal: "kcal",
+      stepsSuffix: "steps",
+      hoursSuffix: "h",
+      dailyBasalCalories: "Default daily basal calories"
     },
     fr: {
       search: "Rechercher",
@@ -26415,7 +26441,20 @@
       cameraError: "Acc\xE8s \xE0 la cam\xE9ra refus\xE9 ou erreur lors du d\xE9marrage du scanner. Veuillez v\xE9rifier les permissions.",
       retry: "R\xE9essayer",
       goBack: "Retour",
-      unknownProduct: "Produit inconnu"
+      unknownProduct: "Produit inconnu",
+      dailyStatus: "Statut quotidien",
+      basalCalories: "Calories basales",
+      exerciseCalories: "Calories d'exercice",
+      stepsTaken: "Pas fait",
+      sleepHours: "Heures de sommeil",
+      energyLevel: "Niveau d'\xE9nergie",
+      hungerLevel: "Niveau de sati\xE9t\xE9",
+      thoughtsPlaceholder: "\xE9crivez ici vos pens\xE9es...",
+      save: "Enregistrer",
+      kcal: "kcal",
+      stepsSuffix: "pas",
+      hoursSuffix: "h",
+      dailyBasalCalories: "Calories basales quotidiennes par d\xE9faut"
     },
     de: {
       search: "Suche",
@@ -26541,7 +26580,20 @@
       cameraError: "Kamerazugriff verweigert oder Fehler beim Starten des Scanners. Bitte \xFCberpr\xFCfen Sie die Berechtigungen.",
       retry: "Wiederholen",
       goBack: "Zur\xFCck",
-      unknownProduct: "Unbekanntes Produkt"
+      unknownProduct: "Unbekanntes Produkt",
+      dailyStatus: "T\xE4glicher Status",
+      basalCalories: "Grundumsatz",
+      exerciseCalories: "Aktivit\xE4tskalorien",
+      stepsTaken: "Gegangene Schritte",
+      sleepHours: "Schlafstunden",
+      energyLevel: "Energielevel",
+      hungerLevel: "S\xE4ttigungsgrad",
+      thoughtsPlaceholder: "schreibe hier deine gedanken...",
+      save: "Speichern",
+      kcal: "kcal",
+      stepsSuffix: "Schritte",
+      hoursSuffix: "Std.",
+      dailyBasalCalories: "Standard-Grundumsatz"
     },
     it: {
       search: "Cerca",
@@ -26667,7 +26719,20 @@
       cameraError: "Accesso alla fotocamera negato o errore durante l'avvio dello scanner. Controlla i permessi.",
       retry: "Riprova",
       goBack: "Indietro",
-      unknownProduct: "Prodotto sconosciuto"
+      unknownProduct: "Prodotto sconosciuto",
+      dailyStatus: "Stato giornaliero",
+      basalCalories: "Calorie basali",
+      exerciseCalories: "Calorie esercizio",
+      stepsTaken: "Passi fatti",
+      sleepHours: "Ore di sonno",
+      energyLevel: "Livello di energia",
+      hungerLevel: "Livello di saziet\xE0",
+      thoughtsPlaceholder: "scrivi qui i tuoi pensieri...",
+      save: "Salva",
+      kcal: "kcal",
+      stepsSuffix: "passi",
+      hoursSuffix: "h",
+      dailyBasalCalories: "Calorie basali giornaliere predefinite"
     }
   };
 
@@ -26811,7 +26876,8 @@
               steps: 0,
               sleepHours: 0,
               energyLevel: 0,
-              hungerLevel: 0
+              hungerLevel: 0,
+              thoughts: ""
             });
           }
         };
@@ -27533,7 +27599,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 2000;
       backdrop-filter: blur(2px);
     }
     .modal {
@@ -27547,6 +27613,8 @@
       text-align: center;
       border: 1px solid var(--card-border);
       position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .modal-header {
       display: flex;
@@ -35114,6 +35182,8 @@ ${countMsg}`,
         .sleepHours=${this.userStatus?.sleepHours || 0}
         .energyLevel=${this.userStatus?.energyLevel || 0}
         .hungerLevel=${this.userStatus?.hungerLevel || 0}
+        .thoughts=${this.userStatus?.thoughts || ""}
+        .translations=${JSON.stringify(this.translations)}
         @status-changed="${this._handleStatusChanged}"
       ></component-user-status>
 
@@ -35171,7 +35241,7 @@ ${countMsg}`,
       }
     }
     async _handleStatusChanged(e6) {
-      const { exerciseCalories, basalCalories, steps, sleepHours, energyLevel, hungerLevel } = e6.detail;
+      const { exerciseCalories, basalCalories, steps, sleepHours, energyLevel, hungerLevel, thoughts } = e6.detail;
       this.userStatus = {
         date: this.currentDate,
         exerciseCalories,
@@ -35179,7 +35249,8 @@ ${countMsg}`,
         steps,
         sleepHours,
         energyLevel,
-        hungerLevel
+        hungerLevel,
+        thoughts
       };
       try {
         await this.db.saveUserStatus(this.userStatus);
@@ -35469,6 +35540,7 @@ ${countMsg}`,
       this.sleepHours = 0;
       this.energyLevel = 0;
       this.hungerLevel = 0;
+      this.thoughts = "";
       this.showModal = false;
       this._exerciseCalories = 0;
       this._basalCalories = 0;
@@ -35476,6 +35548,11 @@ ${countMsg}`,
       this._sleepHours = 0;
       this._energyLevel = 0;
       this._hungerLevel = 0;
+      this._thoughts = "";
+      this.translationsTexts = {};
+    }
+    set translations(translations2) {
+      this.translationsTexts = JSON.parse(translations2);
     }
     static {
       this.styles = [
@@ -35499,8 +35576,9 @@ ${countMsg}`,
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       height: 35px;
       box-sizing: border-box;
-      overflow: hidden;
+      overflow: visible;
       cursor: pointer;
+      position: relative;
     }
 
     .status-item {
@@ -35524,6 +35602,19 @@ ${countMsg}`,
       display: none;
     }
 
+    .thoughts-icon {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      font-size: 1.2rem;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+      z-index: 1;
+    }
     .modal-content {
       display: flex;
       flex-direction: column;
@@ -35555,6 +35646,19 @@ ${countMsg}`,
     .slider-container {
       margin-top: 8px;
     }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 8px;
+      border: 1px solid var(--card-border, #4fb9ad);
+      border-radius: 4px;
+      background: var(--input-background, #fff);
+      color: var(--text-color);
+      font-family: inherit;
+      resize: vertical;
+      box-sizing: border-box;
+    }
   `
       ];
     }
@@ -35565,6 +35669,7 @@ ${countMsg}`,
       this._sleepHours = this.sleepHours;
       this._energyLevel = this.energyLevel;
       this._hungerLevel = this.hungerLevel;
+      this._thoughts = this.thoughts;
       this.showModal = true;
     }
     closeModal() {
@@ -35577,6 +35682,7 @@ ${countMsg}`,
       this.sleepHours = this._sleepHours;
       this.energyLevel = this._energyLevel;
       this.hungerLevel = this._hungerLevel;
+      this.thoughts = this._thoughts;
       this.dispatchEvent(new CustomEvent("status-changed", {
         detail: {
           exerciseCalories: this.exerciseCalories,
@@ -35584,7 +35690,8 @@ ${countMsg}`,
           steps: this.steps,
           sleepHours: this.sleepHours,
           energyLevel: this.energyLevel,
-          hungerLevel: this.hungerLevel
+          hungerLevel: this.hungerLevel,
+          thoughts: this.thoughts
         },
         bubbles: true,
         composed: true
@@ -35593,7 +35700,11 @@ ${countMsg}`,
     }
     handleInputChange(e6, key) {
       const target = e6.target;
-      this[`_${key}`] = Number(target.value);
+      if (key === "thoughts") {
+        this._thoughts = target.value;
+      } else {
+        this[`_${key}`] = Number(target.value);
+      }
     }
     formatTime(val) {
       const hours = Math.floor(val);
@@ -35603,27 +35714,28 @@ ${countMsg}`,
     render() {
       return b2`
       <div class="status-card" @click="${this.openModal}">
-        <div class="status-item" title="Basal Calories">
+        ${this.thoughts ? b2`<div class="thoughts-icon" title="${this.thoughts}">📝</div>` : ""}
+        <div class="status-item" title="${this.translationsTexts["basalCalories"]}">
           <span class="emoji">🔥</span>
-          ${this.basalCalories > 0 ? b2`<span class="value">${this.basalCalories} kcal</span>` : ""}
+          ${this.basalCalories > 0 ? b2`<span class="value">${this.basalCalories} ${this.translationsTexts["kcal"]}</span>` : ""}
         </div>
-        <div class="status-item" title="Exercise Calories">
+        <div class="status-item" title="${this.translationsTexts["exerciseCalories"]}">
           <span class="emoji">💪</span>
-          ${this.exerciseCalories > 0 ? b2`<span class="value">${this.exerciseCalories} kcal</span>` : ""}
+          ${this.exerciseCalories > 0 ? b2`<span class="value">${this.exerciseCalories} ${this.translationsTexts["kcal"]}</span>` : ""}
         </div>
-        <div class="status-item" title="Steps">
+        <div class="status-item" title="${this.translationsTexts["stepsTaken"]}">
           <span class="emoji">👣</span>
-          ${this.steps > 0 ? b2`<span class="value">${this.steps} steps</span>` : ""}
+          ${this.steps > 0 ? b2`<span class="value">${this.steps} ${this.translationsTexts["stepsSuffix"]}</span>` : ""}
         </div>
-        <div class="status-item" title="Sleep">
+        <div class="status-item" title="${this.translationsTexts["sleepHours"]}">
           <span class="emoji">😴</span>
-          ${this.sleepHours > 0 ? b2`<span class="value">${this.formatTime(this.sleepHours)} h</span>` : ""}
+          ${this.sleepHours > 0 ? b2`<span class="value">${this.formatTime(this.sleepHours)} ${this.translationsTexts["hoursSuffix"]}</span>` : ""}
         </div>
-        <div class="status-item" title="Energy Level">
+        <div class="status-item" title="${this.translationsTexts["energyLevel"]}">
           <span class="emoji">⚡</span>
           ${this.energyLevel > 0 ? b2`<span class="value">${this.energyLevel}/5</span>` : ""}
         </div>
-        <div class="status-item" title="Hunger Level">
+        <div class="status-item" title="${this.translationsTexts["hungerLevel"]}">
           <span class="emoji">🍕</span>
           ${this.hungerLevel > 0 ? b2`<span class="value">${this.hungerLevel}/5</span>` : ""}
         </div>
@@ -35633,29 +35745,29 @@ ${countMsg}`,
         <div class="modal-overlay" @click="${this.closeModal}">
           <div class="modal" @click="${(e6) => e6.stopPropagation()}">
             <div class="modal-header">
-              <h3>Daily Status</h3>
+              <h3>${this.translationsTexts["dailyStatus"]}</h3>
               <button class="close-btn" @click="${this.closeModal}">&times;</button>
             </div>
             
             <div class="modal-content">
               <div class="form-row">
                 <div class="form-group">
-                  <label>🔥 Basal kcal (${this._basalCalories})</label>
+                  <label>🔥 ${this.translationsTexts["basalCalories"]} (${this._basalCalories})</label>
                   <input type="number" .value="${String(this._basalCalories)}" @input="${(e6) => this.handleInputChange(e6, "basalCalories")}" />
                 </div>
                 <div class="form-group">
-                  <label>💪 Exercise kcal (${this._exerciseCalories})</label>
+                  <label>💪 ${this.translationsTexts["exerciseCalories"]} (${this._exerciseCalories})</label>
                   <input type="number" .value="${String(this._exerciseCalories)}" @input="${(e6) => this.handleInputChange(e6, "exerciseCalories")}" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label>👣 Steps taken (${this._steps})</label>
+                <label>👣 ${this.translationsTexts["stepsTaken"]} (${this._steps})</label>
                 <input type="number" .value="${String(this._steps)}" @input="${(e6) => this.handleInputChange(e6, "steps")}" />
               </div>
 
               <div class="form-group">
-                <label>😴 Sleep hours (${this.formatTime(this._sleepHours)})</label>
+                <label>😴 ${this.translationsTexts["sleepHours"]} (${this.formatTime(this._sleepHours)})</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -35665,14 +35777,14 @@ ${countMsg}`,
                     .steps="${0.25}"
                     .value="${this._sleepHours}"
                     @value-changed="${(e6) => this._sleepHours = e6.detail.value}"
-                    minTag="0h"
-                    maxTag="12h"
+                    minTag="0${this.translationsTexts["hoursSuffix"]}"
+                    maxTag="12${this.translationsTexts["hoursSuffix"]}"
                   ></component-slider>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>⚡ Energy level (${this._energyLevel}/5)</label>
+                <label>⚡ ${this.translationsTexts["energyLevel"]} (${this._energyLevel}/5)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -35688,7 +35800,7 @@ ${countMsg}`,
               </div>
 
               <div class="form-group">
-                <label>🍕 Hunger level (${this._hungerLevel}/5)</label>
+                <label>🍕 ${this.translationsTexts["hungerLevel"]} (${this._hungerLevel}/5)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -35703,8 +35815,16 @@ ${countMsg}`,
                 </div>
               </div>
 
+              <div class="form-group">
+                <textarea
+                  placeholder="${this.translationsTexts["thoughtsPlaceholder"]}"
+                  .value="${this._thoughts}"
+                  @input="${(e6) => this.handleInputChange(e6, "thoughts")}"
+                ></textarea>
+              </div>
+
               <div class="modal-buttons">
-                <button class="btn" @click="${this.saveChanges}">Save</button>
+                <button class="btn" @click="${this.saveChanges}">${this.translationsTexts["save"]}</button>
               </div>
             </div>
           </div>
@@ -35732,6 +35852,12 @@ ${countMsg}`,
     n4({ type: Number })
   ], ComponentUserStatus.prototype, "hungerLevel", 2);
   __decorateClass([
+    n4({ type: String })
+  ], ComponentUserStatus.prototype, "thoughts", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentUserStatus.prototype, "translations", 1);
+  __decorateClass([
     r5()
   ], ComponentUserStatus.prototype, "showModal", 2);
   __decorateClass([
@@ -35752,6 +35878,12 @@ ${countMsg}`,
   __decorateClass([
     r5()
   ], ComponentUserStatus.prototype, "_hungerLevel", 2);
+  __decorateClass([
+    r5()
+  ], ComponentUserStatus.prototype, "_thoughts", 2);
+  __decorateClass([
+    r5()
+  ], ComponentUserStatus.prototype, "translationsTexts", 2);
 
   // src/components/componentSlider/componentSlider.ts
   var ComponentSlider = class extends i4 {

@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.10
+
+### Patch Changes
+
+- updating app with new component user status
+
 ## 1.0.9
 
 ### Patch Changes

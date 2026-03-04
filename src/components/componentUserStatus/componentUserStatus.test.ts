@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { createComponent } from '../../shared/test-helper';
-import { ComponentUserStatus } from './componentUserStatus';
+import ComponentUserStatus from './componentUserStatus';
 import './index';
 
 describe('ComponentUserStatus Spec:', () => {
@@ -100,6 +100,40 @@ describe('ComponentUserStatus Spec:', () => {
   it('should render all five activity items', async () => {
     const shadow = element.shadowRoot;
     const items = shadow?.querySelectorAll('.status-item');
-    expect(items?.length).to.equal(5);
+    expect(items?.length).to.equal(6);
+  });
+
+  it('should show 📝 icon when thoughts are present', async () => {
+    const el = element as ComponentUserStatus;
+    el.thoughts = 'Taking a break today';
+    await el.updateComplete;
+
+    const icon = element.shadowRoot?.querySelector('.thoughts-icon');
+    expect(icon).to.exist;
+    expect(icon?.getAttribute('title')).to.equal('Taking a break today');
+  });
+
+  it('should update thoughts via modal', async () => {
+    const el = element as ComponentUserStatus;
+
+    // Open modal
+    (element.shadowRoot?.querySelector('.status-card') as HTMLElement).click();
+    await el.updateComplete;
+
+    const textarea = element.shadowRoot?.querySelector('textarea') as HTMLTextAreaElement;
+    expect(textarea).to.exist;
+
+    textarea.value = 'New thoughts';
+    textarea.dispatchEvent(new Event('input'));
+
+    const promise = new Promise<CustomEvent>((resolve) => {
+      element.addEventListener('status-changed', (e) => resolve(e as CustomEvent), { once: true });
+    });
+
+    (element.shadowRoot?.querySelector('.modal-buttons .btn') as HTMLElement).click();
+
+    const event = await promise;
+    expect(event.detail.thoughts).to.equal('New thoughts');
+    expect(el.thoughts).to.equal('New thoughts');
   });
 });

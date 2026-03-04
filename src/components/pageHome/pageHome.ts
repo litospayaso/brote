@@ -283,6 +283,8 @@ export default class PageHome extends Page {
         .sleepHours=${this.userStatus?.sleepHours || 0}
         .energyLevel=${this.userStatus?.energyLevel || 0}
         .hungerLevel=${this.userStatus?.hungerLevel || 0}
+        .thoughts=${this.userStatus?.thoughts || ''}
+        .translations=${JSON.stringify(this.translations)}
         @status-changed="${this._handleStatusChanged}"
       ></component-user-status>
 
@@ -343,7 +345,7 @@ export default class PageHome extends Page {
   }
 
   async _handleStatusChanged(e: CustomEvent) {
-    const { exerciseCalories, basalCalories, steps, sleepHours, energyLevel, hungerLevel } = e.detail;
+    const { exerciseCalories, basalCalories, steps, sleepHours, energyLevel, hungerLevel, thoughts } = e.detail;
 
     this.userStatus = {
       date: this.currentDate,
@@ -352,7 +354,8 @@ export default class PageHome extends Page {
       steps,
       sleepHours,
       energyLevel,
-      hungerLevel
+      hungerLevel,
+      thoughts
     };
 
     try {

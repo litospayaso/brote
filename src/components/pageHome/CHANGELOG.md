@@ -1,5 +1,11 @@
 # home-page
 
+## 0.0.10
+
+### Patch Changes
+
+- updating app with new component user status
+
 ## 0.0.9
 
 ### Patch Changes
