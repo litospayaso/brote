@@ -1,10 +1,15 @@
 import { html, css } from 'lit';
 import Page from '../../shared/page';
 import { state } from 'lit/decorators.js';
+import { Capacitor } from '@capacitor/core';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { loadCss, variableStyles } from '../../shared/functions';
+import type { UserProfile } from '../../shared/db';
 import type { GroupButtonOption } from '../componentGroupButton/componentGroupButton';
 
 export default class PageOpenCal extends Page {
+  private _notificationTimeout: any = null;
+
   static styles = [
     Page.styles,
     css`
@@ -65,6 +70,94 @@ export default class PageOpenCal extends Page {
     PageOpenCal.styles.forEach((style, i) => {
       loadCss(String(style), `page-open-cal-styles-${i}`);
     });
+
+    this._setupNotifications();
+
+    window.addEventListener('notification-settings-changed', () => {
+      this._setupNotifications();
+    });
+
+    LocalNotifications.addListener('localNotificationActionPerformed', (notification) => {
+      console.log('Notification action performed', notification);
+      this.navigateToPage({ page: 'home', openStatus: 'true' }, false);
+    });
+  }
+
+  private async _setupNotifications() {
+    try {
+      if (this._notificationTimeout) {
+        clearTimeout(this._notificationTimeout);
+        this._notificationTimeout = null;
+      }
+
+      const savedProfile = localStorage.getItem('user_profile');
+      if (!savedProfile) return;
+
+      const profile: UserProfile = JSON.parse(savedProfile);
+      const notificationsEnabled = !!profile.notificationsEnabled;
+      const notificationTime = profile.notificationTime || '20:00';
+
+      const platform = Capacitor.getPlatform();
+
+      const permission = await LocalNotifications.requestPermissions();
+      if (permission.display !== 'granted' && notificationsEnabled) {
+        return;
+      }
+
+      await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+
+      if (notificationsEnabled) {
+        const [hour, minute] = notificationTime.split(':').map(Number);
+
+        if (platform === 'web') {
+          const now = new Date();
+          const scheduledTime = new Date();
+          scheduledTime.setHours(hour, minute, 0, 0);
+
+          if (scheduledTime <= now) {
+            scheduledTime.setDate(scheduledTime.getDate() + 1);
+          }
+
+          const delay = scheduledTime.getTime() - now.getTime();
+          this._notificationTimeout = setTimeout(() => this._triggerBrowserNotification(), delay);
+        } else {
+          await LocalNotifications.schedule({
+            notifications: [
+              {
+                title: this.translations.dailyStatusReminder || 'Daily Status Reminder',
+                body: this.translations.fillYourStatusMsg || 'Remember to fill your daily status!',
+                id: 1,
+                schedule: {
+                  on: { hour, minute },
+                  repeats: true,
+                  allowWhileIdle: true
+                }
+              }
+            ]
+          });
+        }
+      }
+    } catch (e) {
+      console.error('LocalNotifications error in PageOpenCal', e);
+    }
+  }
+
+  private async _triggerBrowserNotification() {
+    try {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: this.translations.dailyStatusReminder || 'Daily Status Reminder',
+            body: this.translations.fillYourStatusMsg || 'Remember to fill your daily status!',
+            id: 1
+          }
+        ]
+      });
+      // Reschedule for tomorrow
+      this._setupNotifications();
+    } catch (e) {
+      console.error('Error triggering browser notification', e);
+    }
   }
 
   pageRender() {

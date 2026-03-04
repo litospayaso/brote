@@ -1,5 +1,11 @@
 # page-opencal
 
+## 0.0.6
+
+### Patch Changes
+
+- adding periodical notification reminder to fill daily user status data
+
 ## 0.0.5
 
 ### Patch Changes

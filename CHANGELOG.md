@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.12
+
+### Patch Changes
+
+- adding periodical notification reminder to fill daily user status data
+
 ## 1.0.11
 
 ### Patch Changes

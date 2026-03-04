@@ -36,6 +36,23 @@ export interface Meal {
   foods: FoodEntry[];
 }
 
+export interface UserProfile {
+  height: number;
+  weight: number;
+  gender: 'male' | 'female' | 'non-binary';
+  goals: {
+    calories: number;
+    defaultBasalCalories?: number;
+    macros: {
+      protein: number;
+      carbs: number;
+      fat: number;
+    }
+  },
+  notificationsEnabled?: boolean;
+  notificationTime?: string;
+}
+
 const DB_NAME = 'OpenCalDB';
 const DB_VERSION = 5;
 const STORE_NAME = 'daily_consumption';

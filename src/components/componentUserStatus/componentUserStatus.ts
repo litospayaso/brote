@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { type PropertyValues, LitElement, html, css } from 'lit';
 import Page from '../../shared/page';
 
 export default class ComponentUserStatus extends LitElement {
@@ -10,6 +10,7 @@ export default class ComponentUserStatus extends LitElement {
   @property({ type: Number }) energyLevel = 0;
   @property({ type: Number }) hungerLevel = 0;
   @property({ type: String }) thoughts = '';
+  @property({ type: Boolean }) open = false;
   @property({ type: String }) set translations(translations: string) {
     this.translationsTexts = JSON.parse(translations);
   };
@@ -129,6 +130,12 @@ export default class ComponentUserStatus extends LitElement {
       box-sizing: border-box;
     }
   `];
+
+  updated(changedProperties: PropertyValues) {
+    if (changedProperties.has('open') && this.open) {
+      this.openModal();
+    }
+  }
 
   private openModal() {
     this._exerciseCalories = this.exerciseCalories;

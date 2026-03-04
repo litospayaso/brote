@@ -147,11 +147,21 @@ export default class PageHome extends Page {
     defaultBasalCalories: 0,
     macros: { protein: 30, carbs: 40, fat: 30 }
   };
+  @state() openStatusModal: boolean = false;
 
   protected async firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): Promise<void> {
     super.firstUpdated(_changedProperties);
     this.loadUserProfile();
     await this.loadData();
+  }
+
+  onPageInit(): void {
+    const params = this.getQueryParamsURL();
+    if (params.get('openStatus') === 'true') {
+      setTimeout(() => {
+        this.openStatusModal = true;
+      }, 100);
+    }
   }
 
   loadUserProfile() {
@@ -285,6 +295,7 @@ export default class PageHome extends Page {
         .hungerLevel=${this.userStatus?.hungerLevel || 0}
         .thoughts=${this.userStatus?.thoughts || ''}
         .translations=${JSON.stringify(this.translations)}
+        .open=${this.openStatusModal}
         @status-changed="${this._handleStatusChanged}"
       ></component-user-status>
 

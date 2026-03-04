@@ -1,7 +1,7 @@
 {
   "name": "brote",
   "private": true,
-  "version": "1.0.11",
+  "version": "1.0.12",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -26,6 +26,7 @@
     "@capacitor/android": "^8.1.0",
     "@capacitor/cli": "^8.1.0",
     "@capacitor/core": "^8.1.0",
+    "@capacitor/local-notifications": "^8.0.1",
     "html5-qrcode": "^2.3.8",
     "lit": "^3.3.1"
   },

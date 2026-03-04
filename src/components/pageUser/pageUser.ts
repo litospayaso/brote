@@ -1,22 +1,8 @@
 import { html, css, type PropertyValues } from 'lit';
 import { state } from 'lit/decorators.js';
 import Page from '../../shared/page';
-import type { MealCategory } from '../../shared/db';
+import type { MealCategory, UserProfile } from '../../shared/db';
 
-interface UserProfile {
-  height: number;
-  weight: number;
-  gender: 'male' | 'female' | 'non-binary';
-  goals: {
-    calories: number;
-    defaultBasalCalories?: number;
-    macros: {
-      protein: number;
-      carbs: number;
-      fat: number;
-    }
-  }
-}
 
 export default class PageUser extends Page {
   static styles = [
@@ -171,6 +157,9 @@ export default class PageUser extends Page {
   @state() fatRatio: number = 30;
   @state() defaultBasalCalories: number = 0;
 
+  @state() notificationsEnabled: boolean = false;
+  @state() notificationTime: string = '20:00';
+
   @state() theme: 'light' | 'dark' = 'light';
   @state() language: string = 'en';
   @state() showClearModal: boolean = false;
@@ -203,6 +192,8 @@ export default class PageUser extends Page {
         this.carbsRatio = profile.goals?.macros?.carbs || 40;
         this.fatRatio = profile.goals?.macros?.fat || 30;
         this.defaultBasalCalories = profile.goals?.defaultBasalCalories || 0;
+        this.notificationsEnabled = !!profile.notificationsEnabled;
+        this.notificationTime = profile.notificationTime || '20:00';
       } catch (e) {
         console.error('Failed to parse user profile', e);
       }
@@ -245,7 +236,9 @@ export default class PageUser extends Page {
           carbs: this.carbsRatio,
           fat: this.fatRatio
         }
-      }
+      },
+      notificationsEnabled: this.notificationsEnabled,
+      notificationTime: this.notificationTime
     };
     localStorage.setItem('user_profile', JSON.stringify(profile));
   }
@@ -276,6 +269,19 @@ export default class PageUser extends Page {
     this.language = (e.target as HTMLSelectElement).value;
     this.setLanguage(this.language);
   }
+
+  private async _handleNotificationToggle() {
+    this.notificationsEnabled = !this.notificationsEnabled;
+    this._saveProfile();
+    window.dispatchEvent(new CustomEvent('notification-settings-changed'));
+  }
+
+  private async _handleNotificationTimeChange(e: Event) {
+    this.notificationTime = (e.target as HTMLInputElement).value;
+    this._saveProfile();
+    window.dispatchEvent(new CustomEvent('notification-settings-changed'));
+  }
+
 
   private async _clearAllData() {
     try {
@@ -606,6 +612,29 @@ export default class PageUser extends Page {
             <option value="de" ?selected="${this.language === 'de'}">Deutsch</option>
             <option value="it" ?selected="${this.language === 'it'}">Italiano</option>
           </select>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
+          <div style="flex: 1;">
+            <label style="margin-bottom: 2px;">${this.translations.dailyStatusReminder}</label>
+            <span style="font-size: 0.8rem; opacity: 0.8;">${this.translations.reminderTime}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <input 
+              type="time" 
+              .value="${this.notificationTime}" 
+              ?disabled="${!this.notificationsEnabled}"
+              @input="${this._handleNotificationTimeChange}"
+              style="width: 100px; padding: 4px 8px; font-size: 0.9rem;"
+            />
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                ?checked="${this.notificationsEnabled}" 
+                @change="${this._handleNotificationToggle}"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
       </div>
 
