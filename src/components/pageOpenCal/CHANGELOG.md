@@ -1,5 +1,11 @@
 # page-opencal
 
+## 0.0.7
+
+### Patch Changes
+
+- adding releases of apk in release folder
+
 ## 0.0.6
 
 ### Patch Changes

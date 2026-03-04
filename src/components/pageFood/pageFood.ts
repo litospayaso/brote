@@ -422,7 +422,7 @@ export default class PageFood extends Page<{ getProduct: typeof getProduct }> {
             proteins: this.product.product?.nutriments?.proteins_100g || 0,
           } as any,
           product_name: (this.product.product as any).product_name,
-          nutrition_data: 'per_100g', // assumption
+          nutrition_data: 'per_100g',
           nutrition_data_per: '100g',
           nutrition_data_prepared_per: '100g',
           brands: (this.product.product as any).brands

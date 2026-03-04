@@ -153,7 +153,6 @@ export default class PageOpenCal extends Page {
           }
         ]
       });
-      // Reschedule for tomorrow
       this._setupNotifications();
     } catch (e) {
       console.error('Error triggering browser notification', e);

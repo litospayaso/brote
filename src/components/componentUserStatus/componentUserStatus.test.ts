@@ -25,11 +25,11 @@ describe('ComponentUserStatus Spec:', () => {
     const shadow = element.shadowRoot;
     const values = Array.from(shadow?.querySelectorAll('.value') || []);
 
-    expect(values[0].textContent?.trim()).to.equal('0'); // exercise
-    expect(values[1].textContent?.trim()).to.equal('0'); // basal
-    expect(values[2].textContent?.trim()).to.equal('0'); // steps
-    expect(values[3].textContent?.trim()).to.equal('0'); // sleep
-    expect(values[4].textContent?.trim()).to.equal('0/5'); // energy
+    expect(values[0].textContent?.trim()).to.equal('0');
+    expect(values[1].textContent?.trim()).to.equal('0');
+    expect(values[2].textContent?.trim()).to.equal('0');
+    expect(values[3].textContent?.trim()).to.equal('0');
+    expect(values[4].textContent?.trim()).to.equal('0/5');
   });
 
   it('should update and render provided properties', async () => {
@@ -69,11 +69,9 @@ describe('ComponentUserStatus Spec:', () => {
     el.sleepHours = 8;
     el.energyLevel = 5;
 
-    // Open modal
     (element.shadowRoot?.querySelector('.status-card') as HTMLElement).click();
     await el.updateComplete;
 
-    // Simulate internal state changes (usually via inputs, but here directly for brevity)
     (el as any)._exerciseCalories = 200;
 
     const promise = new Promise<CustomEvent>((resolve) => {
@@ -116,7 +114,6 @@ describe('ComponentUserStatus Spec:', () => {
   it('should update thoughts via modal', async () => {
     const el = element as ComponentUserStatus;
 
-    // Open modal
     (element.shadowRoot?.querySelector('.status-card') as HTMLElement).click();
     await el.updateComplete;
 

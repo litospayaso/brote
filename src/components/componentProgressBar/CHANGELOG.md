@@ -1,5 +1,11 @@
 # component-progress-bar
 
+## 0.0.5
+
+### Patch Changes
+
+- adding releases of apk in release folder
+
 ## 0.0.4
 
 ### Patch Changes

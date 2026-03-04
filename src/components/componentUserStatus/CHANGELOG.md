@@ -1,5 +1,11 @@
 # component-user-status
 
+## 0.0.3
+
+### Patch Changes
+
+- adding releases of apk in release folder
+
 ## 0.0.2
 
 ### Patch Changes

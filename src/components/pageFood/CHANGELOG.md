@@ -1,5 +1,11 @@
 # page-food
 
+## 0.0.6
+
+### Patch Changes
+
+- adding releases of apk in release folder
+
 ## 0.0.5
 
 ### Patch Changes

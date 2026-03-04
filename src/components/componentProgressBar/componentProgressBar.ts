@@ -146,7 +146,6 @@ export class ComponentProgressBar extends LitElement {
       currentCarbsPercent = (carbsCalories / macroTotal) * 100;
       currentProteinPercent = (proteinCalories / macroTotal) * 100;
 
-      // If no calories are eaten, set all to 0 instead of 0/1/0 etc.
       if ((fatCalories + carbsCalories + proteinCalories) === 0) {
         currentFatPercent = 0;
         currentCarbsPercent = 0;

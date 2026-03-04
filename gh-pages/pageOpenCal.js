@@ -34208,7 +34208,6 @@
             },
             product_name: this.product.product.product_name,
             nutrition_data: "per_100g",
-            // assumption
             nutrition_data_per: "100g",
             nutrition_data_prepared_per: "100g",
             brands: this.product.product.brands
