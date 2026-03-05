@@ -28681,10 +28681,10 @@
 
   // node_modules/@capacitor/status-bar/dist/esm/definitions.js
   var Style;
-  (function(Style2) {
-    Style2["Dark"] = "DARK";
-    Style2["Light"] = "LIGHT";
-    Style2["Default"] = "DEFAULT";
+  (function(Style3) {
+    Style3["Dark"] = "DARK";
+    Style3["Light"] = "LIGHT";
+    Style3["Default"] = "DEFAULT";
   })(Style || (Style = {}));
   var Animation;
   (function(Animation2) {
@@ -28700,7 +28700,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.15",
+    version: "1.0.17",
     type: "module",
     scripts: {
       dev: "vite",
@@ -28718,7 +28718,7 @@
       "cap:open:android": "npx cap open android",
       "cap:copy:android": "npx cap copy android",
       "cap:add:android": "npx cap add android",
-      "build:apk": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && .\\gradlew assembleDebug",
+      "build:apk": "node scripts/apk_release.js",
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
       deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
@@ -28850,6 +28850,7 @@
     async _setupStatusBar() {
       try {
         if (Capacitor.isNativePlatform()) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
           await StatusBar.setOverlaysWebView({ overlay: false });
           await this._updateStatusBarColor();
         }
@@ -28863,10 +28864,8 @@
           const theme = localStorage.getItem("theme") || "light";
           if (theme === "dark") {
             await StatusBar.setBackgroundColor({ color: "#a285bb" });
-            await StatusBar.setStyle({ style: Style.Dark });
           } else {
             await StatusBar.setBackgroundColor({ color: "#4fb9ad" });
-            await StatusBar.setStyle({ style: Style.Light });
           }
         }
       } catch (e6) {
@@ -28875,6 +28874,9 @@
     }
     async _setupNotifications() {
       try {
+        if (Capacitor.isNativePlatform()) {
+          await new Promise((resolve) => setTimeout(resolve, 1e3));
+        }
         if (this._notificationTimeout) {
           clearTimeout(this._notificationTimeout);
           this._notificationTimeout = null;
@@ -28919,7 +28921,7 @@
           }
         }
       } catch (e6) {
-        console.error("LocalNotifications error in PageOpenCal", e6);
+        console.error("LocalNotifications error in PageBroteApp", e6);
       }
     }
     async _triggerBrowserNotification() {

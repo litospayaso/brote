@@ -109,10 +109,10 @@ export default class PageBroteApp extends Page {
         const theme = localStorage.getItem('theme') || 'light';
         if (theme === 'dark') {
           await StatusBar.setBackgroundColor({ color: '#a285bb' });
-          await StatusBar.setStyle({ style: Style.Dark });
+          // await StatusBar.setStyle({ style: Style.Dark });
         } else {
           await StatusBar.setBackgroundColor({ color: '#4fb9ad' });
-          await StatusBar.setStyle({ style: Style.Light });
+          // await StatusBar.setStyle({ style: Style.Light });
         }
       }
     } catch (e) {

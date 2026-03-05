@@ -1,5 +1,11 @@
 # brote-app
 
+## 0.0.11
+
+### Patch Changes
+
+- fixing error on setting status bar color
+
 ## 0.0.10
 
 ### Patch Changes

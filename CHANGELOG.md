@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.17
+
+### Patch Changes
+
+- fixing error on setting status bar color
+
 ## 1.0.16
 
 ### Patch Changes
