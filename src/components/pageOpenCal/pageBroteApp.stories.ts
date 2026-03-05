@@ -3,12 +3,12 @@ import type { Meta, StoryObj } from '@storybook/web-components-vite';
 
 
 const render = () => {
-  const element = document.createElement('page-opencal');
+  const element = document.createElement('brote-app');
   return element;
 }
 
 const meta = {
-  title: 'App/PageOpenCal',
+  title: 'App/Brote App',
   tags: ['autodocs'],
   render,
 } satisfies Meta<any>;

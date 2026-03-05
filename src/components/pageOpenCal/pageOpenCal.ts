@@ -3,11 +3,12 @@ import Page from '../../shared/page';
 import { state } from 'lit/decorators.js';
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { StatusBar } from '@capacitor/status-bar';
 import { loadCss, variableStyles } from '../../shared/functions';
 import type { UserProfile } from '../../shared/db';
 import type { GroupButtonOption } from '../componentGroupButton/componentGroupButton';
 
-export default class PageOpenCal extends Page {
+export default class PageBroteApp extends Page {
   private _notificationTimeout: any = null;
 
   static styles = [
@@ -28,7 +29,8 @@ export default class PageOpenCal extends Page {
         width: fit-content;
       }
       .app-container {
-       padding-bottom: 60px; 
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: 60px; 
       }
     `
   ];
@@ -67,11 +69,12 @@ export default class PageOpenCal extends Page {
     this.applyTheme();
     document.head.appendChild(style);
 
-    PageOpenCal.styles.forEach((style, i) => {
-      loadCss(String(style), `page-open-cal-styles-${i}`);
-    });
-
+    this._setupStatusBar();
     this._setupNotifications();
+
+    PageBroteApp.styles.forEach((style, i) => {
+      loadCss(String(style), `page-brote-styles-${i}`);
+    });
 
     window.addEventListener('notification-settings-changed', () => {
       this._setupNotifications();
@@ -81,6 +84,16 @@ export default class PageOpenCal extends Page {
       console.log('Notification action performed', notification);
       this.navigateToPage({ page: 'home', openStatus: 'true' }, false);
     });
+  }
+
+  private async _setupStatusBar() {
+    try {
+      if (Capacitor.isNativePlatform()) {
+        await StatusBar.setOverlaysWebView({ overlay: false });
+      }
+    } catch (e) {
+      console.error('Error configuring StatusBar', e);
+    }
   }
 
   private async _setupNotifications() {
@@ -222,6 +235,6 @@ export default class PageOpenCal extends Page {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'page-opencal': PageOpenCal;
+    'brote-app': PageBroteApp;
   }
 }

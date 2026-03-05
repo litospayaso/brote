@@ -1,6 +1,6 @@
-# PageOpenCal
+# Brote App
 
-The orchestrator page for the OpenCal application.
+The orchestrator page for the Brote application.
 
 ## Description
 This component acts as the main router/controller for the application. It inspects the URL path and renders the appropriate sub-page:
@@ -11,5 +11,5 @@ This component acts as the main router/controller for the application. It inspec
 This component should be used as the main entry point in the application's `index.html`.
 
 ```html
-<page-opencal></page-opencal>
+<brote-app></brote-app>
 ```

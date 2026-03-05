@@ -11,4 +11,4 @@ import '../pageHome/index';
 import '../pageMeal/index';
 
 
-register('page-opencal', PageOpenCal);
+register('brote-app', PageOpenCal);

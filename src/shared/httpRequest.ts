@@ -45,7 +45,7 @@ export const request = async (url: string, http?: HttpRequestInterface): Promise
     method,
     mode: 'cors',
     headers: {
-      'User-Agent': 'Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/open-cal'
+      'User-Agent': 'Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/brote'
     },
     cache: 'no-cache',
     credentials: 'omit',

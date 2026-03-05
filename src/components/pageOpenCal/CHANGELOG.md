@@ -1,4 +1,10 @@
-# page-opencal
+# brote-app
+
+## 0.0.8
+
+### Patch Changes
+
+- Renaming project into brote and adding capacitor/status-bar to the apk build
 
 ## 0.0.7
 
