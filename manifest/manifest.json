@@ -1,31 +1,31 @@
 {
   "name": "Brote",
   "short_name": "Brote",
-  "start_url": "https://litospayaso.github.io/open-cal/",
+  "start_url": "https://litospayaso.github.io/brote/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/litospayaso/open-cal/refs/heads/main/gh-pages/manifest/icon-192x192.png",
+      "src": "https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/gh-pages/manifest/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://raw.githubusercontent.com/litospayaso/open-cal/refs/heads/main/gh-pages/manifest/icon-192x192-maskable.png",
+      "src": "https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/gh-pages/manifest/icon-192x192-maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://raw.githubusercontent.com/litospayaso/open-cal/refs/heads/main/gh-pages/manifest/icon-512x512.png",
+      "src": "https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/gh-pages/manifest/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://raw.githubusercontent.com/litospayaso/open-cal/refs/heads/main/gh-pages/manifest/icon-512x512-maskable.png",
+      "src": "https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/gh-pages/manifest/icon-512x512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

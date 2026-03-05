@@ -28670,8 +28670,28 @@
     web: () => Promise.resolve().then(() => (init_web(), web_exports)).then((m2) => new m2.LocalNotificationsWeb())
   });
 
+  // node_modules/@capacitor/status-bar/dist/esm/index.js
+  init_dist();
+
+  // node_modules/@capacitor/status-bar/dist/esm/definitions.js
+  var Style;
+  (function(Style2) {
+    Style2["Dark"] = "DARK";
+    Style2["Light"] = "LIGHT";
+    Style2["Default"] = "DEFAULT";
+  })(Style || (Style = {}));
+  var Animation;
+  (function(Animation2) {
+    Animation2["None"] = "NONE";
+    Animation2["Slide"] = "SLIDE";
+    Animation2["Fade"] = "FADE";
+  })(Animation || (Animation = {}));
+
+  // node_modules/@capacitor/status-bar/dist/esm/index.js
+  var StatusBar = registerPlugin("StatusBar");
+
   // src/components/pageOpenCal/pageOpenCal.ts
-  var _PageOpenCal = class _PageOpenCal extends Page {
+  var _PageBroteApp = class _PageBroteApp extends Page {
     constructor() {
       super(...arguments);
       this._notificationTimeout = null;
@@ -28701,7 +28721,8 @@
         width: fit-content;
       }
       .app-container {
-       padding-bottom: 60px; 
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: 60px; 
       }
     `
       ];
@@ -28728,10 +28749,11 @@
       style.textContent = variableStyles.cssText;
       this.applyTheme();
       document.head.appendChild(style);
-      _PageOpenCal.styles.forEach((style2, i5) => {
-        loadCss(String(style2), `page-open-cal-styles-${i5}`);
-      });
+      this._setupStatusBar();
       this._setupNotifications();
+      _PageBroteApp.styles.forEach((style2, i5) => {
+        loadCss(String(style2), `page-brote-styles-${i5}`);
+      });
       window.addEventListener("notification-settings-changed", () => {
         this._setupNotifications();
       });
@@ -28739,6 +28761,15 @@
         console.log("Notification action performed", notification);
         this.navigateToPage({ page: "home", openStatus: "true" }, false);
       });
+    }
+    async _setupStatusBar() {
+      try {
+        if (Capacitor.isNativePlatform()) {
+          await StatusBar.setOverlaysWebView({ overlay: false });
+        }
+      } catch (e6) {
+        console.error("Error configuring StatusBar", e6);
+      }
     }
     async _setupNotifications() {
       try {
@@ -28863,11 +28894,11 @@
   };
   __decorateClass([
     r5()
-  ], _PageOpenCal.prototype, "page", 2);
+  ], _PageBroteApp.prototype, "page", 2);
   __decorateClass([
     r5()
-  ], _PageOpenCal.prototype, "groupButtonOptions", 2);
-  var PageOpenCal = _PageOpenCal;
+  ], _PageBroteApp.prototype, "groupButtonOptions", 2);
+  var PageBroteApp = _PageBroteApp;
 
   // src/components/componentGroupButton/componentGroupButton.ts
   var ComponentGroupButton = class extends i4 {
@@ -33084,7 +33115,7 @@
       method,
       mode: "cors",
       headers: {
-        "User-Agent": "Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/open-cal"
+        "User-Agent": "Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/brote"
       },
       cache: "no-cache",
       credentials: "omit"
@@ -37810,7 +37841,7 @@ ${countMsg}`,
   register("page-meal", PageMeal);
 
   // src/components/pageOpenCal/index.ts
-  register("page-opencal", PageOpenCal);
+  register("brote-app", PageBroteApp);
 })();
 /*! Bundled license information:
 
