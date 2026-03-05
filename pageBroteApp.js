@@ -28681,10 +28681,10 @@
 
   // node_modules/@capacitor/status-bar/dist/esm/definitions.js
   var Style;
-  (function(Style2) {
-    Style2["Dark"] = "DARK";
-    Style2["Light"] = "LIGHT";
-    Style2["Default"] = "DEFAULT";
+  (function(Style3) {
+    Style3["Dark"] = "DARK";
+    Style3["Light"] = "LIGHT";
+    Style3["Default"] = "DEFAULT";
   })(Style || (Style = {}));
   var Animation;
   (function(Animation2) {
@@ -28700,7 +28700,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.16",
+    version: "1.0.17",
     type: "module",
     scripts: {
       dev: "vite",
@@ -28864,10 +28864,8 @@
           const theme = localStorage.getItem("theme") || "light";
           if (theme === "dark") {
             await StatusBar.setBackgroundColor({ color: "#a285bb" });
-            await StatusBar.setStyle({ style: Style.Dark });
           } else {
             await StatusBar.setBackgroundColor({ color: "#4fb9ad" });
-            await StatusBar.setStyle({ style: Style.Light });
           }
         }
       } catch (e6) {
