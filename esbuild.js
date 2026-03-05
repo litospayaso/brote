@@ -47,7 +47,7 @@ await asyncForEach(glob.sync('./src/components/**/index.ts'), async file => {
   console.log('\x1b[32m%s', '\n-----------------------------');
   console.log('\x1b[32m%s\x1b[36m%s\x1b[0m', '[component]: ', componentName);
 
-  if (componentName === 'pageOpenCal') {
+  if (componentName === 'pageBroteApp') {
     finalVersion = version;
   }
 
