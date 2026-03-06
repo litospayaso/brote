@@ -42,7 +42,7 @@
   };
 
   // node_modules/@capacitor/core/dist/index.js
-  var ExceptionCode, CapacitorException, getPlatformId, createCapacitor, initCapacitorGlobal, Capacitor, registerPlugin, WebPlugin, encode, decode, CapacitorCookiesPluginWeb, CapacitorCookies, readBlobAsBase64, normalizeHttpHeaders, buildUrlParams, buildRequestInit, CapacitorHttpPluginWeb, CapacitorHttp, SystemBarsStyle, SystemBarType, SystemBarsPluginWeb, SystemBars;
+  var ExceptionCode, CapacitorException, getPlatformId, createCapacitor, initCapacitorGlobal, Capacitor, registerPlugin, WebPlugin, encode, decode, CapacitorCookiesPluginWeb, CapacitorCookies, readBlobAsBase64, normalizeHttpHeaders, buildUrlParams, buildRequestInit, CapacitorHttpPluginWeb, CapacitorHttp;
   var init_dist = __esm({
     "node_modules/@capacitor/core/dist/index.js"() {
       (function(ExceptionCode2) {
@@ -521,32 +521,6 @@
       CapacitorHttp = registerPlugin("CapacitorHttp", {
         web: () => new CapacitorHttpPluginWeb()
       });
-      (function(SystemBarsStyle2) {
-        SystemBarsStyle2["Dark"] = "DARK";
-        SystemBarsStyle2["Light"] = "LIGHT";
-        SystemBarsStyle2["Default"] = "DEFAULT";
-      })(SystemBarsStyle || (SystemBarsStyle = {}));
-      (function(SystemBarType2) {
-        SystemBarType2["StatusBar"] = "StatusBar";
-        SystemBarType2["NavigationBar"] = "NavigationBar";
-      })(SystemBarType || (SystemBarType = {}));
-      SystemBarsPluginWeb = class extends WebPlugin {
-        async setStyle() {
-          this.unavailable("not available for web");
-        }
-        async setAnimation() {
-          this.unavailable("not available for web");
-        }
-        async show() {
-          this.unavailable("not available for web");
-        }
-        async hide() {
-          this.unavailable("not available for web");
-        }
-      };
-      SystemBars = registerPlugin("SystemBars", {
-        web: () => new SystemBarsPluginWeb()
-      });
     }
   });
 
@@ -572,7 +546,7 @@
               try {
                 new Notification("");
               } catch (e6) {
-                if (e6 instanceof Error && e6.name === "TypeError") {
+                if (e6.name == "TypeError") {
                   return false;
                 }
               }
@@ -28766,14 +28740,15 @@
       "build:apk": "node scripts/apk_release.js",
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
+      "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
       deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
     },
     dependencies: {
-      "@capacitor/android": "^8.1.0",
-      "@capacitor/cli": "^8.1.0",
-      "@capacitor/core": "^8.1.0",
-      "@capacitor/local-notifications": "^8.0.1",
-      "@capacitor/status-bar": "^8.0.1",
+      "@capacitor/android": "^7.6.0",
+      "@capacitor/cli": "^7.6.0",
+      "@capacitor/core": "^7.6.0",
+      "@capacitor/local-notifications": "^7.0.6",
+      "@capacitor/status-bar": "^7.0.5",
       "html5-qrcode": "^2.3.8",
       lit: "^3.3.1"
     },
