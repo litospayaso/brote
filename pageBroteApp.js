@@ -29025,7 +29025,7 @@
     render() {
       return b2`
     <div class="app-container">
-      V5
+      V6
       ${this.pageRender()}
     </div>
     <div class="group-button-container">
