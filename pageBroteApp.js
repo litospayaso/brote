@@ -28187,6 +28187,29 @@
       super();
       this.translations = translations.en;
       this.db = dbService;
+      this._touchStartX = 0;
+      this._touchStartY = 0;
+      /**
+       * Function to handle touch start event.
+       * @param e TouchEvent
+       */
+      this._handleTouchStart = (e6) => {
+        this._touchStartX = e6.changedTouches[0].screenX;
+        this._touchStartY = e6.changedTouches[0].screenY;
+      };
+      /**
+       * Function to handle touch end event.
+       * @param e TouchEvent
+       */
+      this._handleTouchEnd = (e6) => {
+        const touchEndX = e6.changedTouches[0].screenX;
+        const touchEndY = e6.changedTouches[0].screenY;
+        const diffX = touchEndX - this._touchStartX;
+        const diffY = touchEndY - this._touchStartY;
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+          this.handleSwipe(diffX, diffY, e6);
+        }
+      };
       this.translations = translations[this.getLanguage()] || translations.en;
     }
     static {
@@ -28570,6 +28593,10 @@
         window.history.replaceState(null, null, `?${queryParamsString}`);
       }
     }
+    /**
+     * Trigger a page navigation event.
+     * @param queryParams object with key value pairs
+     */
     triggerPageNavigation(queryParams) {
       this.dispatchEvent(new CustomEvent("page-navigation", {
         detail: { ...queryParams },
@@ -28577,9 +28604,22 @@
         composed: true
       }));
     }
+    /**
+     * Called when a swipe is detected.
+     * Can be overridden by subclasses to implement custom swipe logic.
+     */
+    handleSwipe(diffX, diffY, event) {
+    }
     connectedCallback() {
       super.connectedCallback();
+      this.addEventListener("touchstart", this._handleTouchStart);
+      this.addEventListener("touchend", this._handleTouchEnd);
       this.onPageInit();
+    }
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.removeEventListener("touchstart", this._handleTouchStart);
+      this.removeEventListener("touchend", this._handleTouchEnd);
     }
     /**
      * It will be called after the Page component is loaded.
@@ -28705,7 +28745,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.18",
+    version: "1.0.19",
     type: "module",
     scripts: {
       dev: "vite",
@@ -28810,6 +28850,7 @@
       .app-container {
         padding-top: env(safe-area-inset-top);
         padding-bottom: 60px; 
+        touch-action: pan-y;
       }
     `
       ];
@@ -28968,7 +29009,10 @@
           @page-navigation="${({ detail }) => this.navigateToPage(detail)}"
         ></page-food>`;
         case "user":
-          return b2`<page-user .version="${package_default.version}"></page-user>`;
+          return b2`<page-user 
+          .version="${package_default.version}"
+          @page-navigation="${({ detail }) => this.navigateToPage(detail)}"
+        ></page-user>`;
         case "scanner":
           return b2`<page-code-scanner 
           @page-navigation="${({ detail }) => this.navigateToPage(detail)}"
@@ -33308,6 +33352,33 @@
         { text: this.translations.meals, id: "meals", active: false }
       ];
     }
+    handleSwipe(diffX) {
+      if (this.viewMode === "cached") {
+        if (diffX > 0) {
+          this.triggerPageNavigation({ page: "home" });
+        } else {
+          this._switchMode("favorites");
+        }
+      } else if (this.viewMode === "favorites") {
+        if (diffX > 0) {
+          this._switchMode("cached");
+        } else {
+          this._switchMode("search");
+        }
+      } else if (this.viewMode === "search") {
+        if (diffX > 0) {
+          this._switchMode("favorites");
+        } else {
+          this._switchMode("meals");
+        }
+      } else if (this.viewMode === "meals") {
+        if (diffX < 0) {
+          this.triggerPageNavigation({ page: "user" });
+        } else {
+          this._switchMode("search");
+        }
+      }
+    }
     async onPageInit() {
       await this.db.init();
       const params = this.getQueryParamsURL();
@@ -33507,6 +33578,7 @@
           </button>
         ` : b2``}
 
+        <div class="search-result-container">
         ${this.loading ? b2`
           <component-spinner class="loading-spinner"></component-spinner>
         ` : b2`
@@ -33536,6 +33608,7 @@
 
           ` : ""}
         `}
+        </div>
       </div>
     `;
     }
@@ -33600,6 +33673,9 @@
         display: flex;
         justify-content: center;
         padding: 2rem;
+      }
+      .search-result-container {
+        min-height: calc(100vh - 450px);
       }
       h1 {
         text-align: center;
@@ -35127,6 +35203,11 @@
     `
       ];
     }
+    handleSwipe(diffX) {
+      if (diffX > 0) {
+        this.triggerPageNavigation({ page: "search" });
+      }
+    }
     onPageInit() {
       const savedProfile = localStorage.getItem("user_profile");
       this.language = this.getLanguage();
@@ -36209,6 +36290,9 @@ ${countMsg}`,
           grid-template-columns: 1fr 1fr;
           gap: 10px;
       }
+      .category-container {
+          min-height: calc(100vh - 500px);
+      }
 
       @media (max-width: 600px) {
         .summary-cards {
@@ -36217,6 +36301,27 @@ ${countMsg}`,
       }
     `
       ];
+    }
+    handleSwipe(diffX, _diffY, e6) {
+      let isHeader = false;
+      const path = e6.composedPath();
+      for (const node of path) {
+        if (node instanceof HTMLElement && node.classList && node.classList.contains("header")) {
+          isHeader = true;
+          break;
+        }
+      }
+      if (isHeader) {
+        if (diffX > 0) {
+          this.changeDate(-1);
+        } else {
+          this.changeDate(1);
+        }
+      } else {
+        if (diffX < 0) {
+          this.triggerPageNavigation({ page: "search" });
+        }
+      }
     }
     async firstUpdated(_changedProperties) {
       super.firstUpdated(_changedProperties);
@@ -36385,17 +36490,20 @@ ${countMsg}`,
         </div>
       </div>
 
-      ${this.renderCategory(this.translations.breakfast, "breakfast")}
-      ${this.renderCategory(this.translations.snackMorning, "snack1")}
-      ${this.renderCategory(this.translations.lunch, "lunch")}
-      ${this.renderCategory(this.translations.snackAfternoon, "snack2")}
-      ${this.renderCategory(this.translations.dinner, "dinner")}
-      ${this.renderCategory(this.translations.snackEvening, "snack3")}
+      <div class="category-container">
+        ${this.renderCategory(this.translations.breakfast, "breakfast")}
+        ${this.renderCategory(this.translations.snackMorning, "snack1")}
+        ${this.renderCategory(this.translations.lunch, "lunch")}
+        ${this.renderCategory(this.translations.snackAfternoon, "snack2")}
+        ${this.renderCategory(this.translations.dinner, "dinner")}
+        ${this.renderCategory(this.translations.snackEvening, "snack3")}
+  
+        ${!this.dailyLog || this.dailyLog.breakfast.length === 0 && this.dailyLog.snack1.length === 0 && this.dailyLog.lunch.length === 0 && this.dailyLog.snack2.length === 0 && this.dailyLog.dinner.length === 0 && this.dailyLog.snack3.length === 0 ? b2`
+          <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
+          <button class="btn" @click="${() => this.triggerPageNavigation({ page: "search" })}">${this.translations.addFood}</button>
+        ` : ""}
+      </div>
 
-      ${!this.dailyLog || this.dailyLog.breakfast.length === 0 && this.dailyLog.snack1.length === 0 && this.dailyLog.lunch.length === 0 && this.dailyLog.snack2.length === 0 && this.dailyLog.dinner.length === 0 && this.dailyLog.snack3.length === 0 ? b2`
-        <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
-        <button class="btn" @click="${() => this.triggerPageNavigation({ page: "search" })}">${this.translations.addFood}</button>
-      ` : ""}
     `;
     }
     async _handleRemoveItem(category, index) {
