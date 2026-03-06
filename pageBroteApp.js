@@ -28741,14 +28741,16 @@
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
       "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
+      "emulator:start:windows": 'start "" "C:\\Users\\angel\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
+      "emulator:install:windows": "adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
       deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
     },
     dependencies: {
-      "@capacitor/android": "^7.6.0",
-      "@capacitor/cli": "^7.6.0",
-      "@capacitor/core": "^7.6.0",
-      "@capacitor/local-notifications": "^7.0.6",
-      "@capacitor/status-bar": "^7.0.5",
+      "@capacitor/android": "^8.1.0",
+      "@capacitor/cli": "^8.1.0",
+      "@capacitor/core": "^8.1.0",
+      "@capacitor/local-notifications": "^8.0.1",
+      "@capacitor/status-bar": "^8.0.1",
       "html5-qrcode": "^2.3.8",
       lit: "^3.3.1"
     },
@@ -36409,7 +36411,7 @@ ${countMsg}`,
         <div class="date-selector">
            <button @click="${() => this.changeDate(-1)}">‹</button>
            <div class="date-display" @click="${this._handleDateDisplayClick}">
-             <span>${this.getFormattedDate()}</span>
+             <span>${this.getFormattedDate()} ANGEL</span>
              <input type="date" .value="${this.currentDate}" @change="${this._handleDateChange}" />
            </div>
            <button @click="${() => this.changeDate(1)}">›</button>
