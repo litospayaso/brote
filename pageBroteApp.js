@@ -28741,7 +28741,7 @@
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
       "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
-      "emulator:start:windows": 'start "" "C:\\Users\\angel\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
+      "emulator:start:windows": 'start "" "%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
       "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
       deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
     },
@@ -29002,7 +29002,6 @@
     render() {
       return b2`
     <div class="app-container">
-      V10
       ${this.pageRender()}
     </div>
     <div class="group-button-container">
@@ -33409,7 +33408,11 @@
             products = [];
           }
         } else if (this.viewMode === "meals") {
-          const meals = await this.db.getAllMeals();
+          let meals = await this.db.getAllMeals();
+          if (this.query) {
+            const lowerQuery = this.query.toLowerCase();
+            meals = meals.filter((m2) => m2.name.toLowerCase().includes(lowerQuery));
+          }
           const mealItems = meals.map((m2) => ({
             code: m2.id,
             url: "",
