@@ -409,6 +409,10 @@ export default class Page<api = {}> extends LitElement {
     }
   }
 
+  /**
+   * Trigger a page navigation event.
+   * @param queryParams object with key value pairs
+   */
   triggerPageNavigation(queryParams: { [key: string]: string }) {
     this.dispatchEvent(new CustomEvent('page-navigation', {
       detail: { ...queryParams },
@@ -417,9 +421,54 @@ export default class Page<api = {}> extends LitElement {
     }));
   }
 
+  private _touchStartX: number = 0;
+  private _touchStartY: number = 0;
+
+  /**
+   * Function to handle touch start event.
+   * @param e TouchEvent
+   */
+  private _handleTouchStart = (e: TouchEvent) => {
+    this._touchStartX = e.changedTouches[0].screenX;
+    this._touchStartY = e.changedTouches[0].screenY;
+  };
+
+  /**
+   * Function to handle touch end event.
+   * @param e TouchEvent
+   */
+  private _handleTouchEnd = (e: TouchEvent) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+
+    const diffX = touchEndX - this._touchStartX;
+    const diffY = touchEndY - this._touchStartY;
+
+    // Check if it's primarily a horizontal swipe
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+      this.handleSwipe(diffX, diffY, e);
+    }
+  };
+
+  /**
+   * Called when a swipe is detected.
+   * Can be overridden by subclasses to implement custom swipe logic.
+   */
+  protected handleSwipe(diffX: number, diffY: number, event: TouchEvent): void {
+    // To be overridden
+  }
+
   connectedCallback() {
     super.connectedCallback();
+    this.addEventListener('touchstart', this._handleTouchStart);
+    this.addEventListener('touchend', this._handleTouchEnd);
     this.onPageInit();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('touchstart', this._handleTouchStart);
+    this.removeEventListener('touchend', this._handleTouchEnd);
   }
 
   /**

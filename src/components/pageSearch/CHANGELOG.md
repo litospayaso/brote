@@ -1,5 +1,11 @@
 # search-page
 
+## 0.0.3
+
+### Patch Changes
+
+- adding swipe functionality to navigate through pages and sections
+
 ## 0.0.2
 
 ### Patch Changes

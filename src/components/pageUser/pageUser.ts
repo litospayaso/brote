@@ -186,6 +186,13 @@ export default class PageUser extends Page {
   @state() importOverride: boolean = false;
   @state() importMessage: { text: string, type: 'success' | 'error' } | null = null;
 
+  protected handleSwipe(diffX: number): void {
+    if (diffX > 0) {
+      // Swipe left
+      this.triggerPageNavigation({ page: 'search' });
+    }
+  }
+
   onPageInit(): void {
     const savedProfile = localStorage.getItem('user_profile');
 

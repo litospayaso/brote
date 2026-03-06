@@ -128,6 +128,9 @@ export default class PageHome extends Page {
           grid-template-columns: 1fr 1fr;
           gap: 10px;
       }
+      .category-container {
+          min-height: calc(100vh - 500px);
+      }
 
       @media (max-width: 600px) {
         .summary-cards {
@@ -148,6 +151,34 @@ export default class PageHome extends Page {
     macros: { protein: 30, carbs: 40, fat: 30 }
   };
   @state() openStatusModal: boolean = false;
+
+  protected handleSwipe(diffX: number, _diffY: number, e: TouchEvent): void {
+    let isHeader = false;
+
+    // If the target is inside the shadow root, we need to check the composed path
+    const path = e.composedPath();
+    for (const node of path) {
+      if (node instanceof HTMLElement && node.classList && node.classList.contains('header')) {
+        isHeader = true;
+        break;
+      }
+    }
+
+    if (isHeader) {
+      if (diffX > 0) {
+        // Swipe right -> previous day
+        this.changeDate(-1);
+      } else {
+        // Swipe left -> next day
+        this.changeDate(1);
+      }
+    } else {
+      if (diffX < 0) {
+        // Swipe right on body
+        this.triggerPageNavigation({ page: 'search' });
+      }
+    }
+  }
 
   protected async firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): Promise<void> {
     super.firstUpdated(_changedProperties);
@@ -335,14 +366,15 @@ export default class PageHome extends Page {
         </div>
       </div>
 
-      ${this.renderCategory(this.translations.breakfast, 'breakfast')}
-      ${this.renderCategory(this.translations.snackMorning, 'snack1')}
-      ${this.renderCategory(this.translations.lunch, 'lunch')}
-      ${this.renderCategory(this.translations.snackAfternoon, 'snack2')}
-      ${this.renderCategory(this.translations.dinner, 'dinner')}
-      ${this.renderCategory(this.translations.snackEvening, 'snack3')}
-
-      ${!this.dailyLog || (
+      <div class="category-container">
+        ${this.renderCategory(this.translations.breakfast, 'breakfast')}
+        ${this.renderCategory(this.translations.snackMorning, 'snack1')}
+        ${this.renderCategory(this.translations.lunch, 'lunch')}
+        ${this.renderCategory(this.translations.snackAfternoon, 'snack2')}
+        ${this.renderCategory(this.translations.dinner, 'dinner')}
+        ${this.renderCategory(this.translations.snackEvening, 'snack3')}
+  
+        ${!this.dailyLog || (
         this.dailyLog.breakfast.length === 0 &&
         this.dailyLog.snack1.length === 0 &&
         this.dailyLog.lunch.length === 0 &&
@@ -350,9 +382,11 @@ export default class PageHome extends Page {
         this.dailyLog.dinner.length === 0 &&
         this.dailyLog.snack3.length === 0
       ) ? html`
-        <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
-        <button class="btn" @click="${() => this.triggerPageNavigation({ page: 'search' })}">${this.translations.addFood}</button>
-      ` : ''}
+          <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
+          <button class="btn" @click="${() => this.triggerPageNavigation({ page: 'search' })}">${this.translations.addFood}</button>
+        ` : ''}
+      </div>
+
     `;
   }
 

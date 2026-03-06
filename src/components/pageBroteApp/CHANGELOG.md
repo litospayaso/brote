@@ -1,5 +1,11 @@
 # brote-app
 
+## 0.0.13
+
+### Patch Changes
+
+- adding swipe functionality to navigate through pages and sections
+
 ## 0.0.12
 
 ### Patch Changes

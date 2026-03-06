@@ -32,6 +32,7 @@ export default class PageBroteApp extends Page {
       .app-container {
         padding-top: env(safe-area-inset-top);
         padding-bottom: 60px; 
+        touch-action: pan-y;
       }
     `
   ];
@@ -230,7 +231,10 @@ export default class PageBroteApp extends Page {
           @page-navigation="${({ detail }: CustomEvent<{ [key: string]: string }>) => this.navigateToPage(detail)}"
         ></page-food>`;
       case 'user':
-        return html`<page-user .version="${packageJson.version}"></page-user>`;
+        return html`<page-user 
+          .version="${packageJson.version}"
+          @page-navigation="${({ detail }: CustomEvent<{ [key: string]: string }>) => this.navigateToPage(detail)}"
+        ></page-user>`;
       case 'scanner':
         return html`<page-code-scanner 
           @page-navigation="${({ detail }: CustomEvent<{ [key: string]: string }>) => this.navigateToPage(detail)}"

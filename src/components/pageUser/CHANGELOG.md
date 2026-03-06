@@ -1,5 +1,11 @@
 # page-user
 
+## 0.0.8
+
+### Patch Changes
+
+- adding swipe functionality to navigate through pages and sections
+
 ## 0.0.7
 
 ### Patch Changes

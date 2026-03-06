@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.19
+
+### Patch Changes
+
+- adding swipe functionality to navigate through pages and sections
+
 ## 1.0.18
 
 ### Patch Changes

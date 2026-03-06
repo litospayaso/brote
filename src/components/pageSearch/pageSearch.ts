@@ -69,6 +69,9 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
         justify-content: center;
         padding: 2rem;
       }
+      .search-result-container {
+        min-height: calc(100vh - 450px);
+      }
       h1 {
         text-align: center;
       }
@@ -80,6 +83,44 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
   @state() mealId: string | null = null;
 
   @state() query: string = '';
+
+  protected handleSwipe(diffX: number): void {
+    if (this.viewMode === 'cached') {
+      if (diffX > 0) {
+        // Swipe left
+        this.triggerPageNavigation({ page: 'home' });
+      } else {
+        // Swipe right
+        this._switchMode('favorites');
+      }
+    }
+    else if (this.viewMode === 'favorites') {
+      if (diffX > 0) {
+        // Swipe right
+        this._switchMode('cached');
+      } else {
+        // Swipe left
+        this._switchMode('search');
+      }
+    } else if (this.viewMode === 'search') {
+      if (diffX > 0) {
+        // Swipe right
+        this._switchMode('favorites');
+      } else {
+        // Swipe left
+        this._switchMode('meals');
+      }
+    } else if (this.viewMode === 'meals') {
+      if (diffX < 0) {
+        // Swipe right
+        this.triggerPageNavigation({ page: 'user' });
+      } else {
+        // Swipe left
+        this._switchMode('search');
+      }
+    }
+  }
+
   @state() viewMode: 'cached' | 'favorites' | 'search' | 'meals' = 'cached';
   @state() groupButtonOptions = [
     { text: this.translations.recents, id: 'cached', active: true },
@@ -309,6 +350,7 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
           </button>
         ` : html``}
 
+        <div class="search-result-container">
         ${this.loading ? html`
           <component-spinner class="loading-spinner"></component-spinner>
         ` : html`
@@ -338,6 +380,7 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
 
           ` : ''}
         `}
+        </div>
       </div>
     `;
   }
