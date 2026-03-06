@@ -202,7 +202,12 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
           products = [];
         }
       } else if (this.viewMode === 'meals') {
-        const meals = await this.db.getAllMeals();
+        let meals = await this.db.getAllMeals();
+
+        if (this.query) {
+          const lowerQuery = this.query.toLowerCase();
+          meals = meals.filter(m => m.name.toLowerCase().includes(lowerQuery));
+        }
 
         const mealItems = meals.map(m => ({
           code: m.id,
