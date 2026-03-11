@@ -1,5 +1,11 @@
 # component-user-status
 
+## 0.0.4
+
+### Patch Changes
+
+- setting the posibility to fav meals
+
 ## 0.0.3
 
 ### Patch Changes

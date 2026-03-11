@@ -116,7 +116,7 @@ export default class ComponentLineChart extends LitElement {
   }
 
   private _generateChartSvg() {
-    const yMargin = 1;
+    const yMargin = 0;
     if (!this._chartContainer) return;
 
     this._chartContainer.innerHTML = '';

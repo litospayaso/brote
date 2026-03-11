@@ -178,7 +178,20 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
           return await this.db.getCachedProduct(fav.code);
         });
         const results = await Promise.all(promises);
-        products = results.filter(p => !!p);
+        const cachedProducts = results.filter(p => !!p);
+
+        const allMeals = await this.db.getAllMeals();
+        const favoriteMeals = allMeals.filter(m => favorites.some(f => f.code === m.id));
+        const mealItems = favoriteMeals.map(m => ({
+          code: m.id,
+          product_name: m.name,
+          isMeal: true,
+          nutriments: {
+            'energy-kcal': m.foods.reduce((acc, f) => acc + (f.product.nutriments?.['energy-kcal'] || 0) * (f.quantity / 100), 0)
+          } as any,
+        }));
+
+        products = [...cachedProducts, ...mealItems];
 
         if (products && products.length > 0 && this.query) {
           products = products.filter(p => {
@@ -224,24 +237,21 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
           meals = meals.filter(m => m.name.toLowerCase().includes(lowerQuery));
         }
 
-        const mealItems = meals.map(m => ({
+        products = meals.map(m => ({
           code: m.id,
           url: '',
           product_name: m.name,
+          isMeal: true,
           nutriments: {
             'energy-kcal': m.foods.reduce((acc, f) => acc + (f.product.nutriments?.['energy-kcal'] || 0) * (f.quantity / 100), 0)
           } as any,
-        } as any));
-
-        products = [
-          ...mealItems
-        ];
+        }));
       }
 
       this.searchResult = await Promise.all(products.map(async product => {
-        if (this.viewMode === 'meals') return product;
-
         const isFavorite = await this.db.isFavorite(product.code);
+        if (product.isMeal) return { ...product, isFavorite };
+
         const normalized: any = { ...product, isFavorite };
         if (product.product) {
           normalized.product_name = product.product.product_name || normalized.product_name;
@@ -301,11 +311,13 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
 
         if (product.isFavorite) {
           try {
-            const fullProduct = await this.api.getProduct(e.detail.code);
-            if (fullProduct) {
-              await this.db.cacheProduct(fullProduct);
-              await this.db.addFavorite(e.detail.code);
+            if (!(product as any).isMeal) {
+              const fullProduct = await this.api.getProduct(e.detail.code);
+              if (fullProduct) {
+                await this.db.cacheProduct(fullProduct);
+              }
             }
+            await this.db.addFavorite(e.detail.code);
           } catch (err) {
             console.error('Error adding favorite', err);
           }
@@ -318,7 +330,7 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
 
   private _handleElementClick(e: CustomEvent) {
     if (e.detail?.code) {
-      if (this.viewMode === 'meals') {
+      if (this.viewMode === 'meals' || (this.searchResult.find(p => p.code === e.detail.code) as any)?.isMeal) {
         this.triggerPageNavigation({ page: 'meal', mealId: e.detail.code });
       } else {
         const params = this.getQueryParamsURL();

@@ -1,5 +1,12 @@
 # search-page
 
+## 0.0.5
+
+### Patch Changes
+
+- setting the posibility to fav meals
+- 0d817f4: adding search filter functionality to meal search page
+
 ## 0.0.4
 
 ### Patch Changes

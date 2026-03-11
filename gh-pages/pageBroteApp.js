@@ -42,7 +42,7 @@
   };
 
   // node_modules/@capacitor/core/dist/index.js
-  var ExceptionCode, CapacitorException, getPlatformId, createCapacitor, initCapacitorGlobal, Capacitor, registerPlugin, WebPlugin, encode, decode, CapacitorCookiesPluginWeb, CapacitorCookies, readBlobAsBase64, normalizeHttpHeaders, buildUrlParams, buildRequestInit, CapacitorHttpPluginWeb, CapacitorHttp;
+  var ExceptionCode, CapacitorException, getPlatformId, createCapacitor, initCapacitorGlobal, Capacitor, registerPlugin, WebPlugin, encode, decode, CapacitorCookiesPluginWeb, CapacitorCookies, readBlobAsBase64, normalizeHttpHeaders, buildUrlParams, buildRequestInit, CapacitorHttpPluginWeb, CapacitorHttp, SystemBarsStyle, SystemBarType, SystemBarsPluginWeb, SystemBars;
   var init_dist = __esm({
     "node_modules/@capacitor/core/dist/index.js"() {
       (function(ExceptionCode2) {
@@ -521,6 +521,32 @@
       CapacitorHttp = registerPlugin("CapacitorHttp", {
         web: () => new CapacitorHttpPluginWeb()
       });
+      (function(SystemBarsStyle2) {
+        SystemBarsStyle2["Dark"] = "DARK";
+        SystemBarsStyle2["Light"] = "LIGHT";
+        SystemBarsStyle2["Default"] = "DEFAULT";
+      })(SystemBarsStyle || (SystemBarsStyle = {}));
+      (function(SystemBarType2) {
+        SystemBarType2["StatusBar"] = "StatusBar";
+        SystemBarType2["NavigationBar"] = "NavigationBar";
+      })(SystemBarType || (SystemBarType = {}));
+      SystemBarsPluginWeb = class extends WebPlugin {
+        async setStyle() {
+          this.unavailable("not available for web");
+        }
+        async setAnimation() {
+          this.unavailable("not available for web");
+        }
+        async show() {
+          this.unavailable("not available for web");
+        }
+        async hide() {
+          this.unavailable("not available for web");
+        }
+      };
+      SystemBars = registerPlugin("SystemBars", {
+        web: () => new SystemBarsPluginWeb()
+      });
     }
   });
 
@@ -546,7 +572,7 @@
               try {
                 new Notification("");
               } catch (e6) {
-                if (e6.name == "TypeError") {
+                if (e6 instanceof Error && e6.name === "TypeError") {
                   return false;
                 }
               }
@@ -26720,6 +26746,7 @@
       category: "Categor\xEDa",
       addToDiary: "A\xF1adir al diario",
       searchProduct: "Buscar producto",
+      searchProductplacholder: "Buscar producto o escribe c\xF3digo de barras",
       noResultsFound: "No se encontraron resultados",
       noFoodsAdded: "No se han a\xF1adido alimentos",
       userStats: "Estad\xEDsticas del usuario",
@@ -26868,6 +26895,7 @@
       category: "Category",
       addToDiary: "Add to Diary",
       searchProduct: "Search product",
+      searchProductplacholder: "Search product or type barcode",
       noResultsFound: "No results found",
       noFoodsAdded: "No foods added",
       userStats: "User stats",
@@ -27016,6 +27044,7 @@
       category: "Cat\xE9gorie",
       addToDiary: "Ajouter au journal",
       searchProduct: "Rechercher un produit",
+      searchProductplacholder: "Rechercher un produit ou saisir un code-barres",
       noResultsFound: "Aucun r\xE9sultat trouv\xE9",
       noFoodsAdded: "Aucun aliment ajout\xE9",
       userStats: "Statistiques de l'utilisateur",
@@ -27159,6 +27188,7 @@
       category: "Kategorie",
       addToDiary: "Zum Tagebuch hinzuf\xFCgen",
       searchProduct: "Produkt suchen",
+      searchProductplacholder: "Produkt suchen oder Barcode eingeben",
       noResultsFound: "Keine Ergebnisse gefunden",
       noFoodsAdded: "Keine Lebensmittel hinzugef\xFCgt",
       userStats: "Statistiken des Benutzers",
@@ -27302,6 +27332,7 @@
       category: "Categoria",
       addToDiary: "Aggiungi al diario",
       searchProduct: "Cerca prodotto",
+      searchProductplacholder: "Cerca prodotto o digita codice a barre",
       noResultsFound: "Nessun risultato trovato",
       noFoodsAdded: "Nessun alimento aggiunto",
       userStats: "Statistiche dell'utente",
@@ -28719,7 +28750,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.19",
+    version: "1.0.21",
     type: "module",
     scripts: {
       dev: "vite",
@@ -28741,9 +28772,9 @@
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
       "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
-      "emulator:start:windows": 'start "" "C:\\Users\\angel\\AppData\\Local\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
+      "emulator:start:windows": 'start "" "%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
       "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
-      deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
+      deploy: "npm run deploy:pages && node scripts/apk_rele>ase.js && node scripts/release.js"
     },
     dependencies: {
       "@capacitor/android": "^8.1.0",
@@ -29002,7 +29033,6 @@
     render() {
       return b2`
     <div class="app-container">
-      V10
       ${this.pageRender()}
     </div>
     <div class="group-button-container">
@@ -33388,7 +33418,18 @@
             return await this.db.getCachedProduct(fav.code);
           });
           const results = await Promise.all(promises);
-          products = results.filter((p3) => !!p3);
+          const cachedProducts = results.filter((p3) => !!p3);
+          const allMeals = await this.db.getAllMeals();
+          const favoriteMeals = allMeals.filter((m2) => favorites.some((f3) => f3.code === m2.id));
+          const mealItems = favoriteMeals.map((m2) => ({
+            code: m2.id,
+            product_name: m2.name,
+            isMeal: true,
+            nutriments: {
+              "energy-kcal": m2.foods.reduce((acc, f3) => acc + (f3.product.nutriments?.["energy-kcal"] || 0) * (f3.quantity / 100), 0)
+            }
+          }));
+          products = [...cachedProducts, ...mealItems];
           if (products && products.length > 0 && this.query) {
             products = products.filter((p3) => {
               const name = p3.product_name || p3.product?.product_name || "";
@@ -33399,6 +33440,20 @@
           }
         } else if (this.viewMode === "search") {
           if (this.query) {
+            const isBarcode = /^\d{8,14}$/.test(this.query);
+            if (isBarcode) {
+              const productResponse = await this.api.getProduct(this.query);
+              if (productResponse && productResponse.status === "success" && productResponse.product) {
+                const params = this.getQueryParamsURL();
+                const mealId = params.get("mealId");
+                const navParams = { page: "food", code: this.query };
+                if (mealId) {
+                  navParams.mealId = mealId;
+                }
+                this.triggerPageNavigation(navParams);
+                return;
+              }
+            }
             const searchResponse = await this.api.searchProduct(this.query);
             const rawProducts = searchResponse.products || [];
             products = await Promise.all(rawProducts.map(async (p3) => {
@@ -33409,22 +33464,24 @@
             products = [];
           }
         } else if (this.viewMode === "meals") {
-          const meals = await this.db.getAllMeals();
-          const mealItems = meals.map((m2) => ({
+          let meals = await this.db.getAllMeals();
+          if (this.query) {
+            const lowerQuery = this.query.toLowerCase();
+            meals = meals.filter((m2) => m2.name.toLowerCase().includes(lowerQuery));
+          }
+          products = meals.map((m2) => ({
             code: m2.id,
             url: "",
             product_name: m2.name,
+            isMeal: true,
             nutriments: {
               "energy-kcal": m2.foods.reduce((acc, f3) => acc + (f3.product.nutriments?.["energy-kcal"] || 0) * (f3.quantity / 100), 0)
             }
           }));
-          products = [
-            ...mealItems
-          ];
         }
         this.searchResult = await Promise.all(products.map(async (product) => {
-          if (this.viewMode === "meals") return product;
           const isFavorite = await this.db.isFavorite(product.code);
+          if (product.isMeal) return { ...product, isFavorite };
           const normalized = { ...product, isFavorite };
           if (product.product) {
             normalized.product_name = product.product.product_name || normalized.product_name;
@@ -33475,11 +33532,13 @@
           this.requestUpdate();
           if (product.isFavorite) {
             try {
-              const fullProduct = await this.api.getProduct(e6.detail.code);
-              if (fullProduct) {
-                await this.db.cacheProduct(fullProduct);
-                await this.db.addFavorite(e6.detail.code);
+              if (!product.isMeal) {
+                const fullProduct = await this.api.getProduct(e6.detail.code);
+                if (fullProduct) {
+                  await this.db.cacheProduct(fullProduct);
+                }
               }
+              await this.db.addFavorite(e6.detail.code);
             } catch (err) {
               console.error("Error adding favorite", err);
             }
@@ -33491,7 +33550,7 @@
     }
     _handleElementClick(e6) {
       if (e6.detail?.code) {
-        if (this.viewMode === "meals") {
+        if (this.viewMode === "meals" || this.searchResult.find((p3) => p3.code === e6.detail.code)?.isMeal) {
           this.triggerPageNavigation({ page: "meal", mealId: e6.detail.code });
         } else {
           const params = this.getQueryParamsURL();
@@ -33510,7 +33569,7 @@
         <h1>${this.mealId ? this.translations.addFood : this.translations.searchProduct}</h1>
         <div class="search-container">
           <component-search-input 
-            placeholder="${this.translations.searchProduct}" 
+            placeholder="${this.translations.searchProductplacholder}" 
             search-button-text="${this.translations.search}" 
             @search-init="${this._handleSearchInit}"
             @search-blur="${this._handleSearchBlur}"
@@ -33547,6 +33606,11 @@
           <component-spinner class="loading-spinner"></component-spinner>
         ` : b2`
           ${this.searchResult.length > 0 ? b2`
+            ${this.viewMode === "search" ? b2`
+              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
+                ${this.translations.createNewProduct}
+              </button>
+            ` : ""}
             <div>
               ${this.searchResult.map((product) => b2`
                 <component-search-result 
@@ -33563,7 +33627,6 @@
           ` : ""}
           ${this.searchResult.length === 0 && this.query.length > 0 ? b2`
             <p>${this.translations.noResultsFound}</p>
-
             ${this.viewMode === "search" ? b2`
               <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
                 ${this.translations.createNewProduct}
@@ -35951,7 +36014,7 @@ ${countMsg}`,
       this._hoveredText = null;
     }
     _generateChartSvg() {
-      const yMargin = 1;
+      const yMargin = 0;
       if (!this._chartContainer) return;
       this._chartContainer.innerHTML = "";
       const width = this._width || this.offsetWidth || 300;
@@ -37038,7 +37101,7 @@ ${countMsg}`,
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
                     .min="${0}"
                     .max="${5}"
-                    .steps="${1}"
+                    .steps="${0.5}"
                     .value="${this._energyLevel}"
                     @value-changed="${(e6) => this._energyLevel = e6.detail.value}"
                     minTag="🪫"
@@ -37054,7 +37117,7 @@ ${countMsg}`,
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
                     .min="${0}"
                     .max="${5}"
-                    .steps="${1}"
+                    .steps="${0.5}"
                     .value="${this._hungerLevel}"
                     @value-changed="${(e6) => this._hungerLevel = e6.detail.value}"
                     minTag="😫"
@@ -37369,49 +37432,269 @@ ${countMsg}`,
       this.language = "en";
       this.tips = {
         es: [
-          "Bebe m\xE1s agua durante el d\xEDa.",
-          "Intenta comer al menos 5 porciones de frutas y verduras.",
-          "Caminar 10,000 pasos al d\xEDa mejora significativamente tu salud.",
-          "Dormir entre 7 y 8 horas es fundamental para la recuperaci\xF3n muscular.",
-          "Limita el consumo de bebidas azucaradas y opta por infusiones o agua.",
-          "La constancia es la clave del \xE9xito en cualquier plan nutricional.",
-          "Planea tus comidas con antelaci\xF3n para evitar elecciones poco saludables."
+          "Tu dieta debe tener en cuenta tu contexto, debe ser realista y considerar tus condiciones..",
+          "Evita la hipermonitorizaci\xF3n, contar obsesivamente calor\xEDas te desconecta de tus se\xF1ales internas y puede llevar a pr\xE1cticas de riesgo.",
+          "Identifica las conductas de riesgo, lavarse los dientes por hambre o sobreentrenar para compensar son pr\xE1cticas peligrosas y no h\xE1bitos saludables.",
+          "No demonices alimentos, pues culpar a ciertos nutrientes no te ayudar\xE1 a mantener una buena relaci\xF3n con la comida y puede desencadenar problemas psicol\xF3gicos.",
+          "Prioriza la comida real, los suplementos solo complementan y depender de muchos puede indicar que probablemente te faltan nutrientes base.",
+          "Come sin culpa, ejerciendo tu derecho a comer lo que desees sin gan\xE1rtelo entrenando y sin aceptar juicios morales.",
+          "Cuida tu relaci\xF3n con la comida entendiendo que la salud no se define solo por lo que comes, sino por tu relaci\xF3n emocional con ello.",
+          "Recuerda que ganar peso tambi\xE9n es liberador, especialmente en deportes de fuerza donde subir de peso para rendir mejor te libera de la obsesi\xF3n por adelgazar.",
+          "Recuerda que tu dieta no es tu identidad, y comer estrictamente para encajar en el fitness a\xEDsla a las personas y diluye los v\xEDnculos humanos.",
+          "Gestiona el deseo de adelgazar aceptando que es normal desear un cuerpo m\xE1s delgado, pero analiza el porqu\xE9 de ese deseo (presi\xF3n est\xE9ticas, canon sociales...) e intenta que ese anhelo no te impida disfrutar.",
+          "Registra tu progreso reservando d\xEDas fijos para entrenar y anota tus avances para visualizar todo lo que has conseguido. Pero tambi\xE9n est\xE1 bien si no lo haces y s\xF3lo disfrutas de comer y entrenar",
+          "Plantea tu objetivo para no entrenar solo para perder peso, enf\xF3cate tambi\xE9n en ganar fuerza, autonom\xEDa y mejorar tu calidad de vida.",
+          "Recuerda que las altas repeticiones no definen tu progreso, ya que el desarrollo muscular depende del volumen total de entrenamiento y no de usar cargas bajas o altas repeticiones.",
+          "Huye de los gur\xFAs y desconf\xEDa de quienes venden soluciones milagrosas, ya que ninguna f\xF3rmula m\xE1gica funciona para todos.",
+          "Recuerda que el fitness no es tu identidad porque eres una persona con aficiones, gustos y no un avatar de Instagram que usa su cuerpo como capital social.",
+          "Ten cuidado con los relojes inteligentes, porque sustituir tu percepci\xF3n interna por datos externos erosiona tu autoeficacia y te desconecta corporalmente. Escuchate y date los cuidados y necesidades que tu cuerpo te pida",
+          "Recupera tu soberan\xEDa corporal entrenando para sentirte libre y capaz, y nunca desde la culpa o como una simple obligaci\xF3n moral.",
+          "Renuncia a la carta de feminidad sin pedir perd\xF3n por entrenar fuerza, usa tu cuerpo para tu propia satisfacci\xF3n personal.",
+          "Rechaza la hipersexualizaci\xF3n del entorno fitness que a menudo relega a las mujeres a ser sujetos pasivos esperando validaci\xF3n masculina.",
+          "Ten claro que no debes tu apariencia a nadie;tu f\xEDsico es una decisi\xF3n exclusivamente tuya.",
+          "S\xE9 consciente de que tu g\xE9nero condiciona tu trato, ya que tu identidad, origen y econom\xEDa determinan inevitablemente c\xF3mo se te tratar\xE1 en los espacios deportivos.",
+          "Busca espacios seguros, es vital crear entornos donde puedas descubrir tu fuerza sin depender de las miradas del resto.",
+          "Recuerda que las dietas restrictivas no funcionan porque comer menos de lo necesario activa el modo supervivencia y te lleva a buscar comida desesperadamente.",
+          "Acepta que es normal sentir hambre porque tu cuerpo necesita comer m\xE1s para regenerarse al entrenar, y no fracasas si no pierdes peso.",
+          "Pierde el miedo a comer y retira la culpa asociada a la comida, entendiendo que comer sin pasar hambre es muy positivo.",
+          "No opines sobre cuerpos ajenos ni comentes los cambios de peso de otros, ya que pueden deberse a problemas de salud y causar da\xF1o.",
+          "No elogies la p\xE9rdida de peso, pues esto refuerza la falsa idea de que perder peso siempre equivale a salud y \xE9xito est\xE9tico.",
+          "Ten en cuenta que el IMC es inv\xE1lido, ya que esta herramienta cruza peso y altura sin distinguir grasa de m\xFAsculo, catalogando err\xF3neamente a personas fuertes.",
+          "Ten cuidado con el sesgo gord\xF3fobo, porque exigir perder peso antes de tratar dolencias es reduccionista y las causas del dolor son siempre multifactoriales.",
+          "Exige respeto sanitario recordando que tienes derecho a atenci\xF3n digna, y si condicionan tu tratamiento a perder peso, cambia de especialista.",
+          "Valora los beneficios inmediatos y haz deporte para tener m\xE1s energ\xEDa y bienestar, no solo con el fin utilitarista de adelgazar.",
+          "Defi\xE9ndete de comentarios no solicitados recordando que tienes derecho a responder como prefieras cuando alguien opina sin tu permiso sobre tu cuerpo.",
+          "Adapta tu terminolog\xEDa sustituyendo la palabra peso por composici\xF3n corporal, lo que te ayudar\xE1 a cambiar tu percepci\xF3n y evitar estigmas perjudiciales.",
+          "Desmonta la meritocracia del peso liber\xE1ndote de la culpa y rechazando que estar delgado sea un m\xE9rito, ya que el peso depende de m\xFAltiples factores.",
+          "Entiende que la salud no es un deber moral y rechaza la idea de que es un peaje que debes pagar para ser respetado.",
+          "Recuerda que hay otros factores de riesgo como vivir en ciudades contaminadas o el estr\xE9s cr\xF3nico, por lo que no debes criminalizar tu cambio de peso en funci\xF3n de tu dieta o deporte.",
+          "Pierde el miedo a la palabra 'gorda/o' evitando eufemismos que perpet\xFAan el estigma y entendiendo la reapropiaci\xF3n pol\xEDtica del t\xE9rmino.",
+          "No critiques el Body Positive, ya que este movimiento no hace apolog\xEDa de la obesidad sino que busca que las personas vivan sin ser juzgadas.",
+          "Recuerda que la alimentaci\xF3n no es estatus y desconf\xEDa de productos caros que buscan proyectar lujo en redes sociales en lugar de promover verdadera salud.",
+          "Cuestiona el autocuidado extremo reconociendo que si tus reglas alimenticias te generan miedo y culpa cuando te las saltas, es solo control.",
+          "Busca profesionales con visi\xF3n cr\xEDtica acudiendo a nutricionistas que entiendan la conducta y el entorno social en lugar de solo enfocarse en las calor\xEDas.",
+          "No pauses tu vida si ganas peso; aprende a habitar tu cuerpo en lugar de pausar tu vida por la est\xE9tica.",
+          "S\xE9 consciente de que el sistema se lucra de ti, pues el capitalismo necesita tu insatisfacci\xF3n corporal cr\xF3nica para seguir vendi\xE9ndote dietas y operaciones est\xE9ticas.",
+          "No compenses con ejercicio si subes de peso, no sobreentrenes y reflexiona por qu\xE9 ahora tu identidad depende de algo puramente est\xE9tico.",
+          "Acepta tus versiones inc\xF3modas aprendiendo a no rechazarte en esos d\xEDas en los que no cumples con tus expectativas visuales.",
+          "Ten cuidado con el bienestar neoliberal porque si tu autocuidado exige ser siempre eficiente y te genera culpa, est\xE1s bajo constante vigilancia.",
+          "Rechaza el 'querer es poder', este mensaje t\xF3xico ignora tus privilegios y genera culpa al obligarte a pelear contra tu propia vida.",
+          "Huye de entrenadores maniqu\xED y desconf\xEDa de influencers que usan su f\xEDsico para venderte ejercicios, culp\xE1ndote despu\xE9s si no consigues resultados.",
+          "Protege tus datos y v\xEDnculos evitando planes gratuitos que extraen datos; huye de gur\xFAs que te pidan aislarte de tus seres queridos.",
+          "Existe una hipocres\xEDa en el mundo fitness, es contradictorio que exijan hacer deporte y al mismo tiempo desprecien a los cuerpos no normativos en el gimnasio.",
+          "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno."
         ],
         en: [
-          "Drink more water throughout the day.",
-          "Try to eat at least 5 portions of fruits and vegetables.",
-          "Walking 10,000 steps a day significantly improves your health.",
-          "Sleeping between 7 and 8 hours is essential for muscle recovery.",
-          "Limit sugary drinks and opt for infusions or water.",
-          "Consistency is the key to success in any nutritional plan.",
-          "Plan your meals in advance to avoid unhealthy choices."
+          "Your diet must take into account your context, it must be realistic and consider your conditions.",
+          "Avoid hypermonitoring, obsessively counting calories disconnects you from your internal signals and can lead to risky practices.",
+          "Identify risky behaviors, brushing your teeth out of hunger or overtraining to compensate are dangerous practices and not healthy habits.",
+          "Do not demonize foods, as blaming certain nutrients will not help you maintain a good relationship with food and can trigger psychological problems.",
+          "Prioritize real food, supplements only complement and relying on too many may indicate that you are probably lacking base nutrients.",
+          "Eat without guilt, exercising your right to eat what you want without earning it by training and without accepting moral judgments.",
+          "Take care of your relationship with food, understanding that health is not defined only by what you eat, but by your emotional relationship with it.",
+          "Remember that gaining weight is also liberating, especially in strength sports where gaining weight to perform better frees you from the obsession with losing weight.",
+          "Remember that your diet is not your identity, and eating strictly to fit into fitness isolates people and dilutes human bonds.",
+          "Manage the desire to lose weight by accepting that it is normal to want a thinner body, but analyze the reason for that desire (aesthetic pressure, social canon...) and try not to let that desire prevent you from enjoying yourself.",
+          "Record your progress by reserving fixed days to train and write down your progress to visualize everything you have achieved. But it's also okay if you don't and just enjoy eating and training.",
+          "Set your goal to not train just to lose weight, also focus on gaining strength, autonomy and improving your quality of life.",
+          "Remember that high repetitions do not define your progress, since muscle development depends on the total training volume and not on using low loads or high repetitions.",
+          "Avoid gurus and distrust those who sell miraculous solutions, since no magic formula works for everyone.",
+          "Remember that fitness is not your identity because you are a person with hobbies and tastes and not an Instagram avatar who uses his body as social capital.",
+          "Be careful with smart watches, because replacing your internal perception with external data erodes your self-efficacy and disconnects you physically. Listen to yourself and give yourself the care and needs that your body asks of you.",
+          "Recover your bodily sovereignty by training to feel free and capable, and never from guilt or as a simple moral obligation.",
+          "Give up the femininity card without apologizing for strength training, use your body for your own personal satisfaction.",
+          "Rejects the hypersexualization of the fitness environment that often relegates women to passive subjects awaiting male validation.",
+          "Be clear that you do not owe your appearance to anyone; your physique is an exclusively your decision.",
+          "Be aware that your gender determines your treatment, since your identity, origin and economy inevitably determine how you will be treated in sports spaces.",
+          "Look for safe spaces, it is vital to create environments where you can discover your strength without depending on the gaze of others.",
+          "Remember that restrictive diets don't work because eating less than necessary activates survival mode and leads you to desperately search for food.",
+          "Accept that it is normal to feel hungry because your body needs to eat more to regenerate when training, and you do not fail if you do not lose weight.",
+          "Lose the fear of eating and remove the guilt associated with food, understanding that eating without being hungry is very positive.",
+          "Do not give opinions about other people's bodies or comment on others' weight changes, as these may be due to health problems and cause harm.",
+          "Do not praise weight loss, as this reinforces the false idea that losing weight always equals health and aesthetic success.",
+          "Keep in mind that BMI is invalid, since this tool crosses weight and height without distinguishing fat from muscle, wrongly classifying strong people.",
+          "Be careful with the fatphobic bias, because demanding weight loss before treating ailments is reductionist and the causes of pain are always multifactorial.",
+          "Demand health respect, remembering that you have the right to decent care, and if your treatment is conditioned on losing weight, change specialists.",
+          "Value the immediate benefits and do sports to have more energy and well-being, not just for the utilitarian purpose of losing weight.",
+          "Defend yourself from unsolicited comments by remembering that you have the right to respond however you prefer when someone gives an opinion about your body without your permission.",
+          "Adapt your terminology by replacing the word weight with body composition, which will help you change your perception and avoid harmful stigmas.",
+          "Dismantle the meritocracy of weight by freeing yourself from guilt and rejecting that being thin is a merit, since weight depends on multiple factors.",
+          "Understand that health is not a moral duty and reject the idea that it is a toll that you must pay to be respected.",
+          "Remember that there are other risk factors such as living in polluted cities or chronic stress, so you should not criminalize your weight change based on your diet or sport.",
+          "Lose your fear of the word 'fat', avoiding euphemisms that perpetuate the stigma and understanding the political reappropriation of the term.",
+          "Do not criticize Body Positive, since this movement does not advocate obesity but seeks for people to live without being judged.",
+          "Remember that food is not status and be wary of expensive products that seek to project luxury on social networks instead of promoting true health.",
+          "Question extreme self-care by recognizing that if your eating rules cause fear and guilt when you break them, it's just control.",
+          "Look for professionals with a critical vision by turning to nutritionists who understand behavior and the social environment instead of just focusing on calories.",
+          "Don't pause your life if you gain weight; Learn to inhabit your body instead of pausing your life for aesthetics.",
+          "Be aware that the system profits from you, because capitalism needs your chronic body dissatisfaction to continue selling you diets and cosmetic operations.",
+          "Do not compensate with exercise if you gain weight, do not overtrain and reflect on why your identity now depends on something purely aesthetic.",
+          "Accept your uncomfortable versions by learning not to reject yourself on those days when you don't meet your visual expectations.",
+          "Be careful with neoliberal wellness because if your self-care requires always being efficient and generates guilt, you are under constant surveillance.",
+          "Reject the 'wanting is power', this toxic message ignores your privileges and generates guilt by forcing you to fight against your own life.",
+          "Avoid mannequin trainers and be wary of influencers who use their physique to sell you exercises, blaming you later if you don't get results.",
+          "Protect your data and links by avoiding free plans that siphon data; Run away from gurus who ask you to isolate yourself from your loved ones.",
+          "There is hypocrisy in the fitness world, it is contradictory that they demand sports and at the same time despise non-normative bodies in the gym.",
+          "Build community when training by using the gym to build bonds and mutual support, remembering that training should not isolate you from your environment."
         ],
         it: [
-          "Bevi pi\xF9 acqua durante il giorno.",
-          "Cerca di mangiare almeno 5 porzioni di frutta e verdura.",
-          "Camminare 10.000 passi al giorno migliora significativamente la tua salute.",
-          "Dormire tra le 7 e le 8 ore \xE8 fondamentale per il recupero muscolare.",
-          "Limita il consumo di bevande zuccherate e opta per infusi o acqua.",
-          "La costanza \xE8 la chiave del successo in qualsiasi piano nutrizionale.",
-          "Pianifica i tuoi pasti in anticipo per evitare scelte poco sane."
+          "La tua dieta deve tenere conto del tuo contesto, deve essere realistica e considerare le tue condizioni.",
+          "Evita l\u2019ipermonitoraggio, contare ossessivamente le calorie ti disconnette dai tuoi segnali interni e pu\xF2 portare a pratiche rischiose.",
+          "Individuare comportamenti rischiosi, lavarsi i denti per fame o allenarsi troppo per compensare sono pratiche pericolose e non abitudini salutari.",
+          "Non demonizzare gli alimenti, perch\xE9 dare la colpa ad alcuni nutrienti non ti aiuter\xE0 a mantenere un buon rapporto con il cibo e pu\xF2 scatenare problemi psicologici.",
+          "Dai la priorit\xE0 al cibo vero, agli integratori solo come complemento e fare affidamento su troppi pu\xF2 indicare che probabilmente ti mancano i nutrienti di base.",
+          "Mangiare senza sensi di colpa, esercitando il proprio diritto a mangiare ci\xF2 che si vuole senza guadagnarselo allenandosi e senza accettare giudizi morali.",
+          "Prenditi cura del tuo rapporto con il cibo, comprendendo che la salute non \xE8 definita solo da ci\xF2 che mangi, ma dal tuo rapporto emotivo con esso.",
+          "Ricorda che anche l'aumento di peso \xE8 liberatorio, soprattutto negli sport di forza in cui aumentare di peso per ottenere prestazioni migliori ti libera dall'ossessione di perdere peso.",
+          "Ricorda che la tua dieta non \xE8 la tua identit\xE0 e che mangiare rigorosamente per adattarsi alla forma fisica isola le persone e diluisce i legami umani.",
+          "Gestisci il desiderio di perdere peso accettando che sia normale desiderare un corpo pi\xF9 magro, ma analizza il motivo di quel desiderio (pressione estetica, canone sociale...) e cerca di non lasciare che quel desiderio ti impedisca di divertirti.",
+          "Registra i tuoi progressi riservando giorni fissi per allenarti e annota i tuoi progressi per visualizzare tutto ci\xF2 che hai ottenuto. Ma va bene anche se non lo fai e ti diverti semplicemente mangiando e allenandoti.",
+          "Stabilisci il tuo obiettivo di non allenarti solo per perdere peso, concentrati anche sull'acquisizione di forza, autonomia e sul miglioramento della qualit\xE0 della vita.",
+          "Ricorda che le ripetizioni elevate non definiscono i tuoi progressi, poich\xE9 lo sviluppo muscolare dipende dal volume totale dell'allenamento e non dall'utilizzo di carichi bassi o ripetizioni elevate.",
+          "Evita i guru e diffida di chi vende soluzioni miracolose, poich\xE9 nessuna formula magica funziona per tutti.",
+          "Ricorda che il fitness non \xE8 la tua identit\xE0 perch\xE9 sei una persona con hobby e gusti e non un avatar di Instagram che usa il suo corpo come capitale sociale.",
+          "Fai attenzione agli orologi intelligenti, perch\xE9 sostituire la tua percezione interna con dati esterni mina la tua autoefficacia e ti disconnette fisicamente. Ascoltati e concediti le cure e i bisogni che il tuo corpo ti chiede.",
+          "Recupera la tua sovranit\xE0 corporea allenandoti a sentirti libero e capace, e mai per senso di colpa o per semplice obbligo morale.",
+          "Rinuncia alla carta della femminilit\xE0 senza scusarti per l'allenamento della forza, usa il tuo corpo per la tua soddisfazione personale.",
+          "Rifiuta l'ipersessualizzazione dell'ambiente del fitness che spesso relega le donne a soggetti passivi in \u200B\u200Battesa della validazione maschile.",
+          "Sii chiaro che non devi il tuo aspetto a nessuno; il tuo fisico \xE8 esclusivamente una tua decisione.",
+          "Sii consapevole che il tuo genere determina il tuo trattamento, poich\xE9 la tua identit\xE0, origine ed economia determinano inevitabilmente il modo in cui sarai trattato negli spazi sportivi.",
+          "Cerca spazi sicuri, \xE8 vitale creare ambienti in cui puoi scoprire la tua forza senza dipendere dallo sguardo degli altri.",
+          "Ricorda che le diete restrittive non funzionano perch\xE9 mangiare meno del necessario attiva la modalit\xE0 di sopravvivenza e ti porta a cercare disperatamente il cibo.",
+          "Accetta che \xE8 normale avere fame perch\xE9 il tuo corpo ha bisogno di mangiare di pi\xF9 per rigenerarsi durante l'allenamento, e non fallirai se non dimagrisci.",
+          "Perdere la paura di mangiare ed eliminare i sensi di colpa legati al cibo, comprendendo che mangiare senza avere fame \xE8 molto positivo.",
+          "Non esprimere opinioni sul corpo di altre persone n\xE9 commentare i cambiamenti di peso degli altri, poich\xE9 potrebbero essere dovuti a problemi di salute e causare danni.",
+          "Non lodare la perdita di peso, poich\xE9 ci\xF2 rafforza la falsa idea che perdere peso equivale sempre a salute e successo estetico.",
+          "Tieni presente che il BMI non \xE8 valido, poich\xE9 questo strumento incrocia peso e altezza senza distinguere il grasso dai muscoli, classificando erroneamente le persone forti.",
+          "Attenzione al pregiudizio grassofobico, perch\xE9 pretendere la perdita di peso prima di curare i disturbi \xE8 riduzionista e le cause del dolore sono sempre multifattoriali.",
+          "Esigi rispetto per la salute, ricordando che hai diritto a cure dignitose e, se il tuo trattamento \xE8 condizionato alla perdita di peso, cambia specialista.",
+          "Valorizzare i benefici immediati e fare sport per avere pi\xF9 energia e benessere, non solo per lo scopo utilitaristico di perdere peso.",
+          "Difenditi dai commenti non richiesti ricordando che hai il diritto di rispondere come preferisci quando qualcuno d\xE0 un'opinione sul tuo corpo senza il tuo permesso.",
+          "Adatta la tua terminologia sostituendo la parola peso con composizione corporea, cosa che ti aiuter\xE0 a cambiare la tua percezione ed evitare stigmi dannosi.",
+          "Smantellare la meritocrazia del peso liberandosi dai sensi di colpa e rifiutando che essere magri sia un merito, poich\xE9 il peso dipende da molteplici fattori.",
+          "Comprendere che la salute non \xE8 un dovere morale e respingere l\u2019idea che sia un pedaggio da pagare per essere rispettati.",
+          "Ricorda che ci sono altri fattori di rischio come vivere in citt\xE0 inquinate o stress cronico, quindi non dovresti criminalizzare il cambiamento di peso in base alla tua dieta o allo sport.",
+          "Perdere la paura della parola \u201Cgrasso\u201D, evitando eufemismi che perpetuano lo stigma e comprendendo la riappropriazione politica del termine.",
+          "Non criticare Body Positive, poich\xE9 questo movimento non sostiene l\u2019obesit\xE0 ma cerca che le persone vivano senza essere giudicate.",
+          "Ricordatevi che il cibo non \xE8 uno status e diffidate dai prodotti costosi che cercano di proiettare il lusso sui social network invece di promuovere la vera salute.",
+          "Metti in discussione l'estrema cura di te stesso riconoscendo che se le tue regole alimentari causano paura e senso di colpa quando le infrangi, \xE8 solo controllo.",
+          "Cerca professionisti con una visione critica rivolgendoti a nutrizionisti che comprendano il comportamento e l'ambiente sociale invece di concentrarsi solo sulle calorie.",
+          "Non mettere in pausa la tua vita se aumenti di peso; Impara ad abitare il tuo corpo invece di mettere in pausa la tua vita per l'estetica.",
+          "Sii consapevole che il sistema trae profitto da te, perch\xE9 il capitalismo ha bisogno della tua insoddisfazione cronica del corpo per continuare a venderti diete e operazioni cosmetiche.",
+          "Non compensare con l\u2019esercizio fisico se ingrassi, non allenarti troppo e rifletti sul perch\xE9 la tua identit\xE0 ormai dipende da qualcosa di puramente estetico.",
+          "Accetta le tue versioni scomode imparando a non rifiutarti nei giorni in cui non soddisfi le tue aspettative visive.",
+          "Fai attenzione al benessere neoliberista perch\xE9 se la tua cura di te stesso richiede di essere sempre efficiente e genera senso di colpa, sei costantemente sorvegliato.",
+          'Rifiuta il "volere \xE8 potere", questo messaggio tossico ignora i tuoi privilegi e genera senso di colpa costringendoti a combattere contro la tua stessa vita.',
+          "Evita i manichini da ginnastica e diffida degli influencer che usano il loro fisico per venderti esercizi, incolpandoti poi se non ottieni risultati.",
+          "Proteggi i tuoi dati e collegamenti evitando piani gratuiti che sottraggono dati; Scappa dai guru che ti chiedono di isolarti dai tuoi cari.",
+          "C\u2019\xE8 ipocrisia nel mondo del fitness, \xE8 contraddittorio che si pretenda lo sport e allo stesso tempo si disprezzino i corpi non normativi in \u200B\u200Bpalestra.",
+          "Costruisci una comunit\xE0 durante l'allenamento utilizzando la palestra per costruire legami e sostegno reciproco, ricordando che l'allenamento non dovrebbe isolarti dal tuo ambiente."
         ],
         fr: [
-          "Buvez plus d'eau tout au long de la journ\xE9e.",
-          "Essayez de manger au moins 5 portions de fruits et l\xE9gumes.",
-          "Marcher 10 000 pas par jour am\xE9liore consid\xE9rablement votre sant\xE9.",
-          "Dormir entre 7 et 8 heures est essentiel pour la r\xE9cup\xE9ration musculaire.",
-          "Limitez les boissons sucr\xE9es et optez pour des infusions ou de l'eau.",
-          "La r\xE9gularit\xE9 est la cl\xE9 du succ\xE8s de tout plan nutritionnel.",
-          "Planifiez vos repas \xE0 l'avance pour \xE9viter les choix malsains."
+          "Votre alimentation doit tenir compte de votre contexte, elle doit \xEAtre r\xE9aliste et tenir compte de vos conditions.",
+          "\xC9vitez l\u2019hypersurveillance, compter de mani\xE8re obsessionnelle les calories vous d\xE9connecte de vos signaux internes et peut conduire \xE0 des pratiques \xE0 risque.",
+          "Identifier les comportements \xE0 risque, se brosser les dents par faim ou se surentra\xEEner pour compenser sont des pratiques dangereuses et non des habitudes saines.",
+          "Ne diabolisez pas les aliments, car bl\xE2mer certains nutriments ne vous aidera pas \xE0 entretenir une bonne relation avec la nourriture et peut d\xE9clencher des probl\xE8mes psychologiques.",
+          "Donnez la priorit\xE9 aux vrais aliments, les suppl\xE9ments ne font que compl\xE9ter et en compter trop peut indiquer que vous manquez probablement de nutriments de base.",
+          "Mangez sans culpabilit\xE9, en exer\xE7ant votre droit de manger ce que vous voulez sans le gagner par l\u2019entra\xEEnement et sans accepter de jugements moraux.",
+          "Prenez soin de votre relation avec la nourriture, en comprenant que la sant\xE9 ne se d\xE9finit pas seulement par ce que vous mangez, mais par votre relation \xE9motionnelle avec celui-ci.",
+          "N\u2019oubliez pas que prendre du poids est aussi lib\xE9rateur, notamment dans les sports de force o\xF9 prendre du poids pour mieux performer vous lib\xE8re de l\u2019obsession de perdre du poids.",
+          "N'oubliez pas que votre alimentation n'est pas votre identit\xE9 et que manger uniquement pour vous adapter \xE0 votre forme physique isole les gens et dilue les liens humains.",
+          "G\xE9rez le d\xE9sir de perdre du poids en acceptant qu'il est normal de vouloir un corps plus mince, mais analysez la raison de ce d\xE9sir (pression esth\xE9tique, canon social...) et essayez de ne pas laisser ce d\xE9sir vous emp\xEAcher de profiter.",
+          "Enregistrez vos progr\xE8s en r\xE9servant des jours fixes pour vous entra\xEEner et notez vos progr\xE8s pour visualiser tout ce que vous avez accompli. Mais ce n'est pas grave non plus si vous ne le faites pas et que vous aimez simplement manger et vous entra\xEEner.",
+          "Fixez-vous pour objectif de ne pas vous entra\xEEner uniquement pour perdre du poids, mais \xE9galement de vous concentrer sur le gain de force, d'autonomie et l'am\xE9lioration de votre qualit\xE9 de vie.",
+          "N'oubliez pas que les r\xE9p\xE9titions \xE9lev\xE9es ne d\xE9finissent pas votre progression, car le d\xE9veloppement musculaire d\xE9pend du volume total d'entra\xEEnement et non de l'utilisation de faibles charges ou de r\xE9p\xE9titions \xE9lev\xE9es.",
+          "\xC9vitez les gourous et m\xE9fiez-vous de ceux qui vendent des solutions miraculeuses, car aucune formule magique ne fonctionne pour tout le monde.",
+          "N'oubliez pas que le fitness n'est pas votre identit\xE9 car vous \xEAtes une personne avec des passe-temps et des go\xFBts et non un avatar Instagram qui utilise son corps comme capital social.",
+          "Soyez prudent avec les montres intelligentes, car remplacer votre perception interne par des donn\xE9es externes \xE9rode votre efficacit\xE9 personnelle et vous d\xE9connecte physiquement. \xC9coutez-vous et accordez-vous les soins et les besoins que votre corps vous demande.",
+          "R\xE9cup\xE9rez votre souverainet\xE9 corporelle en vous entra\xEEnant \xE0 vous sentir libre et capable, et jamais par culpabilit\xE9 ou par simple obligation morale.",
+          "Abandonnez la carte de la f\xE9minit\xE9 sans vous excuser pour la musculation, utilisez votre corps pour votre satisfaction personnelle.",
+          "Rejette l\u2019hypersexualisation de l\u2019environnement du fitness qui rel\xE8gue souvent les femmes \xE0 des sujets passifs en attente de validation masculine.",
+          "Soyez clair sur le fait que vous ne devez votre apparence \xE0 personne ; votre physique est exclusivement votre d\xE9cision.",
+          "Sachez que votre sexe d\xE9termine votre traitement, puisque votre identit\xE9, votre origine et votre \xE9conomie d\xE9terminent in\xE9vitablement la mani\xE8re dont vous serez trait\xE9 dans les espaces sportifs.",
+          "Recherchez des espaces s\xFBrs, il est essentiel de cr\xE9er des environnements o\xF9 vous pourrez d\xE9couvrir votre force sans d\xE9pendre du regard des autres.",
+          "N'oubliez pas que les r\xE9gimes restrictifs ne fonctionnent pas car manger moins que n\xE9cessaire active le mode survie et vous am\xE8ne \xE0 chercher d\xE9sesp\xE9r\xE9ment de la nourriture.",
+          "Acceptez qu'il est normal d'avoir faim car votre corps a besoin de manger plus pour se r\xE9g\xE9n\xE9rer lors de l'entra\xEEnement, et vous n'\xE9chouerez pas si vous ne perdez pas de poids.",
+          "Perdez la peur de manger et \xE9liminez la culpabilit\xE9 associ\xE9e \xE0 la nourriture, en comprenant que manger sans avoir faim est tr\xE8s positif.",
+          "Ne donnez pas d'opinion sur le corps d'autrui et ne commentez pas les changements de poids d'autrui, car ceux-ci peuvent \xEAtre dus \xE0 des probl\xE8mes de sant\xE9 et causer des dommages.",
+          "Ne faites pas l\u2019\xE9loge de la perte de poids, car cela renforce la fausse id\xE9e selon laquelle perdre du poids est toujours synonyme de r\xE9ussite en mati\xE8re de sant\xE9 et d\u2019esth\xE9tique.",
+          "Gardez \xE0 l\u2019esprit que l\u2019IMC n\u2019est pas valide, car cet outil croise le poids et la taille sans distinguer la graisse des muscles, classant ainsi \xE0 tort les personnes fortes.",
+          "Attention au biais fatphobique, car exiger une perte de poids avant de traiter des maux est r\xE9ductionniste et les causes des douleurs sont toujours multifactorielles.",
+          "Exigez le respect de votre sant\xE9, en rappelant que vous avez droit \xE0 des soins d\xE9cents, et si votre traitement est conditionn\xE9 \xE0 la perte de poids, changez de sp\xE9cialiste.",
+          "Valorisez les bienfaits imm\xE9diats et faites du sport pour avoir plus d\u2019\xE9nergie et de bien-\xEAtre, et pas seulement dans le but utilitaire de perdre du poids.",
+          "D\xE9fendez-vous des commentaires non sollicit\xE9s en vous rappelant que vous avez le droit de r\xE9pondre comme vous le souhaitez lorsque quelqu'un donne une opinion sur votre corps sans votre permission.",
+          "Adaptez votre terminologie en rempla\xE7ant le mot poids par composition corporelle, ce qui vous aidera \xE0 changer votre perception et \xE0 \xE9viter les stigmates n\xE9fastes.",
+          "D\xE9mantelez la m\xE9ritocratie du poids en vous lib\xE9rant de la culpabilit\xE9 et en rejetant qu\u2019\xEAtre mince soit un m\xE9rite, puisque le poids d\xE9pend de multiples facteurs.",
+          "Comprenez que la sant\xE9 n\u2019est pas un devoir moral et rejetez l\u2019id\xE9e selon laquelle c\u2019est un tribut qu\u2019il faut payer pour \xEAtre respect\xE9.",
+          "N'oubliez pas qu'il existe d'autres facteurs de risque, comme le fait de vivre dans des villes pollu\xE9es ou le stress chronique. Vous ne devez donc pas criminaliser votre changement de poids en fonction de votre alimentation ou de votre sport.",
+          "Perdez votre peur du mot \xAB gros \xBB, \xE9vitez les euph\xE9mismes qui perp\xE9tuent la stigmatisation et comprenez la r\xE9appropriation politique du terme.",
+          "Ne critiquez pas Body Positive, car ce mouvement ne pr\xF4ne pas l\u2019ob\xE9sit\xE9 mais cherche \xE0 ce que les gens vivent sans \xEAtre jug\xE9s.",
+          "N'oubliez pas que la nourriture n'est pas un statut et m\xE9fiez-vous des produits co\xFBteux qui cherchent \xE0 projeter le luxe sur les r\xE9seaux sociaux au lieu de promouvoir une v\xE9ritable sant\xE9.",
+          "Remettez en question les soins personnels extr\xEAmes en reconnaissant que si vos r\xE8gles alimentaires provoquent de la peur et de la culpabilit\xE9 lorsque vous les enfreignez, il ne s'agit que de contr\xF4le.",
+          "Recherchez des professionnels dot\xE9s d\u2019une vision critique en vous tournant vers des nutritionnistes qui comprennent les comportements et l\u2019environnement social au lieu de vous concentrer uniquement sur les calories.",
+          "Ne mettez pas votre vie en pause si vous prenez du poids\xA0; Apprenez \xE0 habiter votre corps au lieu de mettre votre vie en pause pour des raisons esth\xE9tiques.",
+          "Sachez que le syst\xE8me profite de vous, car le capitalisme a besoin de votre insatisfaction corporelle chronique pour continuer \xE0 vous vendre des r\xE9gimes et des op\xE9rations cosm\xE9tiques.",
+          "Ne compensez pas par l'exercice si vous prenez du poids, ne vous entra\xEEnez pas trop et r\xE9fl\xE9chissez \xE0 la raison pour laquelle votre identit\xE9 d\xE9pend d\xE9sormais de quelque chose de purement esth\xE9tique.",
+          "Acceptez vos versions inconfortables en apprenant \xE0 ne pas vous rejeter les jours o\xF9 vous ne r\xE9pondez pas \xE0 vos attentes visuelles.",
+          "Soyez prudent avec le bien-\xEAtre n\xE9olib\xE9ral car si vos soins personnels n\xE9cessitent d'\xEAtre toujours efficaces et g\xE9n\xE8rent de la culpabilit\xE9, vous \xEAtes sous surveillance constante.",
+          "Rejetez le \xAB vouloir, c'est le pouvoir \xBB, ce message toxique ignore vos privil\xE8ges et g\xE9n\xE8re de la culpabilit\xE9 en vous obligeant \xE0 lutter contre votre propre vie.",
+          "\xC9vitez les mannequins d'entra\xEEnement et m\xE9fiez-vous des influenceurs qui utilisent leur physique pour vous vendre des exercices, vous reprochant plus tard si vous n'obtenez pas de r\xE9sultats.",
+          "Prot\xE9gez vos donn\xE9es et vos liens en \xE9vitant les forfaits gratuits qui siphonnent les donn\xE9es\xA0; Fuyez les gourous qui vous demandent de vous isoler de vos proches.",
+          "Il y a de l'hypocrisie dans le monde du fitness, il est contradictoire qu'ils exigent du sport et en m\xEAme temps m\xE9prisent les corps non normatifs dans la salle de sport.",
+          "Construisez une communaut\xE9 lorsque vous vous entra\xEEnez en utilisant la salle de sport pour cr\xE9er des liens et un soutien mutuel, en vous rappelant que l\u2019entra\xEEnement ne doit pas vous isoler de votre environnement."
         ],
         de: [
-          "Trinken Sie \xFCber den Tag verteilt mehr Wasser.",
-          "Versuchen Sie, mindestens 5 Portionen Obst und Gem\xFCse zu essen.",
-          "10.000 Schritte am Tag zu gehen, verbessert Ihre Gesundheit erheblich.",
-          "7 bis 8 Stunden Schlaf sind f\xFCr die Muskelerholung unerl\xE4sslich.",
-          "Begrenzen Sie zuckerhaltige Getr\xE4nke und w\xE4hlen Sie stattdessen Tees oder Wasser.",
-          "Best\xE4ndigkeit ist der Schl\xFCssel zum Erfolg bei jedem Ern\xE4hrungsplan.",
-          "Planen Sie Ihre Mahlzeiten im Voraus, um ungesunde Entscheidungen zu vermeiden."
+          "Ihre Ern\xE4hrung muss Ihren Kontext ber\xFCcksichtigen, sie muss realistisch sein und Ihre Bedingungen ber\xFCcksichtigen.",
+          "Vermeiden Sie Hypermonitoring, da das zwanghafte Kalorienz\xE4hlen Sie von Ihren inneren Signalen abkoppelt und zu riskanten Praktiken f\xFChren kann.",
+          "Das Erkennen riskanter Verhaltensweisen, Z\xE4hneputzen aus Hunger oder \xDCbertraining zum Ausgleich sind gef\xE4hrliche Praktiken und keine gesunden Gewohnheiten.",
+          "Verteufeln Sie Lebensmittel nicht, da die Schuldzuweisung an bestimmte N\xE4hrstoffe nicht dazu beitr\xE4gt, ein gutes Verh\xE4ltnis zu Lebensmitteln aufrechtzuerhalten, und psychische Probleme ausl\xF6sen kann.",
+          "Bevorzugen Sie echte Lebensmittel, Nahrungserg\xE4nzungsmittel erg\xE4nzen nur und wenn Sie sich auf zu viele verlassen, kann dies darauf hindeuten, dass Ihnen wahrscheinlich Grundn\xE4hrstoffe fehlen.",
+          "Essen Sie ohne Schuldgef\xFChle, \xFCben Sie Ihr Recht aus, zu essen, was Sie wollen, ohne es sich durch Training zu verdienen und ohne moralische Urteile zu akzeptieren.",
+          "Achten Sie auf Ihre Beziehung zum Essen und verstehen Sie, dass Gesundheit nicht nur durch das, was Sie essen, definiert wird, sondern auch durch Ihre emotionale Beziehung dazu.",
+          "Denken Sie daran, dass eine Gewichtszunahme auch eine befreiende Wirkung hat, insbesondere bei Kraftsportarten, bei denen eine Gewichtszunahme, um bessere Leistungen zu erbringen, Sie von der Obsession, Gewicht zu verlieren, befreit.",
+          "Denken Sie daran, dass Ihre Ern\xE4hrung nicht Ihre Identit\xE4t ist und dass eine ausschlie\xDFlich auf Fitness ausgerichtete Ern\xE4hrung Menschen isoliert und menschliche Bindungen schw\xE4cht.",
+          "Bew\xE4ltigen Sie den Wunsch, Gewicht zu verlieren, indem Sie akzeptieren, dass es normal ist, sich einen d\xFCnneren K\xF6rper zu w\xFCnschen. Analysieren Sie jedoch den Grund f\xFCr diesen Wunsch (\xE4sthetischer Druck, sozialer Kanon ...) und versuchen Sie, sich von diesem Wunsch nicht davon abhalten zu lassen, Spa\xDF zu haben.",
+          "Zeichnen Sie Ihre Fortschritte auf, indem Sie feste Trainingstage reservieren und Ihre Fortschritte aufschreiben, um alles, was Sie erreicht haben, zu visualisieren. Es ist aber auch in Ordnung, wenn man das nicht tut und einfach Spa\xDF am Essen und Trainieren hat.",
+          "Setzen Sie sich das Ziel, nicht nur zum Abnehmen zu trainieren, sondern konzentrieren Sie sich auch darauf, Kraft und Autonomie zu gewinnen und Ihre Lebensqualit\xE4t zu verbessern.",
+          "Denken Sie daran, dass hohe Wiederholungszahlen nicht Ihren Fortschritt bestimmen, da der Muskelaufbau vom gesamten Trainingsvolumen abh\xE4ngt und nicht von der Verwendung geringer Belastungen oder hoher Wiederholungszahlen.",
+          "Vermeiden Sie Gurus und misstrauen Sie denen, die Wunderl\xF6sungen verkaufen, denn keine Zauberformel funktioniert f\xFCr jeden.",
+          "Denken Sie daran, dass Fitness nicht Ihre Identit\xE4t ist, denn Sie sind ein Mensch mit Hobbys und Vorlieben und kein Instagram-Avatar, der seinen K\xF6rper als soziales Kapital nutzt.",
+          "Seien Sie vorsichtig mit Smartwatches, denn das Ersetzen Ihrer internen Wahrnehmung durch externe Daten untergr\xE4bt Ihre Selbstwirksamkeit und trennt Sie k\xF6rperlich. H\xF6ren Sie auf sich selbst und geben Sie sich die Pflege und die Bed\xFCrfnisse, die Ihr K\xF6rper von Ihnen verlangt.",
+          "Gewinnen Sie Ihre k\xF6rperliche Souver\xE4nit\xE4t zur\xFCck, indem Sie trainieren, sich frei und f\xE4hig zu f\xFChlen, und niemals aus Schuldgef\xFChlen oder einer einfachen moralischen Verpflichtung.",
+          "Geben Sie die Weiblichkeitskarte auf, ohne sich f\xFCr das Krafttraining zu entschuldigen, und nutzen Sie Ihren K\xF6rper f\xFCr Ihre pers\xF6nliche Zufriedenheit.",
+          "Lehnt die Hypersexualisierung des Fitnessumfelds ab, die Frauen oft zu passiven Subjekten degradiert, die auf m\xE4nnliche Best\xE4tigung warten.",
+          "Seien Sie sich dar\xFCber im Klaren, dass Sie Ihr Aussehen niemandem zu verdanken haben. \xDCber Ihren K\xF6rperbau entscheiden Sie ausschlie\xDFlich.",
+          "Seien Sie sich bewusst, dass Ihr Geschlecht Ihre Behandlung bestimmt, da Ihre Identit\xE4t, Herkunft und Wirtschaft unweigerlich dar\xFCber entscheiden, wie Sie in Sportr\xE4umen behandelt werden.",
+          "Suchen Sie nach sicheren R\xE4umen. Es ist wichtig, Umgebungen zu schaffen, in denen Sie Ihre St\xE4rke entdecken k\xF6nnen, ohne auf die Blicke anderer angewiesen zu sein.",
+          "Denken Sie daran, dass restriktive Di\xE4ten nicht funktionieren, weil weniger Essen als n\xF6tig den \xDCberlebensmodus aktiviert und Sie dazu verleitet, verzweifelt nach Nahrung zu suchen.",
+          "Akzeptieren Sie, dass es normal ist, Hunger zu versp\xFCren, weil Ihr K\xF6rper beim Training mehr essen muss, um sich zu regenerieren, und Sie scheitern nicht, wenn Sie nicht abnehmen.",
+          "Verlieren Sie die Angst vor dem Essen und beseitigen Sie die mit dem Essen verbundenen Schuldgef\xFChle, indem Sie verstehen, dass Essen ohne Hunger sehr positiv ist.",
+          "Geben Sie keine Meinung \xFCber den K\xF6rper anderer Menschen ab und kommentieren Sie nicht die Gewichtsver\xE4nderungen anderer, da diese auf gesundheitliche Probleme zur\xFCckzuf\xFChren sein und sch\xE4dlich sein k\xF6nnen.",
+          "Loben Sie das Abnehmen nicht, da dies die falsche Vorstellung best\xE4rkt, dass Abnehmen immer gleichbedeutend mit Gesundheit und \xE4sthetischem Erfolg ist.",
+          "Bedenken Sie, dass der BMI ung\xFCltig ist, da dieses Tool Gewicht und Gr\xF6\xDFe kreuzt, ohne zwischen Fett und Muskeln zu unterscheiden, wodurch starke Menschen falsch klassifiziert werden.",
+          "Seien Sie vorsichtig mit der fettphobischen Voreingenommenheit, denn die Forderung nach Gewichtsabnahme vor der Behandlung von Beschwerden ist reduktionistisch und die Ursachen von Schmerzen sind immer multifaktoriell.",
+          "Fordern Sie Respekt vor Ihrer Gesundheit, denken Sie daran, dass Sie das Recht auf eine angemessene Pflege haben, und wechseln Sie den Spezialisten, wenn Ihre Behandlung von einer Gewichtsabnahme abh\xE4ngig ist.",
+          "Sch\xE4tzen Sie die unmittelbaren Vorteile und treiben Sie Sport, um mehr Energie und Wohlbefinden zu haben, und nicht nur aus dem praktischen Grund, Gewicht zu verlieren.",
+          "Sch\xFCtzen Sie sich vor unaufgeforderten Kommentaren, indem Sie daran denken, dass Sie das Recht haben, so zu reagieren, wie Sie m\xF6chten, wenn jemand ohne Ihre Erlaubnis eine Meinung \xFCber Ihren K\xF6rper \xE4u\xDFert.",
+          "Passen Sie Ihre Terminologie an, indem Sie das Wortgewicht durch K\xF6rperzusammensetzung ersetzen. Dies wird Ihnen helfen, Ihre Wahrnehmung zu \xE4ndern und sch\xE4dliche Stigmatisierungen zu vermeiden.",
+          "Bauen Sie die Leistungsgesellschaft des Gewichts ab, indem Sie sich von Schuldgef\xFChlen befreien und ablehnen, dass es ein Verdienst ist, d\xFCnn zu sein, da das Gewicht von mehreren Faktoren abh\xE4ngt.",
+          "Verstehen Sie, dass Gesundheit keine moralische Pflicht ist und lehnen Sie die Vorstellung ab, dass es sich um einen Tribut handelt, den Sie zahlen m\xFCssen, um respektiert zu werden.",
+          "Denken Sie daran, dass es weitere Risikofaktoren wie das Leben in verschmutzten St\xE4dten oder chronischen Stress gibt. Daher sollten Sie Ihre Gewichtsver\xE4nderung aufgrund Ihrer Ern\xE4hrung oder Ihres Sports nicht kriminalisieren.",
+          "Verlieren Sie Ihre Angst vor dem Wort \u201EFett\u201C, vermeiden Sie Euphemismen, die das Stigma aufrechterhalten, und verstehen Sie die politische Wiederaneignung des Begriffs.",
+          "Kritisieren Sie Body Positive nicht, da diese Bewegung nicht Fettleibigkeit bef\xFCrwortet, sondern darauf abzielt, dass Menschen leben k\xF6nnen, ohne beurteilt zu werden.",
+          "Denken Sie daran, dass Lebensmittel keinen Status haben, und seien Sie vorsichtig bei teuren Produkten, die in den sozialen Netzwerken Luxus vermitteln wollen, anstatt echte Gesundheit zu f\xF6rdern.",
+          "Stellen Sie extreme Selbstf\xFCrsorge in Frage, indem Sie erkennen, dass es nur um Kontrolle geht, wenn Ihre Essregeln Angst und Schuldgef\xFChle hervorrufen, wenn Sie sie brechen.",
+          "Suchen Sie nach Fachleuten mit einer kritischen Vision, indem Sie sich an Ern\xE4hrungsberater wenden, die das Verhalten und das soziale Umfeld verstehen, anstatt sich nur auf Kalorien zu konzentrieren.",
+          "Unterbrechen Sie Ihr Leben nicht, wenn Sie an Gewicht zunehmen. Lernen Sie, Ihren K\xF6rper zu bewohnen, anstatt Ihr Leben aus \xE4sthetischen Gr\xFCnden innezuhalten.",
+          "Seien Sie sich bewusst, dass das System von Ihnen profitiert, denn der Kapitalismus braucht Ihre chronische K\xF6rperunzufriedenheit, um Ihnen weiterhin Di\xE4ten und Sch\xF6nheitsoperationen zu verkaufen.",
+          "Kompensieren Sie eine Gewichtszunahme nicht durch Sport, \xFCbertrainieren Sie nicht und denken Sie dar\xFCber nach, warum Ihre Identit\xE4t jetzt von etwas rein \xC4sthetischem abh\xE4ngt.",
+          "Akzeptieren Sie Ihre unangenehmen Versionen, indem Sie lernen, sich an den Tagen, an denen Sie Ihre visuellen Erwartungen nicht erf\xFCllen, nicht abzulehnen.",
+          "Seien Sie vorsichtig mit neoliberaler Wellness, denn wenn Ihre Selbstf\xFCrsorge stets Effizienz erfordert und Schuldgef\xFChle erzeugt, stehen Sie unter st\xE4ndiger \xDCberwachung.",
+          "Lehnen Sie das \u201EWollen ist Macht\u201C ab. Diese giftige Botschaft ignoriert Ihre Privilegien und erzeugt Schuldgef\xFChle, indem sie Sie zwingt, gegen Ihr eigenes Leben zu k\xE4mpfen.",
+          "Vermeiden Sie Schaufensterpuppen-Trainer und seien Sie vorsichtig vor Influencern, die ihren K\xF6rper nutzen, um Ihnen \xDCbungen zu verkaufen, und Ihnen sp\xE4ter die Schuld geben, wenn Sie keine Ergebnisse erzielen.",
+          "Sch\xFCtzen Sie Ihre Daten und Links, indem Sie kostenlose Pl\xE4ne vermeiden, die Daten absch\xF6pfen; Laufen Sie vor Gurus weg, die Sie auffordern, sich von Ihren Lieben zu isolieren.",
+          "In der Fitnesswelt herrscht Heuchelei, es ist widerspr\xFCchlich, dass sie Sport fordern und gleichzeitig nicht normative K\xF6rper im Fitnessstudio verachten.",
+          "Bauen Sie beim Training eine Gemeinschaft auf, indem Sie das Fitnessstudio nutzen, um Bindungen und gegenseitige Unterst\xFCtzung aufzubauen. Denken Sie daran, dass das Training Sie nicht von Ihrer Umgebung isolieren sollte."
         ]
       };
       this.selectedTip = "";

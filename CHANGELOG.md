@@ -1,5 +1,12 @@
 # brote
 
+## 1.0.21
+
+### Patch Changes
+
+- 2c2a8b6: Setting emulator functions for android on windows
+- setting the posibility to fav meals
+
 ## 1.0.20
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "name": "brote",
   "private": true,
-  "version": "1.0.20",
+  "version": "1.0.21",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,7 +25,7 @@
     "run:android:windows": "npm run build && npm run cap:sync && node -e \"setTimeout(() => {}, 1000)\" && node scripts/fix_java_version.js && npx cap run android -l",
     "emulator:start:windows": "start \"\" \"%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe\" -avd Pixel_8_Pro_API_36 -no-snapshot-load",
     "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
-    "deploy": "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
+    "deploy": "npm run deploy:pages && node scripts/apk_rele>ase.js && node scripts/release.js"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
