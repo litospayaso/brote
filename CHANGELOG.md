@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.22
+
+### Patch Changes
+
+- Upgrading search to fetch popular products
+
 ## 1.0.21
 
 ### Patch Changes
