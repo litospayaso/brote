@@ -17,6 +17,7 @@ function findAndFixBuildGradle(dir) {
       content = content.replace(/JavaVersion\.VERSION_1_8/g, 'JavaVersion.VERSION_17');
       content = content.replace(/jvmTarget\s*=\s*['"]?21['"]?/g, "jvmTarget = '17'");
       content = content.replace(/jvmTarget\s*=\s*['"]?1\.8['"]?/g, "jvmTarget = '17'");
+      content = content.replace(/jvmToolchain\(21\)/g, 'jvmToolchain(17)');
 
       if (content !== originalContent) {
         console.log(`Fixing Java version in ${fullPath}`);

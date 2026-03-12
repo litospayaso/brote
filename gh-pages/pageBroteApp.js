@@ -164,7 +164,7 @@
                 callbackId
               }, callback);
             };
-            const p3 = new Promise((resolve) => call.then(() => resolve({ remove })));
+            const p3 = new Promise((resolve2) => call.then(() => resolve2({ remove })));
             p3.remove = async () => {
               console.warn(`Using addListener() without 'await' is deprecated.`);
               await remove();
@@ -368,11 +368,11 @@
       CapacitorCookies = registerPlugin("CapacitorCookies", {
         web: () => new CapacitorCookiesPluginWeb()
       });
-      readBlobAsBase64 = async (blob) => new Promise((resolve, reject) => {
+      readBlobAsBase64 = async (blob) => new Promise((resolve2, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
           const base64String = reader.result;
-          resolve(base64String.indexOf(",") >= 0 ? base64String.split(",")[1] : base64String);
+          resolve2(base64String.indexOf(",") >= 0 ? base64String.split(",")[1] : base64String);
         };
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(blob);
@@ -1675,15 +1675,15 @@
           /**
            * Encodes some string into a Uint8Array.
            */
-          static encode(s4, encoding) {
+          static encode(s5, encoding) {
             const encodingName = this.encodingName(encoding);
             if (this.customEncoder) {
-              return this.customEncoder(s4, encodingName);
+              return this.customEncoder(s5, encodingName);
             }
             if (typeof TextEncoder === "undefined") {
-              return this.encodeFallback(s4);
+              return this.encodeFallback(s5);
             }
-            return new TextEncoder().encode(s4);
+            return new TextEncoder().encode(s5);
           }
           static isBrowser() {
             return typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
@@ -1709,15 +1709,15 @@
           static decodeFallback(bytes, encoding) {
             const characterSet = this.encodingCharacterSet(encoding);
             if (StringEncoding.isDecodeFallbackSupported(characterSet)) {
-              let s4 = "";
+              let s5 = "";
               for (let i5 = 0, length = bytes.length; i5 < length; i5++) {
                 let h3 = bytes[i5].toString(16);
                 if (h3.length < 2) {
                   h3 = "0" + h3;
                 }
-                s4 += "%" + h3;
+                s5 += "%" + h3;
               }
-              return decodeURIComponent(s4);
+              return decodeURIComponent(s5);
             }
             if (characterSet.equals(CharacterSetECI.UnicodeBigUnmarked)) {
               return String.fromCharCode.apply(null, new Uint16Array(bytes.buffer));
@@ -1732,8 +1732,8 @@
            *
            * @see https://stackoverflow.com/a/17192845/4367683
            */
-          static encodeFallback(s4) {
-            const encodedURIstring = btoa(unescape(encodeURIComponent(s4)));
+          static encodeFallback(s5) {
+            const encodedURIstring = btoa(unescape(encodeURIComponent(s5)));
             const charList = encodedURIstring.split("");
             const uintArray = [];
             for (let i5 = 0; i5 < charList.length; i5++) {
@@ -1959,13 +1959,13 @@
             this.encoding = encoding;
             return this;
           }
-          append(s4) {
-            if (typeof s4 === "string") {
-              this.value += s4.toString();
+          append(s5) {
+            if (typeof s5 === "string") {
+              this.value += s5.toString();
             } else if (this.encoding) {
-              this.value += StringUtils.castAsNonUtf8Char(s4, this.encoding);
+              this.value += StringUtils.castAsNonUtf8Char(s5, this.encoding);
             } else {
-              this.value += String.fromCharCode(s4);
+              this.value += String.fromCharCode(s5);
             }
             return this;
           }
@@ -2992,11 +2992,11 @@
         }
         var __awaiter8 = (globalThis || global || self || window || void 0) && (globalThis || global || self || window || void 0).__awaiter || function(thisArg, _arguments, P2, generator) {
           function adopt(value) {
-            return value instanceof P2 ? value : new P2(function(resolve) {
-              resolve(value);
+            return value instanceof P2 ? value : new P2(function(resolve2) {
+              resolve2(value);
             });
           }
-          return new (P2 || (P2 = Promise))(function(resolve, reject) {
+          return new (P2 || (P2 = Promise))(function(resolve2, reject) {
             function fulfilled(value) {
               try {
                 step(generator.next(value));
@@ -3012,7 +3012,7 @@
               }
             }
             function step(result) {
-              result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+              result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
             }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
           });
@@ -3300,7 +3300,7 @@
            * @param videoElement
            */
           playVideoOnLoadAsync(videoElement) {
-            return new Promise((resolve, reject) => this.playVideoOnLoad(videoElement, () => resolve()));
+            return new Promise((resolve2, reject) => this.playVideoOnLoad(videoElement, () => resolve2()));
           }
           /**
            * Binds listeners and callbacks to the videoElement.
@@ -3497,8 +3497,8 @@
             return decodeTask;
           }
           _decodeOnLoadImage(element) {
-            return new Promise((resolve, reject) => {
-              this.imageLoadedListener = () => this.decodeOnce(element, false, true).then(resolve, reject);
+            return new Promise((resolve2, reject) => {
+              this.imageLoadedListener = () => this.decodeOnce(element, false, true).then(resolve2, reject);
               element.addEventListener("load", this.imageLoadedListener);
             });
           }
@@ -3566,7 +3566,7 @@
            */
           decodeOnce(element, retryIfNotFound = true, retryIfChecksumOrFormatError = true) {
             this._stopAsyncDecode = false;
-            const loop = (resolve, reject) => {
+            const loop = (resolve2, reject) => {
               if (this._stopAsyncDecode) {
                 reject(new NotFoundException("Video stream has ended before any code could be detected."));
                 this._stopAsyncDecode = void 0;
@@ -3574,18 +3574,18 @@
               }
               try {
                 const result = this.decode(element);
-                resolve(result);
+                resolve2(result);
               } catch (e6) {
                 const ifNotFound = retryIfNotFound && e6 instanceof NotFoundException;
                 const isChecksumOrFormatError = e6 instanceof ChecksumException || e6 instanceof FormatException;
                 const ifChecksumOrFormat = isChecksumOrFormatError && retryIfChecksumOrFormatError;
                 if (ifNotFound || ifChecksumOrFormat) {
-                  return setTimeout(loop, this._timeBetweenDecodingAttempts, resolve, reject);
+                  return setTimeout(loop, this._timeBetweenDecodingAttempts, resolve2, reject);
                 }
                 reject(e6);
               }
             };
-            return new Promise((resolve, reject) => loop(resolve, reject));
+            return new Promise((resolve2, reject) => loop(resolve2, reject));
           }
           /**
            * Continuously decodes from video input.
@@ -4531,13 +4531,13 @@
             return result;
           }
           findErrorMagnitudes(errorEvaluator, errorLocations) {
-            const s4 = errorLocations.length;
-            const result = new Int32Array(s4);
+            const s5 = errorLocations.length;
+            const result = new Int32Array(s5);
             const field = this.field;
-            for (let i5 = 0; i5 < s4; i5++) {
+            for (let i5 = 0; i5 < s5; i5++) {
               const xiInverse = field.inverse(errorLocations[i5]);
               let denominator = 1;
-              for (let j = 0; j < s4; j++) {
+              for (let j = 0; j < s5; j++) {
                 if (i5 !== j) {
                   const term = field.multiply(errorLocations[j], xiInverse);
                   const termPlus1 = (term & 1) === 0 ? term | 1 : term & ~1;
@@ -5045,8 +5045,8 @@
            * SincTS has no difference between int and float, there's all numbers,
            * this is used only to polyfill Java code.
            */
-          static floatToIntBits(f3) {
-            return f3;
+          static floatToIntBits(f4) {
+            return f4;
           }
         }
         Float.MAX_VALUE = Number.MAX_SAFE_INTEGER;
@@ -7276,21 +7276,21 @@
             }
             return startRange;
           }
-          static checkChecksum(s4) {
-            return AbstractUPCEANReader.checkStandardUPCEANChecksum(s4);
+          static checkChecksum(s5) {
+            return AbstractUPCEANReader.checkStandardUPCEANChecksum(s5);
           }
-          static checkStandardUPCEANChecksum(s4) {
-            let length = s4.length;
+          static checkStandardUPCEANChecksum(s5) {
+            let length = s5.length;
             if (length === 0)
               return false;
-            let check = parseInt(s4.charAt(length - 1), 10);
-            return AbstractUPCEANReader.getStandardUPCEANChecksum(s4.substring(0, length - 1)) === check;
+            let check = parseInt(s5.charAt(length - 1), 10);
+            return AbstractUPCEANReader.getStandardUPCEANChecksum(s5.substring(0, length - 1)) === check;
           }
-          static getStandardUPCEANChecksum(s4) {
-            let length = s4.length;
+          static getStandardUPCEANChecksum(s5) {
+            let length = s5.length;
             let sum = 0;
             for (let i5 = length - 1; i5 >= 0; i5 -= 2) {
-              let digit = s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              let digit = s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
               if (digit < 0 || digit > 9) {
                 throw new FormatException();
               }
@@ -7298,7 +7298,7 @@
             }
             sum *= 3;
             for (let i5 = length - 2; i5 >= 0; i5 -= 2) {
-              let digit = s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              let digit = s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
               if (digit < 0 || digit > 9) {
                 throw new FormatException();
               }
@@ -7453,15 +7453,15 @@
             }
             return rowOffset;
           }
-          static extensionChecksum(s4) {
-            let length = s4.length;
+          static extensionChecksum(s5) {
+            let length = s5.length;
             let sum = 0;
             for (let i5 = length - 2; i5 >= 0; i5 -= 2) {
-              sum += s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              sum += s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
             }
             sum *= 3;
             for (let i5 = length - 1; i5 >= 0; i5 -= 2) {
-              sum += s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              sum += s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
             }
             sum *= 3;
             return sum % 10;
@@ -7675,21 +7675,21 @@
               new Int32Array(UPCEANReader.START_END_PATTERN.length).fill(0)
             );
           }
-          static checkChecksum(s4) {
-            return UPCEANReader.checkStandardUPCEANChecksum(s4);
+          static checkChecksum(s5) {
+            return UPCEANReader.checkStandardUPCEANChecksum(s5);
           }
-          static checkStandardUPCEANChecksum(s4) {
-            let length = s4.length;
+          static checkStandardUPCEANChecksum(s5) {
+            let length = s5.length;
             if (length === 0)
               return false;
-            let check = parseInt(s4.charAt(length - 1), 10);
-            return UPCEANReader.getStandardUPCEANChecksum(s4.substring(0, length - 1)) === check;
+            let check = parseInt(s5.charAt(length - 1), 10);
+            return UPCEANReader.getStandardUPCEANChecksum(s5.substring(0, length - 1)) === check;
           }
-          static getStandardUPCEANChecksum(s4) {
-            let length = s4.length;
+          static getStandardUPCEANChecksum(s5) {
+            let length = s5.length;
             let sum = 0;
             for (let i5 = length - 1; i5 >= 0; i5 -= 2) {
-              let digit = s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              let digit = s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
               if (digit < 0 || digit > 9) {
                 throw new FormatException();
               }
@@ -7697,7 +7697,7 @@
             }
             sum *= 3;
             for (let i5 = length - 2; i5 >= 0; i5 -= 2) {
-              let digit = s4.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
+              let digit = s5.charAt(i5).charCodeAt(0) - "0".charCodeAt(0);
               if (digit < 0 || digit > 9) {
                 throw new FormatException();
               }
@@ -7890,8 +7890,8 @@
            * @throws FormatException
            */
           // @Override
-          checkChecksum(s4) {
-            return UPCEANReader.checkChecksum(UPCEReader.convertUPCEtoUPCA(s4));
+          checkChecksum(s5) {
+            return UPCEANReader.checkChecksum(UPCEReader.convertUPCEtoUPCA(s5));
           }
           /**
            * @throws NotFoundException
@@ -9520,19 +9520,19 @@
               return false;
             }
             let checksum = firstCharacter.getChecksumPortion();
-            let s4 = 2;
+            let s5 = 2;
             for (let i5 = 1; i5 < this.pairs.size(); ++i5) {
               let currentPair = this.pairs.get(i5);
               checksum += currentPair.getLeftChar().getChecksumPortion();
-              s4++;
+              s5++;
               let currentRightChar = currentPair.getRightChar();
               if (currentRightChar != null) {
                 checksum += currentRightChar.getChecksumPortion();
-                s4++;
+                s5++;
               }
             }
             checksum %= 211;
-            let checkCharacterValue = 211 * (s4 - 4) + checksum;
+            let checkCharacterValue = 211 * (s5 - 4) + checksum;
             return checkCharacterValue == checkCharacter.getValue();
           }
           static getNextSecondBar(row, initialPos) {
@@ -11947,8 +11947,8 @@
           getBits() {
             return this.bits;
           }
-          static fromString(s4) {
-            switch (s4) {
+          static fromString(s5) {
+            switch (s5) {
               case "L":
                 return ErrorCorrectionLevel.L;
               case "M":
@@ -11958,7 +11958,7 @@
               case "H":
                 return ErrorCorrectionLevel.H;
               default:
-                throw new ArgumentException(s4 + "not available");
+                throw new ArgumentException(s5 + "not available");
             }
           }
           toString() {
@@ -20677,9 +20677,9 @@
               formalDerivativeCoefficients[errorLocatorDegree - i5] = this.field.multiply(i5, errorLocator.getCoefficient(i5));
             }
             let formalDerivative = new ModulusPoly(this.field, formalDerivativeCoefficients);
-            let s4 = errorLocations.length;
-            let result = new Int32Array(s4);
-            for (let i5 = 0; i5 < s4; i5++) {
+            let s5 = errorLocations.length;
+            let result = new Int32Array(s5);
+            for (let i5 = 0; i5 < s5; i5++) {
               let xiInverse = this.field.inverse(errorLocations[i5]);
               let numerator = this.field.subtract(0, errorEvaluator.evaluateAt(xiInverse));
               let denominator = this.field.inverse(formalDerivative.evaluateAt(xiInverse));
@@ -23364,8 +23364,8 @@
             const formats = isNullOrUndefined2(hints) ? null : hints.get(DecodeHintType$1.POSSIBLE_FORMATS);
             const readers = new Array();
             if (!isNullOrUndefined2(formats)) {
-              const addOneDReader = formats.some((f3) => {
-                return f3 === BarcodeFormat$1.UPC_A || f3 === BarcodeFormat$1.UPC_E || f3 === BarcodeFormat$1.EAN_13 || f3 === BarcodeFormat$1.EAN_8 || f3 === BarcodeFormat$1.CODABAR || f3 === BarcodeFormat$1.CODE_39 || f3 === BarcodeFormat$1.CODE_93 || f3 === BarcodeFormat$1.CODE_128 || f3 === BarcodeFormat$1.ITF || f3 === BarcodeFormat$1.RSS_14 || f3 === BarcodeFormat$1.RSS_EXPANDED;
+              const addOneDReader = formats.some((f4) => {
+                return f4 === BarcodeFormat$1.UPC_A || f4 === BarcodeFormat$1.UPC_E || f4 === BarcodeFormat$1.EAN_13 || f4 === BarcodeFormat$1.EAN_8 || f4 === BarcodeFormat$1.CODABAR || f4 === BarcodeFormat$1.CODE_39 || f4 === BarcodeFormat$1.CODE_93 || f4 === BarcodeFormat$1.CODE_128 || f4 === BarcodeFormat$1.ITF || f4 === BarcodeFormat$1.RSS_14 || f4 === BarcodeFormat$1.RSS_EXPANDED;
               });
               if (addOneDReader && !tryHarder) {
                 readers.push(new MultiFormatOneDReader(hints, this.verbose));
@@ -26170,6 +26170,634 @@
     }
   });
 
+  // node_modules/@capacitor/filesystem/dist/esm/definitions.js
+  var Directory, Encoding;
+  var init_definitions = __esm({
+    "node_modules/@capacitor/filesystem/dist/esm/definitions.js"() {
+      (function(Directory2) {
+        Directory2["Documents"] = "DOCUMENTS";
+        Directory2["Data"] = "DATA";
+        Directory2["Library"] = "LIBRARY";
+        Directory2["Cache"] = "CACHE";
+        Directory2["External"] = "EXTERNAL";
+        Directory2["ExternalStorage"] = "EXTERNAL_STORAGE";
+        Directory2["ExternalCache"] = "EXTERNAL_CACHE";
+        Directory2["LibraryNoCloud"] = "LIBRARY_NO_CLOUD";
+        Directory2["Temporary"] = "TEMPORARY";
+      })(Directory || (Directory = {}));
+      (function(Encoding2) {
+        Encoding2["UTF8"] = "utf8";
+        Encoding2["ASCII"] = "ascii";
+        Encoding2["UTF16"] = "utf16";
+      })(Encoding || (Encoding = {}));
+    }
+  });
+
+  // node_modules/@capacitor/filesystem/dist/esm/web.js
+  var web_exports2 = {};
+  __export(web_exports2, {
+    FilesystemWeb: () => FilesystemWeb
+  });
+  function resolve(path) {
+    const posix = path.split("/").filter((item) => item !== ".");
+    const newPosix = [];
+    posix.forEach((item) => {
+      if (item === ".." && newPosix.length > 0 && newPosix[newPosix.length - 1] !== "..") {
+        newPosix.pop();
+      } else {
+        newPosix.push(item);
+      }
+    });
+    return newPosix.join("/");
+  }
+  function isPathParent(parent, children) {
+    parent = resolve(parent);
+    children = resolve(children);
+    const pathsA = parent.split("/");
+    const pathsB = children.split("/");
+    return parent !== children && pathsA.every((value, index) => value === pathsB[index]);
+  }
+  var FilesystemWeb;
+  var init_web2 = __esm({
+    "node_modules/@capacitor/filesystem/dist/esm/web.js"() {
+      init_dist();
+      init_definitions();
+      FilesystemWeb = class _FilesystemWeb extends WebPlugin {
+        constructor() {
+          super(...arguments);
+          this.DB_VERSION = 1;
+          this.DB_NAME = "Disc";
+          this._writeCmds = ["add", "put", "delete"];
+          this.downloadFile = async (options) => {
+            var _a, _b;
+            const requestInit = buildRequestInit(options, options.webFetchExtra);
+            const response = await fetch(options.url, requestInit);
+            let blob;
+            if (!options.progress)
+              blob = await response.blob();
+            else if (!(response === null || response === void 0 ? void 0 : response.body))
+              blob = new Blob();
+            else {
+              const reader = response.body.getReader();
+              let bytes = 0;
+              const chunks = [];
+              const contentType = response.headers.get("content-type");
+              const contentLength = parseInt(response.headers.get("content-length") || "0", 10);
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done)
+                  break;
+                chunks.push(value);
+                bytes += (value === null || value === void 0 ? void 0 : value.length) || 0;
+                const status = {
+                  url: options.url,
+                  bytes,
+                  contentLength
+                };
+                this.notifyListeners("progress", status);
+              }
+              const allChunks = new Uint8Array(bytes);
+              let position = 0;
+              for (const chunk of chunks) {
+                if (typeof chunk === "undefined")
+                  continue;
+                allChunks.set(chunk, position);
+                position += chunk.length;
+              }
+              blob = new Blob([allChunks.buffer], { type: contentType || void 0 });
+            }
+            const result = await this.writeFile({
+              path: options.path,
+              directory: (_a = options.directory) !== null && _a !== void 0 ? _a : void 0,
+              recursive: (_b = options.recursive) !== null && _b !== void 0 ? _b : false,
+              data: blob
+            });
+            return { path: result.uri, blob };
+          };
+        }
+        readFileInChunks(_options, _callback) {
+          throw this.unavailable("Method not implemented.");
+        }
+        async initDb() {
+          if (this._db !== void 0) {
+            return this._db;
+          }
+          if (!("indexedDB" in window)) {
+            throw this.unavailable("This browser doesn't support IndexedDB");
+          }
+          return new Promise((resolve2, reject) => {
+            const request2 = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+            request2.onupgradeneeded = _FilesystemWeb.doUpgrade;
+            request2.onsuccess = () => {
+              this._db = request2.result;
+              resolve2(request2.result);
+            };
+            request2.onerror = () => reject(request2.error);
+            request2.onblocked = () => {
+              console.warn("db blocked");
+            };
+          });
+        }
+        static doUpgrade(event) {
+          const eventTarget = event.target;
+          const db = eventTarget.result;
+          switch (event.oldVersion) {
+            case 0:
+            case 1:
+            default: {
+              if (db.objectStoreNames.contains("FileStorage")) {
+                db.deleteObjectStore("FileStorage");
+              }
+              const store = db.createObjectStore("FileStorage", { keyPath: "path" });
+              store.createIndex("by_folder", "folder");
+            }
+          }
+        }
+        async dbRequest(cmd, args) {
+          const readFlag = this._writeCmds.indexOf(cmd) !== -1 ? "readwrite" : "readonly";
+          return this.initDb().then((conn) => {
+            return new Promise((resolve2, reject) => {
+              const tx = conn.transaction(["FileStorage"], readFlag);
+              const store = tx.objectStore("FileStorage");
+              const req = store[cmd](...args);
+              req.onsuccess = () => resolve2(req.result);
+              req.onerror = () => reject(req.error);
+            });
+          });
+        }
+        async dbIndexRequest(indexName, cmd, args) {
+          const readFlag = this._writeCmds.indexOf(cmd) !== -1 ? "readwrite" : "readonly";
+          return this.initDb().then((conn) => {
+            return new Promise((resolve2, reject) => {
+              const tx = conn.transaction(["FileStorage"], readFlag);
+              const store = tx.objectStore("FileStorage");
+              const index = store.index(indexName);
+              const req = index[cmd](...args);
+              req.onsuccess = () => resolve2(req.result);
+              req.onerror = () => reject(req.error);
+            });
+          });
+        }
+        getPath(directory, uriPath) {
+          const cleanedUriPath = uriPath !== void 0 ? uriPath.replace(/^[/]+|[/]+$/g, "") : "";
+          let fsPath = "";
+          if (directory !== void 0)
+            fsPath += "/" + directory;
+          if (uriPath !== "")
+            fsPath += "/" + cleanedUriPath;
+          return fsPath;
+        }
+        async clear() {
+          const conn = await this.initDb();
+          const tx = conn.transaction(["FileStorage"], "readwrite");
+          const store = tx.objectStore("FileStorage");
+          store.clear();
+        }
+        /**
+         * Read a file from disk
+         * @param options options for the file read
+         * @return a promise that resolves with the read file data result
+         */
+        async readFile(options) {
+          const path = this.getPath(options.directory, options.path);
+          const entry = await this.dbRequest("get", [path]);
+          if (entry === void 0)
+            throw Error("File does not exist.");
+          return { data: entry.content ? entry.content : "" };
+        }
+        /**
+         * Write a file to disk in the specified location on device
+         * @param options options for the file write
+         * @return a promise that resolves with the file write result
+         */
+        async writeFile(options) {
+          const path = this.getPath(options.directory, options.path);
+          let data = options.data;
+          const encoding = options.encoding;
+          const doRecursive = options.recursive;
+          const occupiedEntry = await this.dbRequest("get", [path]);
+          if (occupiedEntry && occupiedEntry.type === "directory")
+            throw Error("The supplied path is a directory.");
+          const parentPath = path.substr(0, path.lastIndexOf("/"));
+          const parentEntry = await this.dbRequest("get", [parentPath]);
+          if (parentEntry === void 0) {
+            const subDirIndex = parentPath.indexOf("/", 1);
+            if (subDirIndex !== -1) {
+              const parentArgPath = parentPath.substr(subDirIndex);
+              await this.mkdir({
+                path: parentArgPath,
+                directory: options.directory,
+                recursive: doRecursive
+              });
+            }
+          }
+          if (!encoding && !(data instanceof Blob)) {
+            data = data.indexOf(",") >= 0 ? data.split(",")[1] : data;
+            if (!this.isBase64String(data))
+              throw Error("The supplied data is not valid base64 content.");
+          }
+          const now = Date.now();
+          const pathObj = {
+            path,
+            folder: parentPath,
+            type: "file",
+            size: data instanceof Blob ? data.size : data.length,
+            ctime: now,
+            mtime: now,
+            content: data
+          };
+          await this.dbRequest("put", [pathObj]);
+          return {
+            uri: pathObj.path
+          };
+        }
+        /**
+         * Append to a file on disk in the specified location on device
+         * @param options options for the file append
+         * @return a promise that resolves with the file write result
+         */
+        async appendFile(options) {
+          const path = this.getPath(options.directory, options.path);
+          let data = options.data;
+          const encoding = options.encoding;
+          const parentPath = path.substr(0, path.lastIndexOf("/"));
+          const now = Date.now();
+          let ctime = now;
+          const occupiedEntry = await this.dbRequest("get", [path]);
+          if (occupiedEntry && occupiedEntry.type === "directory")
+            throw Error("The supplied path is a directory.");
+          const parentEntry = await this.dbRequest("get", [parentPath]);
+          if (parentEntry === void 0) {
+            const subDirIndex = parentPath.indexOf("/", 1);
+            if (subDirIndex !== -1) {
+              const parentArgPath = parentPath.substr(subDirIndex);
+              await this.mkdir({
+                path: parentArgPath,
+                directory: options.directory,
+                recursive: true
+              });
+            }
+          }
+          if (!encoding && !this.isBase64String(data))
+            throw Error("The supplied data is not valid base64 content.");
+          if (occupiedEntry !== void 0) {
+            if (occupiedEntry.content instanceof Blob) {
+              throw Error("The occupied entry contains a Blob object which cannot be appended to.");
+            }
+            if (occupiedEntry.content !== void 0 && !encoding) {
+              data = btoa(atob(occupiedEntry.content) + atob(data));
+            } else {
+              data = occupiedEntry.content + data;
+            }
+            ctime = occupiedEntry.ctime;
+          }
+          const pathObj = {
+            path,
+            folder: parentPath,
+            type: "file",
+            size: data.length,
+            ctime,
+            mtime: now,
+            content: data
+          };
+          await this.dbRequest("put", [pathObj]);
+        }
+        /**
+         * Delete a file from disk
+         * @param options options for the file delete
+         * @return a promise that resolves with the deleted file data result
+         */
+        async deleteFile(options) {
+          const path = this.getPath(options.directory, options.path);
+          const entry = await this.dbRequest("get", [path]);
+          if (entry === void 0)
+            throw Error("File does not exist.");
+          const entries = await this.dbIndexRequest("by_folder", "getAllKeys", [IDBKeyRange.only(path)]);
+          if (entries.length !== 0)
+            throw Error("Folder is not empty.");
+          await this.dbRequest("delete", [path]);
+        }
+        /**
+         * Create a directory.
+         * @param options options for the mkdir
+         * @return a promise that resolves with the mkdir result
+         */
+        async mkdir(options) {
+          const path = this.getPath(options.directory, options.path);
+          const doRecursive = options.recursive;
+          const parentPath = path.substr(0, path.lastIndexOf("/"));
+          const depth = (path.match(/\//g) || []).length;
+          const parentEntry = await this.dbRequest("get", [parentPath]);
+          const occupiedEntry = await this.dbRequest("get", [path]);
+          if (depth === 1)
+            throw Error("Cannot create Root directory");
+          if (occupiedEntry !== void 0)
+            throw Error("Current directory does already exist.");
+          if (!doRecursive && depth !== 2 && parentEntry === void 0)
+            throw Error("Parent directory must exist");
+          if (doRecursive && depth !== 2 && parentEntry === void 0) {
+            const parentArgPath = parentPath.substr(parentPath.indexOf("/", 1));
+            await this.mkdir({
+              path: parentArgPath,
+              directory: options.directory,
+              recursive: doRecursive
+            });
+          }
+          const now = Date.now();
+          const pathObj = {
+            path,
+            folder: parentPath,
+            type: "directory",
+            size: 0,
+            ctime: now,
+            mtime: now
+          };
+          await this.dbRequest("put", [pathObj]);
+        }
+        /**
+         * Remove a directory
+         * @param options the options for the directory remove
+         */
+        async rmdir(options) {
+          const { path, directory, recursive } = options;
+          const fullPath = this.getPath(directory, path);
+          const entry = await this.dbRequest("get", [fullPath]);
+          if (entry === void 0)
+            throw Error("Folder does not exist.");
+          if (entry.type !== "directory")
+            throw Error("Requested path is not a directory");
+          const readDirResult = await this.readdir({ path, directory });
+          if (readDirResult.files.length !== 0 && !recursive)
+            throw Error("Folder is not empty");
+          for (const entry2 of readDirResult.files) {
+            const entryPath = `${path}/${entry2.name}`;
+            const entryObj = await this.stat({ path: entryPath, directory });
+            if (entryObj.type === "file") {
+              await this.deleteFile({ path: entryPath, directory });
+            } else {
+              await this.rmdir({ path: entryPath, directory, recursive });
+            }
+          }
+          await this.dbRequest("delete", [fullPath]);
+        }
+        /**
+         * Return a list of files from the directory (not recursive)
+         * @param options the options for the readdir operation
+         * @return a promise that resolves with the readdir directory listing result
+         */
+        async readdir(options) {
+          const path = this.getPath(options.directory, options.path);
+          const entry = await this.dbRequest("get", [path]);
+          if (options.path !== "" && entry === void 0)
+            throw Error("Folder does not exist.");
+          const entries = await this.dbIndexRequest("by_folder", "getAllKeys", [IDBKeyRange.only(path)]);
+          const files = await Promise.all(entries.map(async (e6) => {
+            let subEntry = await this.dbRequest("get", [e6]);
+            if (subEntry === void 0) {
+              subEntry = await this.dbRequest("get", [e6 + "/"]);
+            }
+            return {
+              name: e6.substring(path.length + 1),
+              type: subEntry.type,
+              size: subEntry.size,
+              ctime: subEntry.ctime,
+              mtime: subEntry.mtime,
+              uri: subEntry.path
+            };
+          }));
+          return { files };
+        }
+        /**
+         * Return full File URI for a path and directory
+         * @param options the options for the stat operation
+         * @return a promise that resolves with the file stat result
+         */
+        async getUri(options) {
+          const path = this.getPath(options.directory, options.path);
+          let entry = await this.dbRequest("get", [path]);
+          if (entry === void 0) {
+            entry = await this.dbRequest("get", [path + "/"]);
+          }
+          return {
+            uri: (entry === null || entry === void 0 ? void 0 : entry.path) || path
+          };
+        }
+        /**
+         * Return data about a file
+         * @param options the options for the stat operation
+         * @return a promise that resolves with the file stat result
+         */
+        async stat(options) {
+          const path = this.getPath(options.directory, options.path);
+          let entry = await this.dbRequest("get", [path]);
+          if (entry === void 0) {
+            entry = await this.dbRequest("get", [path + "/"]);
+          }
+          if (entry === void 0)
+            throw Error("Entry does not exist.");
+          return {
+            name: entry.path.substring(path.length + 1),
+            type: entry.type,
+            size: entry.size,
+            ctime: entry.ctime,
+            mtime: entry.mtime,
+            uri: entry.path
+          };
+        }
+        /**
+         * Rename a file or directory
+         * @param options the options for the rename operation
+         * @return a promise that resolves with the rename result
+         */
+        async rename(options) {
+          await this._copy(options, true);
+          return;
+        }
+        /**
+         * Copy a file or directory
+         * @param options the options for the copy operation
+         * @return a promise that resolves with the copy result
+         */
+        async copy(options) {
+          return this._copy(options, false);
+        }
+        async requestPermissions() {
+          return { publicStorage: "granted" };
+        }
+        async checkPermissions() {
+          return { publicStorage: "granted" };
+        }
+        /**
+         * Function that can perform a copy or a rename
+         * @param options the options for the rename operation
+         * @param doRename whether to perform a rename or copy operation
+         * @return a promise that resolves with the result
+         */
+        async _copy(options, doRename = false) {
+          let { toDirectory } = options;
+          const { to, from, directory: fromDirectory } = options;
+          if (!to || !from) {
+            throw Error("Both to and from must be provided");
+          }
+          if (!toDirectory) {
+            toDirectory = fromDirectory;
+          }
+          const fromPath = this.getPath(fromDirectory, from);
+          const toPath = this.getPath(toDirectory, to);
+          if (fromPath === toPath) {
+            return {
+              uri: toPath
+            };
+          }
+          if (isPathParent(fromPath, toPath)) {
+            throw Error("To path cannot contain the from path");
+          }
+          let toObj;
+          try {
+            toObj = await this.stat({
+              path: to,
+              directory: toDirectory
+            });
+          } catch (e6) {
+            const toPathComponents = to.split("/");
+            toPathComponents.pop();
+            const toPath2 = toPathComponents.join("/");
+            if (toPathComponents.length > 0) {
+              const toParentDirectory = await this.stat({
+                path: toPath2,
+                directory: toDirectory
+              });
+              if (toParentDirectory.type !== "directory") {
+                throw new Error("Parent directory of the to path is a file");
+              }
+            }
+          }
+          if (toObj && toObj.type === "directory") {
+            throw new Error("Cannot overwrite a directory with a file");
+          }
+          const fromObj = await this.stat({
+            path: from,
+            directory: fromDirectory
+          });
+          const updateTime = async (path, ctime2, mtime) => {
+            const fullPath = this.getPath(toDirectory, path);
+            const entry = await this.dbRequest("get", [fullPath]);
+            entry.ctime = ctime2;
+            entry.mtime = mtime;
+            await this.dbRequest("put", [entry]);
+          };
+          const ctime = fromObj.ctime ? fromObj.ctime : Date.now();
+          switch (fromObj.type) {
+            // The "from" object is a file
+            case "file": {
+              const file = await this.readFile({
+                path: from,
+                directory: fromDirectory
+              });
+              if (doRename) {
+                await this.deleteFile({
+                  path: from,
+                  directory: fromDirectory
+                });
+              }
+              let encoding;
+              if (!(file.data instanceof Blob) && !this.isBase64String(file.data)) {
+                encoding = Encoding.UTF8;
+              }
+              const writeResult = await this.writeFile({
+                path: to,
+                directory: toDirectory,
+                data: file.data,
+                encoding
+              });
+              if (doRename) {
+                await updateTime(to, ctime, fromObj.mtime);
+              }
+              return writeResult;
+            }
+            case "directory": {
+              if (toObj) {
+                throw Error("Cannot move a directory over an existing object");
+              }
+              try {
+                await this.mkdir({
+                  path: to,
+                  directory: toDirectory,
+                  recursive: false
+                });
+                if (doRename) {
+                  await updateTime(to, ctime, fromObj.mtime);
+                }
+              } catch (e6) {
+              }
+              const contents = (await this.readdir({
+                path: from,
+                directory: fromDirectory
+              })).files;
+              for (const filename of contents) {
+                await this._copy({
+                  from: `${from}/${filename.name}`,
+                  to: `${to}/${filename.name}`,
+                  directory: fromDirectory,
+                  toDirectory
+                }, doRename);
+              }
+              if (doRename) {
+                await this.rmdir({
+                  path: from,
+                  directory: fromDirectory
+                });
+              }
+            }
+          }
+          return {
+            uri: toPath
+          };
+        }
+        isBase64String(str) {
+          try {
+            return btoa(atob(str)) == str;
+          } catch (err) {
+            return false;
+          }
+        }
+      };
+      FilesystemWeb._debug = true;
+    }
+  });
+
+  // node_modules/@capacitor/share/dist/esm/web.js
+  var web_exports3 = {};
+  __export(web_exports3, {
+    ShareWeb: () => ShareWeb
+  });
+  var ShareWeb;
+  var init_web3 = __esm({
+    "node_modules/@capacitor/share/dist/esm/web.js"() {
+      init_dist();
+      ShareWeb = class extends WebPlugin {
+        async canShare() {
+          if (typeof navigator === "undefined" || !navigator.share) {
+            return { value: false };
+          } else {
+            return { value: true };
+          }
+        }
+        async share(options) {
+          if (typeof navigator === "undefined" || !navigator.share) {
+            throw this.unavailable("Share API not available in this browser");
+          }
+          await navigator.share({
+            title: options.title,
+            text: options.text,
+            url: options.url
+          });
+          return {};
+        }
+      };
+    }
+  });
+
   // node_modules/@lit/reactive-element/css-tag.js
   var t = globalThis;
   var e = t.ShadowRoot && (void 0 === t.ShadyCSS || t.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
@@ -26182,10 +26810,10 @@
     }
     get styleSheet() {
       let t4 = this.o;
-      const s4 = this.t;
+      const s5 = this.t;
       if (e && void 0 === t4) {
-        const e6 = void 0 !== s4 && 1 === s4.length;
-        e6 && (t4 = o.get(s4)), void 0 === t4 && ((this.o = t4 = new CSSStyleSheet()).replaceSync(this.cssText), e6 && o.set(s4, t4));
+        const e6 = void 0 !== s5 && 1 === s5.length;
+        e6 && (t4 = o.get(s5)), void 0 === t4 && ((this.o = t4 = new CSSStyleSheet()).replaceSync(this.cssText), e6 && o.set(s5, t4));
       }
       return t4;
     }
@@ -26195,23 +26823,23 @@
   };
   var r = (t4) => new n("string" == typeof t4 ? t4 : t4 + "", void 0, s);
   var i = (t4, ...e6) => {
-    const o6 = 1 === t4.length ? t4[0] : e6.reduce((e7, s4, o7) => e7 + ((t5) => {
+    const o6 = 1 === t4.length ? t4[0] : e6.reduce((e7, s5, o7) => e7 + ((t5) => {
       if (true === t5._$cssResult$) return t5.cssText;
       if ("number" == typeof t5) return t5;
       throw Error("Value passed to 'css' function must be a 'css' function result: " + t5 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-    })(s4) + t4[o7 + 1], t4[0]);
+    })(s5) + t4[o7 + 1], t4[0]);
     return new n(o6, t4, s);
   };
-  var S = (s4, o6) => {
-    if (e) s4.adoptedStyleSheets = o6.map((t4) => t4 instanceof CSSStyleSheet ? t4 : t4.styleSheet);
+  var S = (s5, o6) => {
+    if (e) s5.adoptedStyleSheets = o6.map((t4) => t4 instanceof CSSStyleSheet ? t4 : t4.styleSheet);
     else for (const e6 of o6) {
       const o7 = document.createElement("style"), n5 = t.litNonce;
-      void 0 !== n5 && o7.setAttribute("nonce", n5), o7.textContent = e6.cssText, s4.appendChild(o7);
+      void 0 !== n5 && o7.setAttribute("nonce", n5), o7.textContent = e6.cssText, s5.appendChild(o7);
     }
   };
   var c = e ? (t4) => t4 : (t4) => t4 instanceof CSSStyleSheet ? ((t5) => {
     let e6 = "";
-    for (const s4 of t5.cssRules) e6 += s4.cssText;
+    for (const s5 of t5.cssRules) e6 += s5.cssText;
     return r(e6);
   })(t4) : t4;
 
@@ -26221,9 +26849,9 @@
   var c2 = a.trustedTypes;
   var l = c2 ? c2.emptyScript : "";
   var p = a.reactiveElementPolyfillSupport;
-  var d = (t4, s4) => t4;
-  var u = { toAttribute(t4, s4) {
-    switch (s4) {
+  var d = (t4, s5) => t4;
+  var u = { toAttribute(t4, s5) {
+    switch (s5) {
       case Boolean:
         t4 = t4 ? l : null;
         break;
@@ -26232,9 +26860,9 @@
         t4 = null == t4 ? t4 : JSON.stringify(t4);
     }
     return t4;
-  }, fromAttribute(t4, s4) {
+  }, fromAttribute(t4, s5) {
     let i5 = t4;
-    switch (s4) {
+    switch (s5) {
       case Boolean:
         i5 = null !== t4;
         break;
@@ -26251,7 +26879,7 @@
     }
     return i5;
   } };
-  var f = (t4, s4) => !i2(t4, s4);
+  var f = (t4, s5) => !i2(t4, s5);
   var b = { attribute: true, type: String, converter: u, reflect: false, useDefault: false, hasChanged: f };
   Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), a.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
   var y = class extends HTMLElement {
@@ -26261,21 +26889,21 @@
     static get observedAttributes() {
       return this.finalize(), this._$Eh && [...this._$Eh.keys()];
     }
-    static createProperty(t4, s4 = b) {
-      if (s4.state && (s4.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t4) && ((s4 = Object.create(s4)).wrapped = true), this.elementProperties.set(t4, s4), !s4.noAccessor) {
-        const i5 = /* @__PURE__ */ Symbol(), h3 = this.getPropertyDescriptor(t4, i5, s4);
+    static createProperty(t4, s5 = b) {
+      if (s5.state && (s5.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t4) && ((s5 = Object.create(s5)).wrapped = true), this.elementProperties.set(t4, s5), !s5.noAccessor) {
+        const i5 = /* @__PURE__ */ Symbol(), h3 = this.getPropertyDescriptor(t4, i5, s5);
         void 0 !== h3 && e2(this.prototype, t4, h3);
       }
     }
-    static getPropertyDescriptor(t4, s4, i5) {
+    static getPropertyDescriptor(t4, s5, i5) {
       const { get: e6, set: r6 } = h(this.prototype, t4) ?? { get() {
-        return this[s4];
+        return this[s5];
       }, set(t5) {
-        this[s4] = t5;
+        this[s5] = t5;
       } };
-      return { get: e6, set(s5) {
+      return { get: e6, set(s6) {
         const h3 = e6?.call(this);
-        r6?.call(this, s5), this.requestUpdate(t4, h3, i5);
+        r6?.call(this, s6), this.requestUpdate(t4, h3, i5);
       }, configurable: true, enumerable: true };
     }
     static getPropertyOptions(t4) {
@@ -26289,31 +26917,31 @@
     static finalize() {
       if (this.hasOwnProperty(d("finalized"))) return;
       if (this.finalized = true, this._$Ei(), this.hasOwnProperty(d("properties"))) {
-        const t5 = this.properties, s4 = [...r2(t5), ...o2(t5)];
-        for (const i5 of s4) this.createProperty(i5, t5[i5]);
+        const t5 = this.properties, s5 = [...r2(t5), ...o2(t5)];
+        for (const i5 of s5) this.createProperty(i5, t5[i5]);
       }
       const t4 = this[Symbol.metadata];
       if (null !== t4) {
-        const s4 = litPropertyMetadata.get(t4);
-        if (void 0 !== s4) for (const [t5, i5] of s4) this.elementProperties.set(t5, i5);
+        const s5 = litPropertyMetadata.get(t4);
+        if (void 0 !== s5) for (const [t5, i5] of s5) this.elementProperties.set(t5, i5);
       }
       this._$Eh = /* @__PURE__ */ new Map();
-      for (const [t5, s4] of this.elementProperties) {
-        const i5 = this._$Eu(t5, s4);
+      for (const [t5, s5] of this.elementProperties) {
+        const i5 = this._$Eu(t5, s5);
         void 0 !== i5 && this._$Eh.set(i5, t5);
       }
       this.elementStyles = this.finalizeStyles(this.styles);
     }
-    static finalizeStyles(s4) {
+    static finalizeStyles(s5) {
       const i5 = [];
-      if (Array.isArray(s4)) {
-        const e6 = new Set(s4.flat(1 / 0).reverse());
-        for (const s5 of e6) i5.unshift(c(s5));
-      } else void 0 !== s4 && i5.push(c(s4));
+      if (Array.isArray(s5)) {
+        const e6 = new Set(s5.flat(1 / 0).reverse());
+        for (const s6 of e6) i5.unshift(c(s6));
+      } else void 0 !== s5 && i5.push(c(s5));
       return i5;
     }
-    static _$Eu(t4, s4) {
-      const i5 = s4.attribute;
+    static _$Eu(t4, s5) {
+      const i5 = s5.attribute;
       return false === i5 ? void 0 : "string" == typeof i5 ? i5 : "string" == typeof t4 ? t4.toLowerCase() : void 0;
     }
     constructor() {
@@ -26329,8 +26957,8 @@
       this._$EO?.delete(t4);
     }
     _$E_() {
-      const t4 = /* @__PURE__ */ new Map(), s4 = this.constructor.elementProperties;
-      for (const i5 of s4.keys()) this.hasOwnProperty(i5) && (t4.set(i5, this[i5]), delete this[i5]);
+      const t4 = /* @__PURE__ */ new Map(), s5 = this.constructor.elementProperties;
+      for (const i5 of s5.keys()) this.hasOwnProperty(i5) && (t4.set(i5, this[i5]), delete this[i5]);
       t4.size > 0 && (this._$Ep = t4);
     }
     createRenderRoot() {
@@ -26345,35 +26973,35 @@
     disconnectedCallback() {
       this._$EO?.forEach((t4) => t4.hostDisconnected?.());
     }
-    attributeChangedCallback(t4, s4, i5) {
+    attributeChangedCallback(t4, s5, i5) {
       this._$AK(t4, i5);
     }
-    _$ET(t4, s4) {
+    _$ET(t4, s5) {
       const i5 = this.constructor.elementProperties.get(t4), e6 = this.constructor._$Eu(t4, i5);
       if (void 0 !== e6 && true === i5.reflect) {
-        const h3 = (void 0 !== i5.converter?.toAttribute ? i5.converter : u).toAttribute(s4, i5.type);
+        const h3 = (void 0 !== i5.converter?.toAttribute ? i5.converter : u).toAttribute(s5, i5.type);
         this._$Em = t4, null == h3 ? this.removeAttribute(e6) : this.setAttribute(e6, h3), this._$Em = null;
       }
     }
-    _$AK(t4, s4) {
+    _$AK(t4, s5) {
       const i5 = this.constructor, e6 = i5._$Eh.get(t4);
       if (void 0 !== e6 && this._$Em !== e6) {
         const t5 = i5.getPropertyOptions(e6), h3 = "function" == typeof t5.converter ? { fromAttribute: t5.converter } : void 0 !== t5.converter?.fromAttribute ? t5.converter : u;
         this._$Em = e6;
-        const r6 = h3.fromAttribute(s4, t5.type);
+        const r6 = h3.fromAttribute(s5, t5.type);
         this[e6] = r6 ?? this._$Ej?.get(e6) ?? r6, this._$Em = null;
       }
     }
-    requestUpdate(t4, s4, i5, e6 = false, h3) {
+    requestUpdate(t4, s5, i5, e6 = false, h3) {
       if (void 0 !== t4) {
         const r6 = this.constructor;
-        if (false === e6 && (h3 = this[t4]), i5 ??= r6.getPropertyOptions(t4), !((i5.hasChanged ?? f)(h3, s4) || i5.useDefault && i5.reflect && h3 === this._$Ej?.get(t4) && !this.hasAttribute(r6._$Eu(t4, i5)))) return;
-        this.C(t4, s4, i5);
+        if (false === e6 && (h3 = this[t4]), i5 ??= r6.getPropertyOptions(t4), !((i5.hasChanged ?? f)(h3, s5) || i5.useDefault && i5.reflect && h3 === this._$Ej?.get(t4) && !this.hasAttribute(r6._$Eu(t4, i5)))) return;
+        this.C(t4, s5, i5);
       }
       false === this.isUpdatePending && (this._$ES = this._$EP());
     }
-    C(t4, s4, { useDefault: i5, reflect: e6, wrapped: h3 }, r6) {
-      i5 && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(t4) && (this._$Ej.set(t4, r6 ?? s4 ?? this[t4]), true !== h3 || void 0 !== r6) || (this._$AL.has(t4) || (this.hasUpdated || i5 || (s4 = void 0), this._$AL.set(t4, s4)), true === e6 && this._$Em !== t4 && (this._$Eq ??= /* @__PURE__ */ new Set()).add(t4));
+    C(t4, s5, { useDefault: i5, reflect: e6, wrapped: h3 }, r6) {
+      i5 && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(t4) && (this._$Ej.set(t4, r6 ?? s5 ?? this[t4]), true !== h3 || void 0 !== r6) || (this._$AL.has(t4) || (this.hasUpdated || i5 || (s5 = void 0), this._$AL.set(t4, s5)), true === e6 && this._$Em !== t4 && (this._$Eq ??= /* @__PURE__ */ new Set()).add(t4));
     }
     async _$EP() {
       this.isUpdatePending = true;
@@ -26392,23 +27020,23 @@
       if (!this.isUpdatePending) return;
       if (!this.hasUpdated) {
         if (this.renderRoot ??= this.createRenderRoot(), this._$Ep) {
-          for (const [t6, s5] of this._$Ep) this[t6] = s5;
+          for (const [t6, s6] of this._$Ep) this[t6] = s6;
           this._$Ep = void 0;
         }
         const t5 = this.constructor.elementProperties;
-        if (t5.size > 0) for (const [s5, i5] of t5) {
-          const { wrapped: t6 } = i5, e6 = this[s5];
-          true !== t6 || this._$AL.has(s5) || void 0 === e6 || this.C(s5, void 0, i5, e6);
+        if (t5.size > 0) for (const [s6, i5] of t5) {
+          const { wrapped: t6 } = i5, e6 = this[s6];
+          true !== t6 || this._$AL.has(s6) || void 0 === e6 || this.C(s6, void 0, i5, e6);
         }
       }
       let t4 = false;
-      const s4 = this._$AL;
+      const s5 = this._$AL;
       try {
-        t4 = this.shouldUpdate(s4), t4 ? (this.willUpdate(s4), this._$EO?.forEach((t5) => t5.hostUpdate?.()), this.update(s4)) : this._$EM();
-      } catch (s5) {
-        throw t4 = false, this._$EM(), s5;
+        t4 = this.shouldUpdate(s5), t4 ? (this.willUpdate(s5), this._$EO?.forEach((t5) => t5.hostUpdate?.()), this.update(s5)) : this._$EM();
+      } catch (s6) {
+        throw t4 = false, this._$EM(), s6;
       }
-      t4 && this._$AE(s4);
+      t4 && this._$AE(s5);
     }
     willUpdate(t4) {
     }
@@ -26460,7 +27088,7 @@
   var g = /'/g;
   var $ = /"/g;
   var y2 = /^(?:script|style|textarea|title)$/i;
-  var x = (t4) => (i5, ...s4) => ({ _$litType$: t4, strings: i5, values: s4 });
+  var x = (t4) => (i5, ...s5) => ({ _$litType$: t4, strings: i5, values: s5 });
   var b2 = x(1);
   var w = x(2);
   var T = x(3);
@@ -26473,38 +27101,38 @@
     return void 0 !== e3 ? e3.createHTML(i5) : i5;
   }
   var N = (t4, i5) => {
-    const s4 = t4.length - 1, e6 = [];
+    const s5 = t4.length - 1, e6 = [];
     let n5, l3 = 2 === i5 ? "<svg>" : 3 === i5 ? "<math>" : "", c4 = v;
-    for (let i6 = 0; i6 < s4; i6++) {
-      const s5 = t4[i6];
-      let a3, u3, d3 = -1, f3 = 0;
-      for (; f3 < s5.length && (c4.lastIndex = f3, u3 = c4.exec(s5), null !== u3); ) f3 = c4.lastIndex, c4 === v ? "!--" === u3[1] ? c4 = _ : void 0 !== u3[1] ? c4 = m : void 0 !== u3[2] ? (y2.test(u3[2]) && (n5 = RegExp("</" + u3[2], "g")), c4 = p2) : void 0 !== u3[3] && (c4 = p2) : c4 === p2 ? ">" === u3[0] ? (c4 = n5 ?? v, d3 = -1) : void 0 === u3[1] ? d3 = -2 : (d3 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? p2 : '"' === u3[3] ? $ : g) : c4 === $ || c4 === g ? c4 = p2 : c4 === _ || c4 === m ? c4 = v : (c4 = p2, n5 = void 0);
+    for (let i6 = 0; i6 < s5; i6++) {
+      const s6 = t4[i6];
+      let a3, u4, d3 = -1, f4 = 0;
+      for (; f4 < s6.length && (c4.lastIndex = f4, u4 = c4.exec(s6), null !== u4); ) f4 = c4.lastIndex, c4 === v ? "!--" === u4[1] ? c4 = _ : void 0 !== u4[1] ? c4 = m : void 0 !== u4[2] ? (y2.test(u4[2]) && (n5 = RegExp("</" + u4[2], "g")), c4 = p2) : void 0 !== u4[3] && (c4 = p2) : c4 === p2 ? ">" === u4[0] ? (c4 = n5 ?? v, d3 = -1) : void 0 === u4[1] ? d3 = -2 : (d3 = c4.lastIndex - u4[2].length, a3 = u4[1], c4 = void 0 === u4[3] ? p2 : '"' === u4[3] ? $ : g) : c4 === $ || c4 === g ? c4 = p2 : c4 === _ || c4 === m ? c4 = v : (c4 = p2, n5 = void 0);
       const x2 = c4 === p2 && t4[i6 + 1].startsWith("/>") ? " " : "";
-      l3 += c4 === v ? s5 + r3 : d3 >= 0 ? (e6.push(a3), s5.slice(0, d3) + h2 + s5.slice(d3) + o3 + x2) : s5 + o3 + (-2 === d3 ? i6 : x2);
+      l3 += c4 === v ? s6 + r3 : d3 >= 0 ? (e6.push(a3), s6.slice(0, d3) + h2 + s6.slice(d3) + o3 + x2) : s6 + o3 + (-2 === d3 ? i6 : x2);
     }
-    return [V(t4, l3 + (t4[s4] || "<?>") + (2 === i5 ? "</svg>" : 3 === i5 ? "</math>" : "")), e6];
+    return [V(t4, l3 + (t4[s5] || "<?>") + (2 === i5 ? "</svg>" : 3 === i5 ? "</math>" : "")), e6];
   };
   var S2 = class _S {
     constructor({ strings: t4, _$litType$: i5 }, e6) {
       let r6;
       this.parts = [];
       let l3 = 0, a3 = 0;
-      const u3 = t4.length - 1, d3 = this.parts, [f3, v2] = N(t4, i5);
-      if (this.el = _S.createElement(f3, e6), P.currentNode = this.el.content, 2 === i5 || 3 === i5) {
+      const u4 = t4.length - 1, d3 = this.parts, [f4, v2] = N(t4, i5);
+      if (this.el = _S.createElement(f4, e6), P.currentNode = this.el.content, 2 === i5 || 3 === i5) {
         const t5 = this.el.content.firstChild;
         t5.replaceWith(...t5.childNodes);
       }
-      for (; null !== (r6 = P.nextNode()) && d3.length < u3; ) {
+      for (; null !== (r6 = P.nextNode()) && d3.length < u4; ) {
         if (1 === r6.nodeType) {
           if (r6.hasAttributes()) for (const t5 of r6.getAttributeNames()) if (t5.endsWith(h2)) {
-            const i6 = v2[a3++], s4 = r6.getAttribute(t5).split(o3), e7 = /([.?@])?(.*)/.exec(i6);
-            d3.push({ type: 1, index: l3, name: e7[2], strings: s4, ctor: "." === e7[1] ? I : "?" === e7[1] ? L : "@" === e7[1] ? z : H }), r6.removeAttribute(t5);
+            const i6 = v2[a3++], s5 = r6.getAttribute(t5).split(o3), e7 = /([.?@])?(.*)/.exec(i6);
+            d3.push({ type: 1, index: l3, name: e7[2], strings: s5, ctor: "." === e7[1] ? I : "?" === e7[1] ? L : "@" === e7[1] ? z : H }), r6.removeAttribute(t5);
           } else t5.startsWith(o3) && (d3.push({ type: 6, index: l3 }), r6.removeAttribute(t5));
           if (y2.test(r6.tagName)) {
             const t5 = r6.textContent.split(o3), i6 = t5.length - 1;
             if (i6 > 0) {
               r6.textContent = s2 ? s2.emptyScript : "";
-              for (let s4 = 0; s4 < i6; s4++) r6.append(t5[s4], c3()), P.nextNode(), d3.push({ type: 2, index: ++l3 });
+              for (let s5 = 0; s5 < i6; s5++) r6.append(t5[s5], c3()), P.nextNode(), d3.push({ type: 2, index: ++l3 });
               r6.append(t5[i6], c3());
             }
           }
@@ -26517,15 +27145,15 @@
       }
     }
     static createElement(t4, i5) {
-      const s4 = l2.createElement("template");
-      return s4.innerHTML = t4, s4;
+      const s5 = l2.createElement("template");
+      return s5.innerHTML = t4, s5;
     }
   };
-  function M(t4, i5, s4 = t4, e6) {
+  function M(t4, i5, s5 = t4, e6) {
     if (i5 === E) return i5;
-    let h3 = void 0 !== e6 ? s4._$Co?.[e6] : s4._$Cl;
+    let h3 = void 0 !== e6 ? s5._$Co?.[e6] : s5._$Cl;
     const o6 = a2(i5) ? void 0 : i5._$litDirective$;
-    return h3?.constructor !== o6 && (h3?._$AO?.(false), void 0 === o6 ? h3 = void 0 : (h3 = new o6(t4), h3._$AT(t4, s4, e6)), void 0 !== e6 ? (s4._$Co ??= [])[e6] = h3 : s4._$Cl = h3), void 0 !== h3 && (i5 = M(t4, h3._$AS(t4, i5.values), h3, e6)), i5;
+    return h3?.constructor !== o6 && (h3?._$AO?.(false), void 0 === o6 ? h3 = void 0 : (h3 = new o6(t4), h3._$AT(t4, s5, e6)), void 0 !== e6 ? (s5._$Co ??= [])[e6] = h3 : s5._$Cl = h3), void 0 !== h3 && (i5 = M(t4, h3._$AS(t4, i5.values), h3, e6)), i5;
   }
   var R = class {
     constructor(t4, i5) {
@@ -26538,13 +27166,13 @@
       return this._$AM._$AU;
     }
     u(t4) {
-      const { el: { content: i5 }, parts: s4 } = this._$AD, e6 = (t4?.creationScope ?? l2).importNode(i5, true);
+      const { el: { content: i5 }, parts: s5 } = this._$AD, e6 = (t4?.creationScope ?? l2).importNode(i5, true);
       P.currentNode = e6;
-      let h3 = P.nextNode(), o6 = 0, n5 = 0, r6 = s4[0];
+      let h3 = P.nextNode(), o6 = 0, n5 = 0, r6 = s5[0];
       for (; void 0 !== r6; ) {
         if (o6 === r6.index) {
           let i6;
-          2 === r6.type ? i6 = new k(h3, h3.nextSibling, this, t4) : 1 === r6.type ? i6 = new r6.ctor(h3, r6.name, r6.strings, this, t4) : 6 === r6.type && (i6 = new Z(h3, this, t4)), this._$AV.push(i6), r6 = s4[++n5];
+          2 === r6.type ? i6 = new k(h3, h3.nextSibling, this, t4) : 1 === r6.type ? i6 = new r6.ctor(h3, r6.name, r6.strings, this, t4) : 6 === r6.type && (i6 = new Z(h3, this, t4)), this._$AV.push(i6), r6 = s5[++n5];
         }
         o6 !== r6?.index && (h3 = P.nextNode(), o6++);
       }
@@ -26552,15 +27180,15 @@
     }
     p(t4) {
       let i5 = 0;
-      for (const s4 of this._$AV) void 0 !== s4 && (void 0 !== s4.strings ? (s4._$AI(t4, s4, i5), i5 += s4.strings.length - 2) : s4._$AI(t4[i5])), i5++;
+      for (const s5 of this._$AV) void 0 !== s5 && (void 0 !== s5.strings ? (s5._$AI(t4, s5, i5), i5 += s5.strings.length - 2) : s5._$AI(t4[i5])), i5++;
     }
   };
   var k = class _k {
     get _$AU() {
       return this._$AM?._$AU ?? this._$Cv;
     }
-    constructor(t4, i5, s4, e6) {
-      this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t4, this._$AB = i5, this._$AM = s4, this.options = e6, this._$Cv = e6?.isConnected ?? true;
+    constructor(t4, i5, s5, e6) {
+      this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t4, this._$AB = i5, this._$AM = s5, this.options = e6, this._$Cv = e6?.isConnected ?? true;
     }
     get parentNode() {
       let t4 = this._$AA.parentNode;
@@ -26586,11 +27214,11 @@
       this._$AH !== A && a2(this._$AH) ? this._$AA.nextSibling.data = t4 : this.T(l2.createTextNode(t4)), this._$AH = t4;
     }
     $(t4) {
-      const { values: i5, _$litType$: s4 } = t4, e6 = "number" == typeof s4 ? this._$AC(t4) : (void 0 === s4.el && (s4.el = S2.createElement(V(s4.h, s4.h[0]), this.options)), s4);
+      const { values: i5, _$litType$: s5 } = t4, e6 = "number" == typeof s5 ? this._$AC(t4) : (void 0 === s5.el && (s5.el = S2.createElement(V(s5.h, s5.h[0]), this.options)), s5);
       if (this._$AH?._$AD === e6) this._$AH.p(i5);
       else {
-        const t5 = new R(e6, this), s5 = t5.u(this.options);
-        t5.p(i5), this.T(s5), this._$AH = t5;
+        const t5 = new R(e6, this), s6 = t5.u(this.options);
+        t5.p(i5), this.T(s6), this._$AH = t5;
       }
     }
     _$AC(t4) {
@@ -26600,14 +27228,14 @@
     k(t4) {
       u2(this._$AH) || (this._$AH = [], this._$AR());
       const i5 = this._$AH;
-      let s4, e6 = 0;
-      for (const h3 of t4) e6 === i5.length ? i5.push(s4 = new _k(this.O(c3()), this.O(c3()), this, this.options)) : s4 = i5[e6], s4._$AI(h3), e6++;
-      e6 < i5.length && (this._$AR(s4 && s4._$AB.nextSibling, e6), i5.length = e6);
+      let s5, e6 = 0;
+      for (const h3 of t4) e6 === i5.length ? i5.push(s5 = new _k(this.O(c3()), this.O(c3()), this, this.options)) : s5 = i5[e6], s5._$AI(h3), e6++;
+      e6 < i5.length && (this._$AR(s5 && s5._$AB.nextSibling, e6), i5.length = e6);
     }
-    _$AR(t4 = this._$AA.nextSibling, s4) {
-      for (this._$AP?.(false, true, s4); t4 !== this._$AB; ) {
-        const s5 = i3(t4).nextSibling;
-        i3(t4).remove(), t4 = s5;
+    _$AR(t4 = this._$AA.nextSibling, s5) {
+      for (this._$AP?.(false, true, s5); t4 !== this._$AB; ) {
+        const s6 = i3(t4).nextSibling;
+        i3(t4).remove(), t4 = s6;
       }
     }
     setConnected(t4) {
@@ -26621,17 +27249,17 @@
     get _$AU() {
       return this._$AM._$AU;
     }
-    constructor(t4, i5, s4, e6, h3) {
-      this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t4, this.name = i5, this._$AM = e6, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = A;
+    constructor(t4, i5, s5, e6, h3) {
+      this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t4, this.name = i5, this._$AM = e6, this.options = h3, s5.length > 2 || "" !== s5[0] || "" !== s5[1] ? (this._$AH = Array(s5.length - 1).fill(new String()), this.strings = s5) : this._$AH = A;
     }
-    _$AI(t4, i5 = this, s4, e6) {
+    _$AI(t4, i5 = this, s5, e6) {
       const h3 = this.strings;
       let o6 = false;
       if (void 0 === h3) t4 = M(this, t4, i5, 0), o6 = !a2(t4) || t4 !== this._$AH && t4 !== E, o6 && (this._$AH = t4);
       else {
         const e7 = t4;
         let n5, r6;
-        for (t4 = h3[0], n5 = 0; n5 < h3.length - 1; n5++) r6 = M(this, e7[s4 + n5], i5, n5), r6 === E && (r6 = this._$AH[n5]), o6 ||= !a2(r6) || r6 !== this._$AH[n5], r6 === A ? t4 = A : t4 !== A && (t4 += (r6 ?? "") + h3[n5 + 1]), this._$AH[n5] = r6;
+        for (t4 = h3[0], n5 = 0; n5 < h3.length - 1; n5++) r6 = M(this, e7[s5 + n5], i5, n5), r6 === E && (r6 = this._$AH[n5]), o6 ||= !a2(r6) || r6 !== this._$AH[n5], r6 === A ? t4 = A : t4 !== A && (t4 += (r6 ?? "") + h3[n5 + 1]), this._$AH[n5] = r6;
       }
       o6 && !e6 && this.j(t4);
     }
@@ -26656,21 +27284,21 @@
     }
   };
   var z = class extends H {
-    constructor(t4, i5, s4, e6, h3) {
-      super(t4, i5, s4, e6, h3), this.type = 5;
+    constructor(t4, i5, s5, e6, h3) {
+      super(t4, i5, s5, e6, h3), this.type = 5;
     }
     _$AI(t4, i5 = this) {
       if ((t4 = M(this, t4, i5, 0) ?? A) === E) return;
-      const s4 = this._$AH, e6 = t4 === A && s4 !== A || t4.capture !== s4.capture || t4.once !== s4.once || t4.passive !== s4.passive, h3 = t4 !== A && (s4 === A || e6);
-      e6 && this.element.removeEventListener(this.name, this, s4), h3 && this.element.addEventListener(this.name, this, t4), this._$AH = t4;
+      const s5 = this._$AH, e6 = t4 === A && s5 !== A || t4.capture !== s5.capture || t4.once !== s5.once || t4.passive !== s5.passive, h3 = t4 !== A && (s5 === A || e6);
+      e6 && this.element.removeEventListener(this.name, this, s5), h3 && this.element.addEventListener(this.name, this, t4), this._$AH = t4;
     }
     handleEvent(t4) {
       "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t4) : this._$AH.handleEvent(t4);
     }
   };
   var Z = class {
-    constructor(t4, i5, s4) {
-      this.element = t4, this.type = 6, this._$AN = void 0, this._$AM = i5, this.options = s4;
+    constructor(t4, i5, s5) {
+      this.element = t4, this.type = 6, this._$AN = void 0, this._$AM = i5, this.options = s5;
     }
     get _$AU() {
       return this._$AM._$AU;
@@ -26681,12 +27309,12 @@
   };
   var B = t2.litHtmlPolyfillSupport;
   B?.(S2, k), (t2.litHtmlVersions ??= []).push("3.3.2");
-  var D = (t4, i5, s4) => {
-    const e6 = s4?.renderBefore ?? i5;
+  var D = (t4, i5, s5) => {
+    const e6 = s5?.renderBefore ?? i5;
     let h3 = e6._$litPart$;
     if (void 0 === h3) {
-      const t5 = s4?.renderBefore ?? null;
-      e6._$litPart$ = h3 = new k(i5.insertBefore(c3(), t5), t5, void 0, s4 ?? {});
+      const t5 = s5?.renderBefore ?? null;
+      e6._$litPart$ = h3 = new k(i5.insertBefore(c3(), t5), t5, void 0, s5 ?? {});
     }
     return h3._$AI(t4), h3;
   };
@@ -26869,7 +27497,10 @@
       stepsSuffix: "pasos",
       hoursSuffix: "h",
       dailyBasalCalories: "Calor\xEDas basales diarias por defecto",
-      appVersion: "Brote - Versi\xF3n de la aplicaci\xF3n"
+      appVersion: "Brote - Versi\xF3n de la aplicaci\xF3n",
+      exportShareTitle: "Brote - Exportar datos",
+      exportShareText: "Aqu\xED tienes tus datos exportados de Brote",
+      shareData: "Compartir datos"
     },
     en: {
       search: "Search",
@@ -27018,7 +27649,10 @@
       stepsSuffix: "steps",
       hoursSuffix: "h",
       dailyBasalCalories: "Default daily basal calories",
-      appVersion: "Brote - App Version"
+      appVersion: "Brote - App Version",
+      exportShareTitle: "Brote - Export Data",
+      exportShareText: "Here is your exported data from Brote",
+      shareData: "Share data"
     },
     fr: {
       search: "Rechercher",
@@ -27162,7 +27796,10 @@
       stepsSuffix: "pas",
       hoursSuffix: "h",
       dailyBasalCalories: "Calories basales quotidiennes par d\xE9faut",
-      appVersion: "Brote - Version de l'application"
+      appVersion: "Brote - Version de l'application",
+      exportShareTitle: "Brote - Exporter les donn\xE9es",
+      exportShareText: "Voici vos donn\xE9es export\xE9es de Brote",
+      shareData: "Partager les donn\xE9es"
     },
     de: {
       search: "Suche",
@@ -27306,7 +27943,10 @@
       stepsSuffix: "Schritte",
       hoursSuffix: "Std.",
       dailyBasalCalories: "Standard-Grundumsatz",
-      appVersion: "Brote - App-Version"
+      appVersion: "Brote - App-Version",
+      exportShareTitle: "Brote - Daten exportieren",
+      exportShareText: "Hier sind Ihre exportierten Daten von Brote",
+      shareData: "Daten teilen"
     },
     it: {
       search: "Cerca",
@@ -27450,7 +28090,10 @@
       stepsSuffix: "passi",
       hoursSuffix: "h",
       dailyBasalCalories: "Calorie basali giornaliere predefinite",
-      appVersion: "Brote - Versione dell'applicazione"
+      appVersion: "Brote - Versione dell'applicazione",
+      exportShareTitle: "Brote - Esporta dati",
+      exportShareText: "Ecco i tuoi dati esportati da Brote",
+      shareData: "Condividi dati"
     }
   };
 
@@ -27468,7 +28111,7 @@
       this.db = null;
     }
     async init() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const request2 = indexedDB.open(DB_NAME, DB_VERSION);
         request2.onerror = (event) => {
           console.error("Database error:", event.target.error);
@@ -27476,7 +28119,7 @@
         };
         request2.onsuccess = (event) => {
           this.db = event.target.result;
-          resolve();
+          resolve2();
         };
         request2.onupgradeneeded = (event) => {
           const db = event.target.result;
@@ -27503,50 +28146,50 @@
     }
     async saveWeightEntry(date, weight) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_WEIGHT_HISTORY], "readwrite");
         const store = transaction.objectStore(STORE_WEIGHT_HISTORY);
         const request2 = store.put({ date, weight });
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
     async getWeightHistory() {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_WEIGHT_HISTORY], "readonly");
         const store = transaction.objectStore(STORE_WEIGHT_HISTORY);
         const request2 = store.getAll();
         request2.onsuccess = () => {
           const result = request2.result || [];
           result.sort((a3, b3) => a3.date.localeCompare(b3.date));
-          resolve(result);
+          resolve2(result);
         };
         request2.onerror = () => reject(request2.error);
       });
     }
     async deleteWeightEntry(date) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_WEIGHT_HISTORY], "readwrite");
         const store = transaction.objectStore(STORE_WEIGHT_HISTORY);
         const request2 = store.delete(date);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
     async getDailyLog(date) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_NAME], "readonly");
         const store = transaction.objectStore(STORE_NAME);
         const request2 = store.get(date);
         request2.onsuccess = () => {
           const result = request2.result;
           if (result) {
-            resolve(result);
+            resolve2(result);
           } else {
-            resolve({
+            resolve2({
               date,
               breakfast: [],
               snack1: [],
@@ -27564,12 +28207,12 @@
     }
     async saveDailyLog(log) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_NAME], "readwrite");
         const store = transaction.objectStore(STORE_NAME);
         const request2 = store.put(log);
         request2.onsuccess = () => {
-          resolve();
+          resolve2();
         };
         request2.onerror = () => {
           reject(request2.error);
@@ -27578,16 +28221,16 @@
     }
     async getUserStatus(date) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_USER_STATUS], "readonly");
         const store = transaction.objectStore(STORE_USER_STATUS);
         const request2 = store.get(date);
         request2.onsuccess = () => {
           const result = request2.result;
           if (result) {
-            resolve(result);
+            resolve2(result);
           } else {
-            resolve({
+            resolve2({
               date,
               exerciseCalories: 0,
               basalCalories: 0,
@@ -27606,11 +28249,11 @@
     }
     async saveUserStatus(status) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_USER_STATUS], "readwrite");
         const store = transaction.objectStore(STORE_USER_STATUS);
         const request2 = store.put(status);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
@@ -27628,96 +28271,96 @@
     }
     async cacheProduct(product) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_PRODUCTS], "readwrite");
         const store = transaction.objectStore(STORE_PRODUCTS);
         const request2 = store.put(product);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
     async getCachedProduct(code) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_PRODUCTS], "readonly");
         const store = transaction.objectStore(STORE_PRODUCTS);
         const request2 = store.get(code);
-        request2.onsuccess = () => resolve(request2.result);
+        request2.onsuccess = () => resolve2(request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async getAllCachedProducts() {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_PRODUCTS], "readonly");
         const store = transaction.objectStore(STORE_PRODUCTS);
         const request2 = store.getAll();
-        request2.onsuccess = () => resolve(request2.result);
+        request2.onsuccess = () => resolve2(request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async addFavorite(code) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_FAVORITES], "readwrite");
         const store = transaction.objectStore(STORE_FAVORITES);
         const request2 = store.put({ code });
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
     async removeFavorite(code) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_FAVORITES], "readwrite");
         const store = transaction.objectStore(STORE_FAVORITES);
         const request2 = store.delete(code);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
     async isFavorite(code) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_FAVORITES], "readonly");
         const store = transaction.objectStore(STORE_FAVORITES);
         const request2 = store.get(code);
-        request2.onsuccess = () => resolve(!!request2.result);
+        request2.onsuccess = () => resolve2(!!request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async getFavorites() {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_FAVORITES], "readonly");
         const store = transaction.objectStore(STORE_FAVORITES);
         const request2 = store.getAll();
-        request2.onsuccess = () => resolve(request2.result);
+        request2.onsuccess = () => resolve2(request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async saveMeal(meal) {
       await this.ensureInit();
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_MEALS], "readwrite");
         const store = transaction.objectStore(STORE_MEALS);
         const request2 = store.put(meal);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
       await this._updateMealInLogs(meal);
     }
     async _updateMealInLogs(meal) {
-      const totals = meal.foods.reduce((acc, f3) => {
-        const ratio = f3.quantity / 100;
+      const totals = meal.foods.reduce((acc, f4) => {
+        const ratio = f4.quantity / 100;
         return {
-          calories: acc.calories + (f3.product.nutriments?.["energy-kcal"] || 0) * ratio,
-          carbs: acc.carbs + (f3.product.nutriments?.carbohydrates || 0) * ratio,
-          fat: acc.fat + (f3.product.nutriments?.fat || 0) * ratio,
-          protein: acc.protein + (f3.product.nutriments?.proteins || 0) * ratio
+          calories: acc.calories + (f4.product.nutriments?.["energy-kcal"] || 0) * ratio,
+          carbs: acc.carbs + (f4.product.nutriments?.carbohydrates || 0) * ratio,
+          fat: acc.fat + (f4.product.nutriments?.fat || 0) * ratio,
+          protein: acc.protein + (f4.product.nutriments?.proteins || 0) * ratio
         };
       }, { calories: 0, carbs: 0, fat: 0, protein: 0 });
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_NAME], "readwrite");
         const store = transaction.objectStore(STORE_NAME);
         const request2 = store.openCursor();
@@ -27747,7 +28390,7 @@
             }
             cursor.continue();
           } else {
-            resolve();
+            resolve2();
           }
         };
         request2.onerror = () => reject(request2.error);
@@ -27755,31 +28398,31 @@
     }
     async getMeal(id) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_MEALS], "readonly");
         const store = transaction.objectStore(STORE_MEALS);
         const request2 = store.get(id);
-        request2.onsuccess = () => resolve(request2.result);
+        request2.onsuccess = () => resolve2(request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async getAllMeals() {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_MEALS], "readonly");
         const store = transaction.objectStore(STORE_MEALS);
         const request2 = store.getAll();
-        request2.onsuccess = () => resolve(request2.result);
+        request2.onsuccess = () => resolve2(request2.result);
         request2.onerror = () => reject(request2.error);
       });
     }
     async deleteMeal(id) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_MEALS], "readwrite");
         const store = transaction.objectStore(STORE_MEALS);
         const request2 = store.delete(id);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
@@ -27788,9 +28431,9 @@
         this.db.close();
         this.db = null;
       }
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const request2 = indexedDB.deleteDatabase(DB_NAME);
-        request2.onsuccess = () => resolve();
+        request2.onsuccess = () => resolve2();
         request2.onerror = () => reject(request2.error);
       });
     }
@@ -27828,7 +28471,7 @@
     }
     async updateProductInLogs(product) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_NAME], "readwrite");
         const store = transaction.objectStore(STORE_NAME);
         const request2 = store.openCursor();
@@ -27864,7 +28507,7 @@
             }
             cursor.continue();
           } else {
-            resolve();
+            resolve2();
           }
         };
         request2.onerror = () => reject(request2.error);
@@ -27872,7 +28515,7 @@
     }
     async deleteMealReference(mealId) {
       await this.ensureInit();
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([STORE_NAME], "readwrite");
         const store = transaction.objectStore(STORE_NAME);
         const request2 = store.openCursor();
@@ -27896,7 +28539,7 @@
             }
             cursor.continue();
           } else {
-            resolve();
+            resolve2();
           }
         };
         request2.onerror = () => reject(request2.error);
@@ -27967,8 +28610,8 @@
           csvContent += "--- SAVED MEALS ---\n";
           csvContent += "MealID,MealName,FoodName,Quantity,Unit\n";
           exportData.meals.forEach((meal) => {
-            meal.foods?.forEach((f3) => {
-              csvContent += `${meal.id},"${meal.name}","${f3.product.product_name || ""}",${f3.quantity},${f3.unit}
+            meal.foods?.forEach((f4) => {
+              csvContent += `${meal.id},"${meal.name}","${f4.product.product_name || ""}",${f4.quantity},${f4.unit}
 `;
             });
           });
@@ -27987,8 +28630,8 @@
         if (exportData.favorites) {
           csvContent += "--- FAVORITES ---\n";
           csvContent += "ProductCode\n";
-          exportData.favorites.forEach((f3) => {
-            csvContent += `${f3.code}
+          exportData.favorites.forEach((f4) => {
+            csvContent += `${f4.code}
 `;
           });
           csvContent += "\n";
@@ -27996,8 +28639,8 @@
         if (exportData.user_status) {
           csvContent += "--- USER STATUS ---\n";
           csvContent += "Date,ExerciseCalories,BasalCalories,Steps,SleepHours,EnergyLevel,HungerLevel,Thoughts\n";
-          exportData.user_status.forEach((s4) => {
-            csvContent += `${s4.date},${s4.exerciseCalories || 0},${s4.basalCalories || 0},${s4.steps || 0},${s4.sleepHours || 0},${s4.energyLevel || 0},${s4.hungerLevel || 0},"${(s4.thoughts || "").replace(/"/g, '""')}"
+          exportData.user_status.forEach((s5) => {
+            csvContent += `${s5.date},${s5.exerciseCalories || 0},${s5.basalCalories || 0},${s5.steps || 0},${s5.sleepHours || 0},${s5.energyLevel || 0},${s5.hungerLevel || 0},"${(s5.thoughts || "").replace(/"/g, '""')}"
 `;
           });
         }
@@ -28053,11 +28696,11 @@
         const transaction = this.db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
         const batchPromises = items.map((item) => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve2, reject) => {
             const request2 = store.put(item);
             request2.onsuccess = () => {
               importedCount++;
-              resolve();
+              resolve2();
             };
             request2.onerror = () => reject(request2.error);
           });
@@ -28072,20 +28715,20 @@
     }
     async getUserStatusSummary(date) {
       await this.ensureInit();
-      return new Promise((resolve) => {
+      return new Promise((resolve2) => {
         const transaction = this.db.transaction([STORE_USER_STATUS], "readonly");
         const store = transaction.objectStore(STORE_USER_STATUS);
         const request2 = store.get(date);
-        request2.onsuccess = () => resolve(request2.result);
-        request2.onerror = () => resolve(null);
+        request2.onsuccess = () => resolve2(request2.result);
+        request2.onerror = () => resolve2(null);
       });
     }
     async _getAllFromStore(storeName) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve2, reject) => {
         const transaction = this.db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         const request2 = store.getAll();
-        request2.onsuccess = () => resolve(request2.result || []);
+        request2.onsuccess = () => resolve2(request2.result || []);
         request2.onerror = () => reject(request2.error);
       });
     }
@@ -28187,6 +28830,7 @@
     `;
 
   // src/shared/page.ts
+  init_dist();
   var Page = class extends i4 {
     constructor() {
       super();
@@ -28207,6 +28851,11 @@
        * @param e TouchEvent
        */
       this._handleTouchEnd = (e6) => {
+        const path = e6.composedPath();
+        const isModalOpen = path.some((el) => el instanceof HTMLElement && el.classList.contains("modal-overlay"));
+        if (isModalOpen) {
+          return;
+        }
         const touchEndX = e6.changedTouches[0].screenX;
         const touchEndY = e6.changedTouches[0].screenY;
         const diffX = touchEndX - this._touchStartX;
@@ -28216,6 +28865,9 @@
         }
       };
       this.translations = translations[this.getLanguage()] || translations.en;
+    }
+    get isNative() {
+      return Capacitor.isNativePlatform();
     }
     static {
       this.styles = [
@@ -28613,7 +29265,7 @@
      * Called when a swipe is detected.
      * Can be overridden by subclasses to implement custom swipe logic.
      */
-    handleSwipe(diffX, diffY, event) {
+    handleSwipe(_diffX, _diffY, _event) {
     }
     connectedCallback() {
       super.connectedCallback();
@@ -28645,8 +29297,8 @@
   var o5 = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };
   var r4 = (t4 = o5, e6, r6) => {
     const { kind: n5, metadata: i5 } = r6;
-    let s4 = globalThis.litPropertyMetadata.get(i5);
-    if (void 0 === s4 && globalThis.litPropertyMetadata.set(i5, s4 = /* @__PURE__ */ new Map()), "setter" === n5 && ((t4 = Object.create(t4)).wrapped = true), s4.set(r6.name, t4), "accessor" === n5) {
+    let s5 = globalThis.litPropertyMetadata.get(i5);
+    if (void 0 === s5 && globalThis.litPropertyMetadata.set(i5, s5 = /* @__PURE__ */ new Map()), "setter" === n5 && ((t4 = Object.create(t4)).wrapped = true), s5.set(r6.name, t4), "accessor" === n5) {
       const { name: o6 } = r6;
       return { set(r7) {
         const n6 = e6.get.call(this);
@@ -28681,10 +29333,10 @@
 
   // node_modules/@lit/reactive-element/decorators/query.js
   function e5(e6, r6) {
-    return (n5, s4, i5) => {
+    return (n5, s5, i5) => {
       const o6 = (t4) => t4.renderRoot?.querySelector(e6) ?? null;
       if (r6) {
-        const { get: e7, set: r7 } = "object" == typeof s4 ? n5 : i5 ?? /* @__PURE__ */ (() => {
+        const { get: e7, set: r7 } = "object" == typeof s5 ? n5 : i5 ?? /* @__PURE__ */ (() => {
           const t4 = /* @__PURE__ */ Symbol();
           return { get() {
             return this[t4];
@@ -28692,12 +29344,12 @@
             this[t4] = e8;
           } };
         })();
-        return e4(n5, s4, { get() {
+        return e4(n5, s5, { get() {
           let t4 = e7.call(this);
           return void 0 === t4 && (t4 = o6(this), (null !== t4 || this.hasUpdated) && r7.call(this, t4)), t4;
         } });
       }
-      return e4(n5, s4, { get() {
+      return e4(n5, s5, { get() {
         return o6(this);
       } });
     };
@@ -28750,7 +29402,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.22",
+    version: "1.0.23",
     type: "module",
     scripts: {
       dev: "vite",
@@ -28780,7 +29432,9 @@
       "@capacitor/android": "^8.1.0",
       "@capacitor/cli": "^8.1.0",
       "@capacitor/core": "^8.1.0",
+      "@capacitor/filesystem": "^8.1.2",
       "@capacitor/local-notifications": "^8.0.1",
+      "@capacitor/share": "^8.0.1",
       "@capacitor/status-bar": "^8.0.1",
       "html5-qrcode": "^2.3.8",
       lit: "^3.3.1"
@@ -28909,7 +29563,7 @@
       try {
         if (Capacitor.isNativePlatform()) {
           console.log("forcing status bar opacity...");
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve2) => setTimeout(resolve2, 500));
           await StatusBar.setOverlaysWebView({ overlay: false });
           await StatusBar.setBackgroundColor({ color: "#000000" });
         }
@@ -28920,7 +29574,7 @@
     async _setupNotifications() {
       try {
         if (Capacitor.isNativePlatform()) {
-          await new Promise((resolve) => setTimeout(resolve, 1e3));
+          await new Promise((resolve2) => setTimeout(resolve2, 1e3));
         }
         if (this._notificationTimeout) {
           clearTimeout(this._notificationTimeout);
@@ -29518,9 +30172,9 @@
     }
     ZXingHtml5QrcodeDecoder2.prototype.decodeAsync = function(canvas) {
       var _this = this;
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve2, reject) {
         try {
-          resolve(_this.decode(canvas));
+          resolve2(_this.decode(canvas));
         } catch (error) {
           reject(error);
         }
@@ -29571,11 +30225,11 @@
   // node_modules/html5-qrcode/esm/native-bar-code-detector.js
   var __awaiter = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -29591,7 +30245,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -29600,7 +30254,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -29610,9 +30264,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -29659,7 +30313,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -29773,11 +30427,11 @@
   // node_modules/html5-qrcode/esm/code-decoder.js
   var __awaiter2 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -29793,7 +30447,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -29802,7 +30456,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -29812,9 +30466,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -29861,7 +30515,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -29990,11 +30644,11 @@
   })();
   var __awaiter3 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -30010,7 +30664,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -30019,7 +30673,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -30029,9 +30683,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -30078,7 +30732,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -30287,7 +30941,7 @@
         return Promise.resolve();
       }
       var $this = this;
-      return new Promise(function(resolve, _2) {
+      return new Promise(function(resolve2, _2) {
         var tracks = $this.mediaStream.getVideoTracks();
         var tracksToClose = tracks.length;
         var tracksClosed = 0;
@@ -30298,7 +30952,7 @@
           if (tracksClosed >= tracksToClose) {
             $this.isClosed = true;
             $this.parentElement.removeChild($this.surface);
-            resolve();
+            resolve2();
           }
         });
       });
@@ -30346,11 +31000,11 @@
   // node_modules/html5-qrcode/esm/camera/factories.js
   var __awaiter4 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -30366,7 +31020,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -30375,7 +31029,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -30385,9 +31039,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -30434,7 +31088,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -30466,11 +31120,11 @@
   // node_modules/html5-qrcode/esm/camera/retriever.js
   var __awaiter5 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -30486,7 +31140,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -30495,7 +31149,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -30505,9 +31159,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -30554,7 +31208,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -30625,7 +31279,7 @@
       });
     };
     CameraRetriever2.getCamerasFromMediaStreamTrack = function() {
-      return new Promise(function(resolve, _2) {
+      return new Promise(function(resolve2, _2) {
         var callback = function(sourceInfos) {
           var results = [];
           for (var _i = 0, sourceInfos_1 = sourceInfos; _i < sourceInfos_1.length; _i++) {
@@ -30637,7 +31291,7 @@
               });
             }
           }
-          resolve(results);
+          resolve2(results);
         };
         var mst = MediaStreamTrack;
         mst.getSources(callback);
@@ -30888,7 +31542,7 @@
       this.element = element;
       var $this = this;
       var toScanningStateChangeTransaction = this.stateManagerProxy.startTransition(Html5QrcodeScannerState.SCANNING);
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve2, reject) {
         var videoConstraints = areVideoConstraintsEnabled ? internalConfig.videoConstraints : $this.createVideoConstraints(cameraIdOrConfig);
         if (!videoConstraints) {
           toScanningStateChangeTransaction.cancel();
@@ -30911,7 +31565,7 @@
             return camera.render(_this.element, cameraRenderingOptions, renderingCallbacks).then(function(renderedCamera) {
               $this.renderedCamera = renderedCamera;
               toScanningStateChangeTransaction.execute();
-              resolve(null);
+              resolve2(null);
             }).catch(function(error) {
               toScanningStateChangeTransaction.cancel();
               reject(error);
@@ -31017,7 +31671,7 @@
       if (!this.stateManagerProxy.canScanFile()) {
         throw "Cannot start file scan - ongoing camera scan";
       }
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve2, reject) {
         _this.possiblyCloseLastScanImageFile();
         _this.clearElement();
         _this.lastScanImageFile = URL.createObjectURL(imageFile);
@@ -31057,7 +31711,7 @@
           context.drawImage(inputImage, 0, 0, imageWidth, imageHeight, padding, padding, hiddenImageWidth, hiddenImageHeight);
           try {
             _this.qrcode.decodeRobustlyAsync(hiddenCanvas).then(function(result) {
-              resolve(Html5QrcodeResultFactory.createFromQrcodeResult(result));
+              resolve2(Html5QrcodeResultFactory.createFromQrcodeResult(result));
             }).catch(reject);
           } catch (exception) {
             reject("QR code parse error, error = ".concat(exception));
@@ -31699,11 +32353,11 @@
   // node_modules/html5-qrcode/esm/camera/permissions.js
   var __awaiter6 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -31719,7 +32373,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -31728,7 +32382,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -31738,9 +32392,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -31787,7 +32441,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -31899,11 +32553,11 @@
   // node_modules/html5-qrcode/esm/ui/scanner/torch-button.js
   var __awaiter7 = function(thisArg, _arguments, P2, generator) {
     function adopt(value) {
-      return value instanceof P2 ? value : new P2(function(resolve) {
-        resolve(value);
+      return value instanceof P2 ? value : new P2(function(resolve2) {
+        resolve2(value);
       });
     }
-    return new (P2 || (P2 = Promise))(function(resolve, reject) {
+    return new (P2 || (P2 = Promise))(function(resolve2, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -31919,7 +32573,7 @@
         }
       }
       function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -31928,7 +32582,7 @@
     var _2 = { label: 0, sent: function() {
       if (t4[0] & 1) throw t4[1];
       return t4[1];
-    }, trys: [], ops: [] }, f3, y3, t4, g2;
+    }, trys: [], ops: [] }, f4, y3, t4, g2;
     return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
       return this;
     }), g2;
@@ -31938,9 +32592,9 @@
       };
     }
     function step(op) {
-      if (f3) throw new TypeError("Generator is already executing.");
+      if (f4) throw new TypeError("Generator is already executing.");
       while (g2 && (g2 = 0, op[0] && (_2 = 0)), _2) try {
-        if (f3 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
+        if (f4 = 1, y3 && (t4 = op[0] & 2 ? y3["return"] : op[0] ? y3["throw"] || ((t4 = y3["return"]) && t4.call(y3), 0) : y3.next) && !(t4 = t4.call(y3, op[1])).done) return t4;
         if (y3 = 0, t4) op = [op[0] & 2, t4.value];
         switch (op[0]) {
           case 0:
@@ -31987,7 +32641,7 @@
         op = [6, e6];
         y3 = 0;
       } finally {
-        f3 = t4 = 0;
+        f4 = t4 = 0;
       }
       if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
@@ -32514,20 +33168,20 @@
         }
       };
       if (this.html5Qrcode) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve2, reject) {
           if (!_this.html5Qrcode) {
-            resolve();
+            resolve2();
             return;
           }
           if (_this.html5Qrcode.isScanning) {
             _this.html5Qrcode.stop().then(function(_2) {
               if (!_this.html5Qrcode) {
-                resolve();
+                resolve2();
                 return;
               }
               _this.html5Qrcode.clear();
               emptyHtmlContainer();
-              resolve();
+              resolve2();
             }).catch(function(error) {
               if (_this.verbose) {
                 _this.logger.logError("Unable to stop qrcode scanner", error);
@@ -32537,7 +33191,7 @@
           } else {
             _this.html5Qrcode.clear();
             emptyHtmlContainer();
-            resolve();
+            resolve2();
           }
         });
       }
@@ -33243,13 +33897,13 @@
     return true;
   };
   var handleResponse = async (response) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve2, reject) => {
       if (response.ok) {
         response.text().then((result) => {
           const res = isJsonString(result) ? JSON.parse(result) : result;
-          resolve(res);
+          resolve2(res);
         }).catch((err) => {
-          resolve(err);
+          resolve2(err);
         });
       } else {
         response.text().then((result) => {
@@ -33437,13 +34091,13 @@
           const results = await Promise.all(promises);
           const cachedProducts = results.filter((p3) => !!p3);
           const allMeals = await this.db.getAllMeals();
-          const favoriteMeals = allMeals.filter((m2) => favorites.some((f3) => f3.code === m2.id));
+          const favoriteMeals = allMeals.filter((m2) => favorites.some((f4) => f4.code === m2.id));
           const mealItems = favoriteMeals.map((m2) => ({
             code: m2.id,
             product_name: m2.name,
             isMeal: true,
             nutriments: {
-              "energy-kcal": m2.foods.reduce((acc, f3) => acc + (f3.product.nutriments?.["energy-kcal"] || 0) * (f3.quantity / 100), 0)
+              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
             }
           }));
           products = [...cachedProducts, ...mealItems];
@@ -33492,7 +34146,7 @@
             product_name: m2.name,
             isMeal: true,
             nutriments: {
-              "energy-kcal": m2.foods.reduce((acc, f3) => acc + (f3.product.nutriments?.["energy-kcal"] || 0) * (f3.quantity / 100), 0)
+              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
             }
           }));
         }
@@ -35065,6 +35719,69 @@
   // src/components/pageFood/index.ts
   register("page-food", PageFood);
 
+  // node_modules/@capacitor/filesystem/dist/esm/index.js
+  init_dist();
+
+  // node_modules/@capacitor/synapse/dist/synapse.mjs
+  function s4(t4) {
+    t4.CapacitorUtils.Synapse = new Proxy(
+      {},
+      {
+        get(e6, n5) {
+          return new Proxy({}, {
+            get(w2, o6) {
+              return (c4, p3, r6) => {
+                const i5 = t4.Capacitor.Plugins[n5];
+                if (i5 === void 0) {
+                  r6(new Error(`Capacitor plugin ${n5} not found`));
+                  return;
+                }
+                if (typeof i5[o6] != "function") {
+                  r6(new Error(`Method ${o6} not found in Capacitor plugin ${n5}`));
+                  return;
+                }
+                (async () => {
+                  try {
+                    const a3 = await i5[o6](c4);
+                    p3(a3);
+                  } catch (a3) {
+                    r6(a3);
+                  }
+                })();
+              };
+            }
+          });
+        }
+      }
+    );
+  }
+  function u3(t4) {
+    t4.CapacitorUtils.Synapse = new Proxy(
+      {},
+      {
+        get(e6, n5) {
+          return t4.cordova.plugins[n5];
+        }
+      }
+    );
+  }
+  function f3(t4 = false) {
+    typeof window > "u" || (window.CapacitorUtils = window.CapacitorUtils || {}, window.Capacitor !== void 0 && !t4 ? s4(window) : window.cordova !== void 0 && u3(window));
+  }
+
+  // node_modules/@capacitor/filesystem/dist/esm/index.js
+  init_definitions();
+  var Filesystem = registerPlugin("Filesystem", {
+    web: () => Promise.resolve().then(() => (init_web2(), web_exports2)).then((m2) => new m2.FilesystemWeb())
+  });
+  f3();
+
+  // node_modules/@capacitor/share/dist/esm/index.js
+  init_dist();
+  var Share = registerPlugin("Share", {
+    web: () => Promise.resolve().then(() => (init_web3(), web_exports3)).then((m2) => new m2.ShareWeb())
+  });
+
   // src/components/pageUser/pageUser.ts
   var PageUser = class extends Page {
     constructor() {
@@ -35373,13 +36090,32 @@
       const dateStr = now.toISOString().split("T")[0];
       const timeStr = now.toTimeString().split(" ")[0].replace(/:/g, "-");
       const filename = `BroteData_${dateStr}_${timeStr}.${extension}`;
-      const blob = new Blob([content], { type: extension === "json" ? "application/json" : "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a3 = document.createElement("a");
-      a3.href = url;
-      a3.download = filename;
-      a3.click();
-      URL.revokeObjectURL(url);
+      if (this.isNative) {
+        try {
+          const result = await Filesystem.writeFile({
+            path: filename,
+            data: content,
+            directory: Directory.Cache,
+            encoding: Encoding.UTF8
+          });
+          await Share.share({
+            title: this.translations.exportShareTitle || "Brote Export Data",
+            text: this.translations.exportShareText || "Here is your exported data from Brote",
+            url: result.uri,
+            dialogTitle: this.translations.shareData || "Share data"
+          });
+        } catch (err) {
+          console.error("Native export failed", err);
+        }
+      } else {
+        const blob = new Blob([content], { type: extension === "json" ? "application/json" : "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a3 = document.createElement("a");
+        a3.href = url;
+        a3.download = filename;
+        a3.click();
+        URL.revokeObjectURL(url);
+      }
       this.showExportModal = false;
     }
     _toggleExportStore(store) {
@@ -36031,7 +36767,6 @@ ${countMsg}`,
       this._hoveredText = null;
     }
     _generateChartSvg() {
-      const yMargin = 0;
       if (!this._chartContainer) return;
       this._chartContainer.innerHTML = "";
       const width = this._width || this.offsetWidth || 300;
@@ -36047,13 +36782,20 @@ ${countMsg}`,
       const safeData = this.data.map((item) => ({ tag: item.tag, value: Number(item.value) }));
       const rawMin = Math.min(...safeData.map((d3) => d3.value));
       const rawMax = Math.max(...safeData.map((d3) => d3.value));
-      let yAxisMin = Math.floor(rawMin - yMargin);
-      let yAxisMax = Math.ceil(rawMax + yMargin);
-      if (yAxisMax === yAxisMin) {
-        yAxisMax += yMargin;
-        yAxisMin -= yMargin;
+      const range = Math.ceil(rawMax) - Math.floor(rawMin);
+      const potentialSteps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1e3];
+      let step = 1;
+      for (const s5 of potentialSteps) {
+        step = s5;
+        if (range / s5 <= 6) break;
+      }
+      let yAxisMin = Math.floor(rawMin / step) * step;
+      let yAxisMax = yAxisMin;
+      while (yAxisMax < rawMax || (yAxisMax - yAxisMin) / step < 2) {
+        yAxisMax += step;
       }
       const valRange = yAxisMax - yAxisMin;
+      const numLabels = Math.round(valRange / step) + 1;
       const availableWidth = width - this._padding * 2;
       const availableHeight = height - this._padding * 2;
       const stepX = availableWidth / Math.max(safeData.length - 1, 1);
@@ -36071,10 +36813,9 @@ ${countMsg}`,
       yAxis.setAttribute("y2", (height - this._padding).toString());
       yAxis.setAttribute("class", "axis");
       svg.appendChild(yAxis);
-      const numLabels = 5;
       for (let i5 = 0; i5 < numLabels; i5++) {
-        const val = yAxisMax - i5 * (valRange / (numLabels - 1));
-        const y3 = this._padding + i5 * (availableHeight / (numLabels - 1));
+        const val = yAxisMax - i5 * step;
+        const y3 = this._padding + i5 * ((height - this._padding * 2) / (numLabels - 1));
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", (width - this._padding + 8).toString());
         text.setAttribute("y", y3.toString());
@@ -36083,19 +36824,17 @@ ${countMsg}`,
         text.setAttribute("dominant-baseline", "central");
         text.setAttribute("font-size", "11px");
         text.setAttribute("fill", "var(--card-text, #333)");
-        text.textContent = Math.round(val).toString();
+        text.textContent = val.toString();
         svg.appendChild(text);
-        if (i5 < numLabels - 1) {
-          const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          gridLine.setAttribute("x1", this._padding.toString());
-          gridLine.setAttribute("y1", y3.toString());
-          gridLine.setAttribute("x2", (width - this._padding).toString());
-          gridLine.setAttribute("y2", y3.toString());
-          gridLine.setAttribute("stroke", "var(--chart-axis-color, var(--palette-grey, #ccc))");
-          gridLine.setAttribute("stroke-width", "0.5");
-          gridLine.setAttribute("stroke-dasharray", "4,4");
-          svg.appendChild(gridLine);
-        }
+        const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        gridLine.setAttribute("x1", this._padding.toString());
+        gridLine.setAttribute("y1", y3.toString());
+        gridLine.setAttribute("x2", (width - this._padding).toString());
+        gridLine.setAttribute("y2", y3.toString());
+        gridLine.setAttribute("stroke", "var(--chart-axis-color, var(--palette-grey, #ccc))");
+        gridLine.setAttribute("stroke-width", "0.5");
+        gridLine.setAttribute("stroke-dasharray", "4,4");
+        svg.appendChild(gridLine);
       }
       if (safeData.length > 0) {
         const firstText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -38042,13 +38781,13 @@ ${countMsg}`,
     }
     async _addToDiary() {
       const date = this.selectedDate;
-      const totals = this.meal.foods.reduce((acc, f3) => {
-        const ratio = f3.quantity / 100;
+      const totals = this.meal.foods.reduce((acc, f4) => {
+        const ratio = f4.quantity / 100;
         return {
-          calories: acc.calories + (f3.product.nutriments?.["energy-kcal"] || 0) * ratio,
-          carbs: acc.carbs + (f3.product.nutriments?.carbohydrates || 0) * ratio,
-          fat: acc.fat + (f3.product.nutriments?.fat || 0) * ratio,
-          protein: acc.protein + (f3.product.nutriments?.proteins || 0) * ratio
+          calories: acc.calories + (f4.product.nutriments?.["energy-kcal"] || 0) * ratio,
+          carbs: acc.carbs + (f4.product.nutriments?.carbohydrates || 0) * ratio,
+          fat: acc.fat + (f4.product.nutriments?.fat || 0) * ratio,
+          protein: acc.protein + (f4.product.nutriments?.proteins || 0) * ratio
         };
       }, { calories: 0, carbs: 0, fat: 0, protein: 0 });
       const mealItem = {
@@ -38197,13 +38936,13 @@ ${countMsg}`,
 
         <div class="summary-cards">
              ${(() => {
-        const totals = this.meal.foods.reduce((acc, f3) => {
-          const ratio = f3.quantity / 100;
+        const totals = this.meal.foods.reduce((acc, f4) => {
+          const ratio = f4.quantity / 100;
           return {
-            calories: acc.calories + (f3.product.nutriments?.["energy-kcal"] || 0) * ratio,
-            carbs: acc.carbs + (f3.product.nutriments?.carbohydrates || 0) * ratio,
-            fat: acc.fat + (f3.product.nutriments?.fat || 0) * ratio,
-            protein: acc.protein + (f3.product.nutriments?.proteins || 0) * ratio
+            calories: acc.calories + (f4.product.nutriments?.["energy-kcal"] || 0) * ratio,
+            carbs: acc.carbs + (f4.product.nutriments?.carbohydrates || 0) * ratio,
+            fat: acc.fat + (f4.product.nutriments?.fat || 0) * ratio,
+            protein: acc.protein + (f4.product.nutriments?.proteins || 0) * ratio
           };
         }, { calories: 0, carbs: 0, fat: 0, protein: 0 });
         return b2`
