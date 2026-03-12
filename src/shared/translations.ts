@@ -150,7 +150,10 @@ export const translations: translationsType = {
     stepsSuffix: 'pasos',
     hoursSuffix: 'h',
     dailyBasalCalories: 'Calorías basales diarias por defecto',
-    appVersion: 'Brote - Versión de la aplicación'
+    appVersion: 'Brote - Versión de la aplicación',
+    exportShareTitle: 'Brote - Exportar datos',
+    exportShareText: 'Aquí tienes tus datos exportados de Brote',
+    shareData: 'Compartir datos'
   },
   en: {
     search: 'Search',
@@ -299,7 +302,10 @@ export const translations: translationsType = {
     stepsSuffix: 'steps',
     hoursSuffix: 'h',
     dailyBasalCalories: 'Default daily basal calories',
-    appVersion: 'Brote - App Version'
+    appVersion: 'Brote - App Version',
+    exportShareTitle: 'Brote - Export Data',
+    exportShareText: 'Here is your exported data from Brote',
+    shareData: 'Share data'
   },
   fr: {
     search: 'Rechercher',
@@ -443,7 +449,10 @@ export const translations: translationsType = {
     stepsSuffix: 'pas',
     hoursSuffix: 'h',
     dailyBasalCalories: 'Calories basales quotidiennes par défaut',
-    appVersion: 'Brote - Version de l\'application'
+    appVersion: 'Brote - Version de l\'application',
+    exportShareTitle: 'Brote - Exporter les données',
+    exportShareText: 'Voici vos données exportées de Brote',
+    shareData: 'Partager les données'
   },
   de: {
     search: 'Suche',
@@ -587,7 +596,10 @@ export const translations: translationsType = {
     stepsSuffix: 'Schritte',
     hoursSuffix: 'Std.',
     dailyBasalCalories: 'Standard-Grundumsatz',
-    appVersion: 'Brote - App-Version'
+    appVersion: 'Brote - App-Version',
+    exportShareTitle: 'Brote - Daten exportieren',
+    exportShareText: 'Hier sind Ihre exportierten Daten von Brote',
+    shareData: 'Daten teilen'
   },
   it: {
     search: 'Cerca',
@@ -731,6 +743,9 @@ export const translations: translationsType = {
     stepsSuffix: 'passi',
     hoursSuffix: 'h',
     dailyBasalCalories: 'Calorie basali giornaliere predefinite',
-    appVersion: 'Brote - Versione dell\'applicazione'
+    appVersion: 'Brote - Versione dell\'applicazione',
+    exportShareTitle: 'Brote - Esporta dati',
+    exportShareText: 'Ecco i tuoi dati esportati da Brote',
+    shareData: 'Condividi dati'
   },
 };

@@ -1,5 +1,7 @@
 # Brote (Open Cal)
 
+![Brote_banner](./assets/brote_banner.png)
+
 Brote is a modern, privacy-focused calorie and macronutrient tracking application built with Web Components and Lit. It allows users to track their daily food intake, manage personal meals, and monitor their progress against nutritional goals.
 
 ## Core Technology Stack
@@ -136,3 +138,11 @@ The application is configured for deployment to GitHub Pages via:
 ```bash
 npm run deploy:pages
 ```
+
+## Releases
+
+You can find the release notes in the `releases/` directory.
+
+## License
+
+The project is fully open source and can be used by anyone.

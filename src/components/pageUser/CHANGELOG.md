@@ -1,5 +1,11 @@
 # page-user
 
+## 0.0.9
+
+### Patch Changes
+
+- Updating linechart, export data on native and documentation.
+
 ## 0.0.8
 
 ### Patch Changes

@@ -116,7 +116,6 @@ export default class ComponentLineChart extends LitElement {
   }
 
   private _generateChartSvg() {
-    const yMargin = 0;
     if (!this._chartContainer) return;
 
     this._chartContainer.innerHTML = '';
@@ -139,15 +138,23 @@ export default class ComponentLineChart extends LitElement {
     const rawMin = Math.min(...safeData.map(d => d.value));
     const rawMax = Math.max(...safeData.map(d => d.value));
 
-    let yAxisMin = Math.floor(rawMin - yMargin);
-    let yAxisMax = Math.ceil(rawMax + yMargin);
+    // Determine an integer step size (1, 2, 5, 10, ...)
+    const range = Math.ceil(rawMax) - Math.floor(rawMin);
+    const potentialSteps = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000];
+    let step = 1;
+    for (const s of potentialSteps) {
+      step = s;
+      if (range / s <= 6) break; // Aim for up to 7 labels (6 intervals)
+    }
 
-    if (yAxisMax === yAxisMin) {
-      yAxisMax += yMargin;
-      yAxisMin -= yMargin;
+    let yAxisMin = Math.floor(rawMin / step) * step;
+    let yAxisMax = yAxisMin;
+    while (yAxisMax < rawMax || (yAxisMax - yAxisMin) / step < 2) {
+      yAxisMax += step;
     }
 
     const valRange = yAxisMax - yAxisMin;
+    const numLabels = Math.round(valRange / step) + 1;
 
     const availableWidth = width - (this._padding * 2);
     const availableHeight = height - (this._padding * 2);
@@ -172,10 +179,9 @@ export default class ComponentLineChart extends LitElement {
     svg.appendChild(yAxis);
 
     // Y-Axis Labels & Grid lines
-    const numLabels = 5;
     for (let i = 0; i < numLabels; i++) {
-      const val = yAxisMax - (i * (valRange / (numLabels - 1)));
-      const y = this._padding + (i * (availableHeight / (numLabels - 1)));
+      const val = yAxisMax - (i * step);
+      const y = this._padding + (i * ((height - (this._padding * 2)) / (numLabels - 1)));
 
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('x', (width - this._padding + 8).toString());
@@ -185,21 +191,19 @@ export default class ComponentLineChart extends LitElement {
       text.setAttribute('dominant-baseline', 'central');
       text.setAttribute('font-size', '11px');
       text.setAttribute('fill', 'var(--card-text, #333)');
-      text.textContent = Math.round(val).toString();
+      text.textContent = val.toString();
       svg.appendChild(text);
 
-      // Horizontal dashed line
-      if (i < numLabels - 1) { // Don't draw over X-Axis
-        const gridLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        gridLine.setAttribute('x1', this._padding.toString());
-        gridLine.setAttribute('y1', y.toString());
-        gridLine.setAttribute('x2', (width - this._padding).toString());
-        gridLine.setAttribute('y2', y.toString());
-        gridLine.setAttribute('stroke', 'var(--chart-axis-color, var(--palette-grey, #ccc))');
-        gridLine.setAttribute('stroke-width', '0.5');
-        gridLine.setAttribute('stroke-dasharray', '4,4');
-        svg.appendChild(gridLine);
-      }
+      // Horizontal grid lines
+      const gridLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      gridLine.setAttribute('x1', this._padding.toString());
+      gridLine.setAttribute('y1', y.toString());
+      gridLine.setAttribute('x2', (width - this._padding).toString());
+      gridLine.setAttribute('y2', y.toString());
+      gridLine.setAttribute('stroke', 'var(--chart-axis-color, var(--palette-grey, #ccc))');
+      gridLine.setAttribute('stroke-width', '0.5');
+      gridLine.setAttribute('stroke-dasharray', '4,4');
+      svg.appendChild(gridLine);
     }
 
     // X-Axis Labels

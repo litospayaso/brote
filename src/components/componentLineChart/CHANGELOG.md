@@ -1,5 +1,11 @@
 # component-line-chart
 
+## 0.0.5
+
+### Patch Changes
+
+- Updating linechart, export data on native and documentation.
+
 ## 0.0.4
 
 ### Patch Changes

@@ -2,8 +2,12 @@ import { type CSSResultGroup, css, LitElement } from 'lit';
 import { translations } from './translations';
 import { dbService, DBService } from './db';
 import { variableStyles } from './functions';
+import { Capacitor } from '@capacitor/core';
 
 export default class Page<api = {}> extends LitElement {
+  protected get isNative(): boolean {
+    return Capacitor.isNativePlatform();
+  }
   /**
    * It will be overrided with api decorator.
    */
@@ -438,6 +442,14 @@ export default class Page<api = {}> extends LitElement {
    * @param e TouchEvent
    */
   private _handleTouchEnd = (e: TouchEvent) => {
+    // Check if we are inside a modal
+    const path = e.composedPath();
+    const isModalOpen = path.some(el => el instanceof HTMLElement && el.classList.contains('modal-overlay'));
+
+    if (isModalOpen) {
+      return;
+    }
+
     const touchEndX = e.changedTouches[0].screenX;
     const touchEndY = e.changedTouches[0].screenY;
 
@@ -454,7 +466,7 @@ export default class Page<api = {}> extends LitElement {
    * Called when a swipe is detected.
    * Can be overridden by subclasses to implement custom swipe logic.
    */
-  protected handleSwipe(diffX: number, diffY: number, event: TouchEvent): void {
+  protected handleSwipe(_diffX: number, _diffY: number, _event: TouchEvent): void {
     // To be overridden
   }
 

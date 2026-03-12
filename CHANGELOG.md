@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.23
+
+### Patch Changes
+
+- Updating linechart, export data on native and documentation.
+
 ## 1.0.22
 
 ### Patch Changes

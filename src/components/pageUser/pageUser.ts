@@ -2,6 +2,8 @@ import { html, css, type PropertyValues } from 'lit';
 import { state, property } from 'lit/decorators.js';
 import Page from '../../shared/page';
 import type { MealCategory, UserProfile } from '../../shared/db';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 
 
 export default class PageUser extends Page {
@@ -339,13 +341,33 @@ export default class PageUser extends Page {
     const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-');
     const filename = `BroteData_${dateStr}_${timeStr}.${extension}`;
 
-    const blob = new Blob([content], { type: extension === 'json' ? 'application/json' : 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (this.isNative) {
+      try {
+        const result = await Filesystem.writeFile({
+          path: filename,
+          data: content,
+          directory: Directory.Cache,
+          encoding: Encoding.UTF8,
+        });
+
+        await Share.share({
+          title: this.translations.exportShareTitle || 'Brote Export Data',
+          text: this.translations.exportShareText || 'Here is your exported data from Brote',
+          url: result.uri,
+          dialogTitle: this.translations.shareData || 'Share data',
+        });
+      } catch (err) {
+        console.error('Native export failed', err);
+      }
+    } else {
+      const blob = new Blob([content], { type: extension === 'json' ? 'application/json' : 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
 
     this.showExportModal = false;
   }
