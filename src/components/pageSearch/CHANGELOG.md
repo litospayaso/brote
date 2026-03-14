@@ -1,5 +1,11 @@
 # search-page
 
+## 0.0.6
+
+### Patch Changes
+
+- changing search behavior so if there is no food in search will try to fetch it from database.
+
 ## 0.0.5
 
 ### Patch Changes

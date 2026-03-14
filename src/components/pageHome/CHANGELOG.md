@@ -1,5 +1,11 @@
 # home-page
 
+## 0.0.14
+
+### Patch Changes
+
+- Adding a way to disable warning messages and statistics
+
 ## 0.0.13
 
 ### Patch Changes

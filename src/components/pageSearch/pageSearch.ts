@@ -153,7 +153,12 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
     if (viewMode && ['cached', 'favorites', 'search', 'meals'].includes(viewMode)) {
       this._switchMode(viewMode as any);
     } else {
-      this._loadData();
+      const cachedProducts = await this.db.getAllCachedProducts();
+      if (!cachedProducts || cachedProducts.length === 0) {
+        this._switchMode('search');
+      } else {
+        this._loadData();
+      }
     }
   }
 
@@ -171,6 +176,10 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
             const lowerQuery = this.query.toLowerCase();
             return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
           });
+          if (products.length === 0) {
+            this._switchMode('search');
+            return;
+          }
         }
       } else if (this.viewMode === 'favorites') {
         const favorites = await this.db.getFavorites();
@@ -200,6 +209,10 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
             const lowerQuery = this.query.toLowerCase();
             return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
           });
+          if (products.length === 0) {
+            this._switchMode('search');
+            return;
+          }
         }
       } else if (this.viewMode === 'search') {
         if (this.query) {

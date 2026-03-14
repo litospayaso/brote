@@ -150,6 +150,8 @@ export default class PageHome extends Page {
     defaultBasalCalories: 0,
     macros: { protein: 30, carbs: 40, fat: 30 }
   };
+  @state() enableWarnings: boolean = true;
+  @state() enableStatistics: boolean = false;
   @state() openStatusModal: boolean = false;
 
   protected handleSwipe(diffX: number, _diffY: number, e: TouchEvent): void {
@@ -211,6 +213,8 @@ export default class PageHome extends Page {
             defaultBasalCalories: profile.goals.defaultBasalCalories || 0
           };
         }
+        this.enableWarnings = profile.enableWarnings !== false;
+        this.enableStatistics = !!profile.enableStatistics;
       } catch (e) {
         console.error('Failed to parse user profile', e);
       }
@@ -317,6 +321,7 @@ export default class PageHome extends Page {
         </div>
       </div>
 
+      ${this.enableStatistics ? html`
       <component-user-status
         .exerciseCalories=${this.userStatus?.exerciseCalories || 0}
         .basalCalories=${this.userStatus?.basalCalories || this.userGoals.defaultBasalCalories || 0}
@@ -328,7 +333,7 @@ export default class PageHome extends Page {
         .translations=${JSON.stringify(this.translations)}
         .open=${this.openStatusModal}
         @status-changed="${this._handleStatusChanged}"
-      ></component-user-status>
+      ></component-user-status>` : ''}
 
       <div class="progress-container">
         <component-progress-bar
@@ -382,7 +387,7 @@ export default class PageHome extends Page {
         this.dailyLog.dinner.length === 0 &&
         this.dailyLog.snack3.length === 0
       ) ? html`
-          <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
+          ${this.enableWarnings ? html`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ''}
           <button class="btn" @click="${() => this.triggerPageNavigation({ page: 'search' })}">${this.translations.addFood}</button>
         ` : ''}
       </div>

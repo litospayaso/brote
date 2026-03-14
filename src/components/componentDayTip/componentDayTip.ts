@@ -59,7 +59,10 @@ export default class ComponentDayTip extends LitElement {
       "Huye de entrenadores maniquí y desconfía de influencers que usan su físico para venderte ejercicios, culpándote después si no consigues resultados.",
       "Protege tus datos y vínculos evitando planes gratuitos que extraen datos; huye de gurús que te pidan aislarte de tus seres queridos.",
       "Existe una hipocresía en el mundo fitness, es contradictorio que exijan hacer deporte y al mismo tiempo desprecien a los cuerpos no normativos en el gimnasio.",
-      "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno."
+      "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno.",
+      "Consume fruta y verdura todos los días, comprala en la frutería de tu barrio",
+      "Haz deporte varios días a la semana para estar fuerte. Apoya a al box / gimnasio de tu barrio",
+      "Si tomas suplementación en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles"
     ],
     en: [
       "Your diet must take into account your context, it must be realistic and consider your conditions.",
@@ -112,7 +115,10 @@ export default class ComponentDayTip extends LitElement {
       "Avoid mannequin trainers and be wary of influencers who use their physique to sell you exercises, blaming you later if you don't get results.",
       "Protect your data and links by avoiding free plans that siphon data; Run away from gurus who ask you to isolate yourself from your loved ones.",
       "There is hypocrisy in the fitness world, it is contradictory that they demand sports and at the same time despise non-normative bodies in the gym.",
-      "Build community when training by using the gym to build bonds and mutual support, remembering that training should not isolate you from your environment."
+      "Build community when training by using the gym to build bonds and mutual support, remembering that training should not isolate you from your environment.",
+      "Consume fruit and vegetables every day, buy them at your neighborhood greengrocer.",
+      "Play sports several days a week to be strong. Support your neighborhood box / gym.",
+      "If you take supplements in your diet, check if you need them with your nutritionist and remember that buying them at your neighborhood box/gym is a way to support them."
     ],
     it: [
       "La tua dieta deve tenere conto del tuo contesto, deve essere realistica e considerare le tue condizioni.",
@@ -165,7 +171,10 @@ export default class ComponentDayTip extends LitElement {
       "Evita i manichini da ginnastica e diffida degli influencer che usano il loro fisico per venderti esercizi, incolpandoti poi se non ottieni risultati.",
       "Proteggi i tuoi dati e collegamenti evitando piani gratuiti che sottraggono dati; Scappa dai guru che ti chiedono di isolarti dai tuoi cari.",
       "C’è ipocrisia nel mondo del fitness, è contraddittorio che si pretenda lo sport e allo stesso tempo si disprezzino i corpi non normativi in ​​palestra.",
-      "Costruisci una comunità durante l'allenamento utilizzando la palestra per costruire legami e sostegno reciproco, ricordando che l'allenamento non dovrebbe isolarti dal tuo ambiente."
+      "Costruisci una comunità durante l'allenamento utilizzando la palestra per costruire legami e sostegno reciproco, ricordando che l'allenamento non dovrebbe isolarti dal tuo ambiente.",
+      "Consuma frutta e verdura tutti i giorni, comprala dal fruttivendolo del tuo quartiere.",
+      "Fai sport diversi giorni alla settimana per essere forte. Sostieni il box / la palestra del tuo quartiere.",
+      "Se assumi integratori nella tua dieta, verifica se ne hai bisogno con il tuo nutrizionista e ricorda che acquistarli nel box/palestra del tuo quartiere è un modo per sostenerli."
     ],
     fr: [
       "Votre alimentation doit tenir compte de votre contexte, elle doit être réaliste et tenir compte de vos conditions.",
@@ -218,7 +227,10 @@ export default class ComponentDayTip extends LitElement {
       "Évitez les mannequins d'entraînement et méfiez-vous des influenceurs qui utilisent leur physique pour vous vendre des exercices, vous reprochant plus tard si vous n'obtenez pas de résultats.",
       "Protégez vos données et vos liens en évitant les forfaits gratuits qui siphonnent les données ; Fuyez les gourous qui vous demandent de vous isoler de vos proches.",
       "Il y a de l'hypocrisie dans le monde du fitness, il est contradictoire qu'ils exigent du sport et en même temps méprisent les corps non normatifs dans la salle de sport.",
-      "Construisez une communauté lorsque vous vous entraînez en utilisant la salle de sport pour créer des liens et un soutien mutuel, en vous rappelant que l’entraînement ne doit pas vous isoler de votre environnement."
+      "Construisez une communauté lorsque vous vous entraînez en utilisant la salle de sport pour créer des liens et un soutien mutuel, en vous rappelant que l’entraînement ne doit pas vous isoler de votre environnement.",
+      "Consommez des fruits et légumes tous les jours, achetez-les chez le primeur de votre quartier.",
+      "Faites du sport plusieurs jours par semaine pour être fort. Soutenez la box / salle de sport de votre quartier.",
+      "Si vous prenez des compléments alimentaires dans votre alimentation, vérifiez si vous en avez besoin avec votre nutritionniste et n'oubliez pas que les acheter dans la box/salle de sport de votre quartier est une façon de les soutenir."
     ],
     de: [
       "Ihre Ernährung muss Ihren Kontext berücksichtigen, sie muss realistisch sein und Ihre Bedingungen berücksichtigen.",
@@ -271,7 +283,10 @@ export default class ComponentDayTip extends LitElement {
       "Vermeiden Sie Schaufensterpuppen-Trainer und seien Sie vorsichtig vor Influencern, die ihren Körper nutzen, um Ihnen Übungen zu verkaufen, und Ihnen später die Schuld geben, wenn Sie keine Ergebnisse erzielen.",
       "Schützen Sie Ihre Daten und Links, indem Sie kostenlose Pläne vermeiden, die Daten abschöpfen; Laufen Sie vor Gurus weg, die Sie auffordern, sich von Ihren Lieben zu isolieren.",
       "In der Fitnesswelt herrscht Heuchelei, es ist widersprüchlich, dass sie Sport fordern und gleichzeitig nicht normative Körper im Fitnessstudio verachten.",
-      "Bauen Sie beim Training eine Gemeinschaft auf, indem Sie das Fitnessstudio nutzen, um Bindungen und gegenseitige Unterstützung aufzubauen. Denken Sie daran, dass das Training Sie nicht von Ihrer Umgebung isolieren sollte."
+      "Bauen Sie beim Training eine Gemeinschaft auf, indem Sie das Fitnessstudio nutzen, um Bindungen und gegenseitige Unterstützung aufzubauen. Denken Sie daran, dass das Training Sie nicht von Ihrer Umgebung isolieren sollte.",
+      "Verzehren Sie jeden Tag Obst und Gemüse, kaufen Sie es beim Gemüsehändler in Ihrer Nähe.",
+      "Treiben Sie mehrmals pro Woche Sport, um stark zu sein. Unterstützen Sie die Box / das Fitnessstudio in Ihrer Nähe.",
+      "Wenn Sie Nahrungsergänzungsmittel in Ihre Ernährung aufnehmen, klären Sie mit Ihrem Ernährungsberater, ob Sie diese benötigen, und denken Sie daran, dass der Kauf in der Box/im Fitnessstudio in Ihrer Nachbarschaft eine Möglichkeit ist, diese zu unterstützen."
     ]
   };
 

@@ -191,6 +191,7 @@ export default class PageUser extends Page {
 
   @state() height: number = 0;
   @state() weight: number = 0;
+  @state() age: number = 30;
   @state() gender: 'male' | 'female' | 'non-binary' = 'male';
   @state() dailyCalories: number = 2000;
   @state() proteinRatio: number = 30;
@@ -203,7 +204,10 @@ export default class PageUser extends Page {
 
   @state() theme: 'light' | 'dark' = 'light';
   @state() language: string = 'en';
+  @state() enableWarnings: boolean = true;
+  @state() enableStatistics: boolean = false;
   @state() showClearModal: boolean = false;
+  @state() showStatisticsModal: boolean = false;
   @state() showWeightModal: boolean = false;
   @state() weightHistory: { date: string, weight: number }[] = [];
   @state() newWeightDate: string = new Date().toISOString().split('T')[0];
@@ -219,6 +223,10 @@ export default class PageUser extends Page {
   @state() importOverride: boolean = false;
   @state() importMessage: { text: string, type: 'success' | 'error' } | null = null;
   @state() statsReferenceDate: string = new Date().toISOString().split('T')[0];
+  @state() showAboutModal: boolean = false;
+
+  private _statsTouchStartX: number = 0;
+  private _statsTouchStartY: number = 0;
 
   protected handleSwipe(diffX: number): void {
     if (diffX > 0) {
@@ -239,6 +247,7 @@ export default class PageUser extends Page {
         this.height = profile.height || 0;
         this.weight = profile.weight || 0;
         this.gender = profile.gender || 'male';
+        this.age = profile.age || 30;
         this.dailyCalories = profile.goals?.calories || 2000;
         this.proteinRatio = profile.goals?.macros?.protein || 30;
         this.carbsRatio = profile.goals?.macros?.carbs || 40;
@@ -246,6 +255,8 @@ export default class PageUser extends Page {
         this.defaultBasalCalories = profile.goals?.defaultBasalCalories || 0;
         this.notificationsEnabled = !!profile.notificationsEnabled;
         this.notificationTime = profile.notificationTime || '20:00';
+        this.enableWarnings = profile.enableWarnings !== false;
+        this.enableStatistics = !!profile.enableStatistics;
       } catch (e) {
         console.error('Failed to parse user profile', e);
       }
@@ -281,6 +292,7 @@ export default class PageUser extends Page {
       height: this.height,
       weight: this.weight,
       gender: this.gender,
+      age: this.age,
       goals: {
         calories: this.dailyCalories,
         defaultBasalCalories: this.defaultBasalCalories,
@@ -291,12 +303,14 @@ export default class PageUser extends Page {
         }
       },
       notificationsEnabled: this.notificationsEnabled,
-      notificationTime: this.notificationTime
+      notificationTime: this.notificationTime,
+      enableWarnings: this.enableWarnings,
+      enableStatistics: this.enableStatistics
     };
     localStorage.setItem('user_profile', JSON.stringify(profile));
   }
 
-  private async _handleNumberInput(field: 'height' | 'weight' | 'dailyCalories' | 'proteinRatio' | 'carbsRatio' | 'fatRatio' | 'defaultBasalCalories', e: Event) {
+  private async _handleNumberInput(field: 'height' | 'weight' | 'age' | 'dailyCalories' | 'proteinRatio' | 'carbsRatio' | 'fatRatio' | 'defaultBasalCalories', e: Event) {
     const value = Number((e.target as HTMLInputElement).value);
     // @ts-ignore
     this[field] = value;
@@ -315,13 +329,14 @@ export default class PageUser extends Page {
   }
 
   private async _handleSaveCalories(e: CustomEvent) {
-    const { calories, height, weight, gender, proteinRatio, carbsRatio, fatRatio } = e.detail;
+    const { calories, height, weight, gender, age, proteinRatio, carbsRatio, fatRatio } = e.detail;
 
     this.dailyCalories = calories;
     this.height = height;
     this.weight = weight;
     this.gender = gender;
-    // We don't store age and activity level in the profile currently, but we update the cals
+    this.age = age;
+    // We don't store activity level in the profile currently, but we update the cals
     this.proteinRatio = proteinRatio;
     this.carbsRatio = carbsRatio;
     this.fatRatio = fatRatio;
@@ -356,6 +371,28 @@ export default class PageUser extends Page {
     this.notificationTime = (e.target as HTMLInputElement).value;
     this._saveProfile();
     window.dispatchEvent(new CustomEvent('notification-settings-changed'));
+  }
+
+  private _handleWarningsToggle(e: Event) {
+    this.enableWarnings = (e.target as HTMLInputElement).checked;
+    this._saveProfile();
+  }
+
+  private _handleStatisticsToggle(e: Event) {
+    const isActivating = (e.target as HTMLInputElement).checked;
+    if (isActivating && this.enableWarnings) {
+      this.showStatisticsModal = true;
+      (e.target as HTMLInputElement).checked = false; // Revert visually until confirmed
+    } else {
+      this.enableStatistics = isActivating;
+      this._saveProfile();
+    }
+  }
+
+  private _confirmEnableStatistics() {
+    this.enableStatistics = true;
+    this._saveProfile();
+    this.showStatisticsModal = false;
   }
 
   private async _loadWeeklyStats() {
@@ -525,12 +562,39 @@ export default class PageUser extends Page {
     };
   }
 
-  private _changeStatsWeek(weeks: number) {
+  private _changeStatsWeek(delta: number) {
     const d = new Date(this.statsReferenceDate);
-    d.setDate(d.getDate() + (weeks * 7));
+    d.setDate(d.getDate() + (delta * 7));
     this.statsReferenceDate = d.toISOString().split('T')[0];
     this._loadWeeklyStats();
   }
+
+  private _handleStatsTouchStart = (e: TouchEvent) => {
+    // Stop propagation so the inner swipe doesn't conflict with outer page swipes instantly 
+    // although we only stop it on move/end to let scrolling work
+    this._statsTouchStartX = e.changedTouches[0].screenX;
+    this._statsTouchStartY = e.changedTouches[0].screenY;
+  };
+
+  private _handleStatsTouchEnd = (e: TouchEvent) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+
+    const diffX = touchEndX - this._statsTouchStartX;
+    const diffY = touchEndY - this._statsTouchStartY;
+
+    // Check if it's primarily a horizontal swipe
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+      e.stopPropagation(); // prevent outer global swipe
+      if (diffX > 0) {
+        // Swipe right (previous week chronologically)
+        this._changeStatsWeek(-1);
+      } else {
+        // Swipe left (next week chronologically)
+        this._changeStatsWeek(1);
+      }
+    }
+  };
 
   private _getWeekRangeLabel(): string {
     const refDate = new Date(this.statsReferenceDate);
@@ -830,6 +894,12 @@ export default class PageUser extends Page {
           <label>${this.translations.height} (cm)</label>
           <input type="number" .value="${this.height}" @input="${(e: Event) => this._handleNumberInput('height', e)}" placeholder="e.g. 175" />
         </div>
+
+        <div class="form-group">
+          <label>${this.translations.age || 'Age'}</label>
+          <input type="number" .value="${this.age}" @input="${(e: Event) => this._handleNumberInput('age', e)}" placeholder="e.g. 30" />
+        </div>
+        
         <div class="form-group">
           <label>${this.translations.dailyBasalCalories}</label>
           <input type="number" .value="${this.defaultBasalCalories}" @input="${(e: Event) => this._handleNumberInput('defaultBasalCalories', e)}" placeholder="e.g. 1500" />
@@ -844,6 +914,7 @@ export default class PageUser extends Page {
         </div>
       </div>
 
+      ${this.enableStatistics ? html`
       <div class="card">
         <h2>${this.translations.statistics}</h2>
         <div class="week-display">
@@ -855,23 +926,27 @@ export default class PageUser extends Page {
           <component-line-chart .data="${this.weightHistory.map(h => ({ tag: h.date, value: h.weight }))}"></component-line-chart>
         </div>
 
-        <div class="week-selector">
-          <button @click="${() => this._changeStatsWeek(-1)}">‹</button>
-          <div class="week-display">
-            <span>${this.translations.weekOf} ${this._getWeekRangeLabel()}</span>
+        <div class="week-statistics-container" @touchstart="${this._handleStatsTouchStart}" @touchend="${this._handleStatsTouchEnd}">
+          <div class="week-selector">
+            <button @click="${() => this._changeStatsWeek(-1)}">‹</button>
+            <div class="week-display">
+              <span>${this.translations.weekOf} ${this._getWeekRangeLabel()}</span>
+            </div>
+            <button @click="${() => this._changeStatsWeek(1)}">›</button>
           </div>
-          <button @click="${() => this._changeStatsWeek(1)}">›</button>
+            ${this.weeklyChartData ? html`
+              <component-bar-line-chart .chartData="${this.weeklyChartData}"></component-bar-line-chart>
+            ` : ''}
+  
+            ${this.radarChartData ? html`
+              <div style="margin-top: 20px; height: 300px;">
+                <component-shape-chart .chartData="${this.radarChartData}"></component-shape-chart>
+              </div>
+            ` : ''}
+          
         </div>
-              ${this.weeklyChartData ? html`
-                <component-bar-line-chart .chartData="${this.weeklyChartData}"></component-bar-line-chart>
-              ` : ''}
-
-              ${this.radarChartData ? html`
-                <div style="margin-top: 20px; height: 300px;">
-                  <component-shape-chart .chartData="${this.radarChartData}"></component-shape-chart>
-                </div>
-              ` : ''}
       </div>
+      ` : ''}
 
       <div class="card">
         <h2>${this.translations.nutritionalGoals}</h2>
@@ -926,6 +1001,37 @@ export default class PageUser extends Page {
         </div>
         <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
           <div style="flex: 1;">
+            <label style="margin-bottom: 2px;">${this.translations.enableWarnings || 'Enable warning messages'}</label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                ?checked="${this.enableWarnings}" 
+                @change="${this._handleWarningsToggle}"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
+          <div style="flex: 1;">
+            <label style="margin-bottom: 2px;">${this.translations.enableStatistics || 'Enable statistics'}</label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                .checked="${this.enableStatistics}" 
+                @change="${this._handleStatisticsToggle}"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
+          <div style="flex: 1;">
             <label style="margin-bottom: 2px;">${this.translations.dailyStatusReminder}</label>
             <span style="font-size: 0.8rem; opacity: 0.8;">${this.translations.reminderTime}</span>
           </div>
@@ -939,7 +1045,7 @@ export default class PageUser extends Page {
             />
             <label class="switch">
               <input 
-                type="checkbox" 
+                type="checkbox" c
                 ?checked="${this.notificationsEnabled}" 
                 @change="${this._handleNotificationToggle}"
               />
@@ -981,6 +1087,25 @@ export default class PageUser extends Page {
       ${this.version ? html`
         <div class="app-version">
           ${this.translations.appVersion}: ${this.version}
+          <div style="margin-top: 10px;">
+            <a href="#" @click="${(e: Event) => { e.preventDefault(); this.showAboutModal = true; }}" style="color: var(--palette-green); text-decoration: underline; cursor: pointer;">
+              ${this.translations.aboutApp || 'About Brote'}
+            </a>
+          </div>
+        </div>
+      ` : ''}
+
+      ${this.showAboutModal ? html`
+        <div class="modal-overlay">
+          <div class="modal" style="width: 500px; max-width: 95%;">
+            <div class="modal-header">
+              <h3>${this.translations.aboutApp || 'About Brote'}</h3>
+              <button class="close-btn" @click="${() => this.showAboutModal = false}">&times;</button>
+            </div>
+            <div style="text-align: justify; line-height: 1.6; font-size: 0.95rem; margin-top: 10px;">
+              <p>${this.translations.aboutMessage}</p>
+            </div>
+          </div>
         </div>
       ` : ''}
 
@@ -1134,9 +1259,31 @@ export default class PageUser extends Page {
               .height="${this.height}"
               .weight="${this.weight}"
               .gender="${this.gender}"
+              .age="${this.age}"
+              .showWarning="${this.enableWarnings}"
               .translations="${JSON.stringify(this.translations)}"
               @save-calories="${this._handleSaveCalories}"
             ></component-maintenance-calories>
+          </div>
+        </div>
+      ` : ''}
+
+      ${this.showStatisticsModal ? html`
+        <div class="modal-overlay">
+          <div class="modal">
+            <div class="modal-header">
+              <h3 style="color: var(--palette-green);">${this.translations.statisticsWarningTitle || 'Warning regarding statistical tracking'}</h3>
+              <button class="close-btn" @click="${() => this.showStatisticsModal = false}">&times;</button>
+            </div>
+            <div class="warning-message">
+              <span>
+                <span class="warning-icon">⚠️</span>${this.translations.statisticsWarningMessage || 'Please be careful...'}
+              </span>
+            </div>
+            <div class="modal-buttons" style="justify-content: space-around;">
+              <button class="btn btn-cancel" @click="${() => this.showStatisticsModal = false}">${this.translations.cancel || 'Cancel'}</button>
+              <button class="btn btn-confirm" @click="${this._confirmEnableStatistics}">${this.translations.confirm || 'Confirm'}</button>
+            </div>
           </div>
         </div>
       ` : ''}

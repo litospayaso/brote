@@ -178,6 +178,17 @@ export default class Page<api = {}> extends LitElement {
       cursor: pointer;
       font-size: 1rem;
     }
+    .btn-cancel {
+      background-color: var(--input-grey-button, #a19fa2);
+      color: white;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+    }
     .btn:hover {
       opacity: 0.9;
     }
@@ -297,6 +308,25 @@ export default class Page<api = {}> extends LitElement {
     input:checked + .slider:before {
       transform: translateX(24px);
     }
+    .warning-message {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--warning-background, #fff3e0);
+      border: 1px solid var(--warning-border, #ffb74d);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--warning-text, #e65100);
+      text-align: justify;
+    }
+    .warning-icon {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      display: block;
+      text-align: center;
+    }
+
+
     ` as CSSResultGroup];
 
   /**

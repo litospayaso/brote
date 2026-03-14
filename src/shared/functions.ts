@@ -80,6 +80,7 @@ export const variableStyles = css`
     --input-background: transparent;
     --input-text: #191c25;
     --input-border: #a19fa2;
+    --input-grey-button: #a19fa2;
     --input-placeholder: #757575;
 
     --button-icon-color: #fff;

@@ -176,7 +176,13 @@ export const translations: translationsType = {
     lowCarb: 'Baja en carbohidratos',
     lowFat: 'Baja en grasas',
     highProtein: 'Alta en proteínas',
-    calculateMaintenance: 'Calcular calorías de mantenimiento'
+    calculateMaintenance: 'Calcular calorías de mantenimiento',
+    enableWarnings: 'Habilitar mensajes de advertencia',
+    enableStatistics: 'Habilitar estadísticas',
+    statisticsWarningTitle: 'Advertencia sobre el seguimiento estadístico',
+    statisticsWarningMessage: 'Cuidado: el uso continuo del seguimiento diario puede desencadenar actitudes obsesivas y de control que, pueden favorecer el desarrollo de trastornos psicológicos o de conducta alimentaria. Utiliza esta herramienta con cuidado y responsabilidad. Se recomienda consultar con un especialista (psicólogo y/o nutricionista) para establecer hábitos de seguimiento saludables. Considere desactivar esta función si te abruma, tu valor no disminuye por no llevar un registro.',
+    aboutApp: 'Acerca de Brote',
+    aboutMessage: 'Brote es una aplicación gratuita y de código abierto diseñada para ayudarte a realizar un seguimiento de tu ingesta nutricional de manera consciente. Utiliza datos de OpenFoodFacts para brindarte información clara. Tu privacidad es fundamental: todos los datos se almacenan localmente en tu dispositivo bajo tu control absoluto y no se comparten. El conocimiento sobre la alimentación propia se considera un derecho humano y una práctica de responsabilidad para con la salud que debe ser accesible y libre. Se aconseja utilizar esta herramienta con precaución: el seguimiento riguroso de calorías y los comportamientos hipervigilantes pueden desencadenar trastornos psicológicos y nutricionales. Por favor, considera pedir apoyo profesional si lo necesitas. La aplicación incluye recordatorios periódicos de esta recomendación, puesto que cuidar de tu mente es una parte esencial del cuidado de tu cuerpo.'
   },
   en: {
     search: 'Search',
@@ -351,7 +357,13 @@ export const translations: translationsType = {
     lowCarb: 'Low Carb',
     lowFat: 'Low Fat',
     highProtein: 'High Protein',
-    calculateMaintenance: 'Calculate maintenance calories'
+    calculateMaintenance: 'Calculate maintenance calories',
+    enableWarnings: 'Enable warning messages',
+    enableStatistics: 'Enable statistics',
+    statisticsWarningTitle: 'Warning regarding statistical tracking',
+    statisticsWarningMessage: 'Be careful: continuous use of daily tracking can trigger obsessive and controlling attitudes which may favor the development of psychological or eating disorders. Use this tool with care and responsibility. It is recommended to consult with a specialist (psychologist and/or nutritionist) to establish healthy tracking habits. Consider disabling this feature if it overwhelms you, your value does not diminish by not keeping a record.',
+    aboutApp: 'About Brote',
+    aboutMessage: 'Brote is a free, open-source application designed to help you track your nutritional intake mindfully. It uses OpenFoodFacts to provide clear food data. Your privacy is paramount: all information is stored locally on your device under your complete control and is never shared. Knowledge about the food consumed is considered a human right and a health responsibility that MUST be accessible and free. This tool should be used with caution: rigorous calorie tracking and hypervigilant behavior can trigger psychological and eating disorders. Please consider seeking professional psychological or nutritional help if you feel you need it. The app includes periodic reminders of this message, as taking care of your mind is an essential part of taking care of yourself.'
   },
   fr: {
     search: 'Rechercher',
@@ -515,7 +527,13 @@ export const translations: translationsType = {
     metabolicWarning: 'Considérations importantes : Cette estimation métabolique repose sur des modèles statistiques pour la population générale et ne tient pas compte des variations individuelles de la composition corporelle (muscle vs graisse). Ces calculs ne doivent être utilisés qu\'à titre indicatif. Pour une approche nutritionnelle précise et sûre, nous recommandons vivement une supervision médicale ou diététique professionnelle, car l\'autosurveillance calorique peut être associée au développement de troubles du comportement alimentaire.',
     maintenanceCaloriesTitle: 'Taux Métabolique de Base',
     mifflinStJeorSubtitle: 'Calcul basé sur la',
-    methodLabel: 'méthode'
+    methodLabel: 'méthode',
+    enableWarnings: 'Activer les messages d\'avertissement',
+    enableStatistics: 'Activer les statistiques',
+    statisticsWarningTitle: 'Avertissement concernant le suivi statistique',
+    statisticsWarningMessage: 'Attention : l\'utilisation continue du suivi quotidien peut déclencher des attitudes obsessionnelles et de contrôle qui peuvent favoriser le développement de troubles psychologiques ou du comportement alimentaire. Utilisez cet outil avec soin et responsabilité. Il est recommandé de consulter un spécialiste (psychologue et/ou nutritionniste) pour établir de saines habitudes de suivi. Pensez à désactiver cette fonctionnalité si elle vous submerge, votre valeur ne diminue pas si vous ne tenez pas de registre.',
+    aboutApp: 'À propos de Brote',
+    aboutMessage: 'Brote est une application gratuite et open-source conçue pour vous aider à suivre votre apport nutritionnel de manière consciente. Elle utilise OpenFoodFacts pour fournir des données claires sur les aliments. Votre vie privée est primordiale : toutes les informations sont stockées localement sur votre appareil sous votre contrôle total et ne sont jamais partagées. La connaissance des aliments consommés est considérée comme un droit fondamental et une responsabilité en matière de santé qui doit être accessible et gratuite. Cet outil doit être utilisé avec prudence : le suivi rigoureux des calories et les comportements hypervigilants peuvent déclencher des troubles psychologiques et alimentaires. N\'hésitez pas à demander une aide psychologique ou nutritionnelle si vous en ressentez le besoin. L\'application inclut des rappels périodiques de ce message, car prendre soin de son esprit est une part essentielle du prendre soin de soi.'
   },
   de: {
     search: 'Suche',
@@ -679,7 +697,13 @@ export const translations: translationsType = {
     metabolicWarning: 'Wichtige Hinweise: Diese Stoffwechselschätzung basiert auf statistischen Modellen für die Allgemeinbevölkerung und berücksichtigt keine individuellen Schwankungen der Körperzusammensetzung (Muskelmasse vs. Fett). Diese Berechnungen sollten nur als allgemeine Orientierung dienen. Für einen präzisen und sicheren Ernährungsansatz empfehlen wir dringend eine professionelle medizinische oder ernährungswissenschaftliche Betreuung, da eine eigenständige Kalorienüberwachung mit der Entwicklung von Essstörungen in Verbindung gebracht werden kann.',
     maintenanceCaloriesTitle: 'Grundumsatz',
     mifflinStJeorSubtitle: 'Berechnung basierend auf der',
-    methodLabel: 'Methode'
+    methodLabel: 'Methode',
+    enableWarnings: 'Warnmeldungen aktivieren',
+    enableStatistics: 'Statistiken aktivieren',
+    statisticsWarningTitle: 'Warnung bezüglich der statistischen Erfassung',
+    statisticsWarningMessage: 'Achtung: Die kontinuierliche Nutzung des täglichen Trackings kann zwanghafte und kontrollierende Verhaltensweisen auslösen, die die Entwicklung von psychischen oder Essstörungen begünstigen können. Nutzen Sie dieses Tool mit Sorgfalt und Verantwortung. Es wird empfohlen, einen Spezialisten (Psychologe und/oder Ernährungsberater) zu konsultieren, um gesunde Tracking-Gewohnheiten zu etablieren. Erwägen Sie die Deaktivierung dieser Funktion, wenn sie Sie überfordert, Ihr Wert verringert sich nicht dadurch, dass Sie keine Aufzeichnungen führen.',
+    aboutApp: 'Über Brote',
+    aboutMessage: 'Brote ist eine kostenlose Open-Source-Anwendung, die Ihnen helfen soll, Ihre Nahrungsaufnahme achtsam zu verfolgen. Sie nutzt OpenFoodFacts, um klare Lebensmitteldaten bereitzustellen. Ihre Privatsphäre steht an erster Stelle: Alle Informationen werden lokal auf Ihrem Gerät unter Ihrer vollständigen Kontrolle gespeichert und niemals weitergegeben. Das Wissen über die konsumierten Lebensmittel wird als grundlegendes Menschenrecht und als gesundheitliche Verantwortung betrachtet, die zugänglich und kostenlos sein muss. Dieses Tool sollte mit Vorsicht genutzt werden: Ein strenges Kalorientracking und hypervigilantes Verhalten können psychische und Essstörungen auslösen. Bitte ziehen Sie fachkundige psychologische oder ernährungsspezifische Hilfe in Betracht, wenn Sie das Gefühl haben, diese zu benötigen. Die App enthält regelmäßige Erinnerungen an diese Botschaft, da die Pflege Ihres Geistes ein wesentlicher Bestandteil der Selbstfürsorge ist.'
   },
   it: {
     search: 'Cerca',
@@ -843,6 +867,12 @@ export const translations: translationsType = {
     metabolicWarning: 'Considerazioni importanti: Questa stima metabolica si basa su modelli statistici per la popolazione generale e non tiene conto delle variazioni individuali nella composizione corporea (muscolo vs. grasso). Questi calcoli devono essere utilizzati solo come guida generale. Per un approccio nutrizionale preciso e sicuro, raccomandiamo vivamente la supervisione medica o dietetica professionale, poiché l\'automonitoraggio calorico può essere associato allo sviluppo di disturbi del comportamento alimentare.',
     maintenanceCaloriesTitle: 'Tasso Metabolico Basale',
     mifflinStJeorSubtitle: 'Calcolo basato sul',
-    methodLabel: 'metodo'
-  },
+    methodLabel: 'metodo',
+    enableWarnings: 'Abilita i messaggi di avviso',
+    enableStatistics: 'Abilita le statistiche',
+    statisticsWarningTitle: 'Avvertenza sul tracciamento statistico',
+    statisticsWarningMessage: 'Attenzione: l\'uso continuo del tracciamento giornaliero può innescare atteggiamenti ossessivi e di controllo che possono favorire lo sviluppo di disturbi psicologici o alimentari. Usa questo strumento con cura e responsabilità. Si consiglia di consultare uno specialista (psicologo e/o nutrizionista) per stabilire abitudini di tracciamento sane. Considera la disattivazione di questa funzione se ti opprime, il tuo valore non diminuisce non tenendo un registro.',
+    aboutApp: 'Informazioni su Brote',
+    aboutMessage: 'Brote è un\'applicazione gratuita e open-source progettata per aiutarti a monitorare il tuo apporto nutrizionale in modo consapevole. Utilizza OpenFoodFacts per fornire dati chiari sugli alimenti. La tua privacy è fondamentale: tutte le informazioni sono memorizzate localmente sul tuo dispositivo sotto il tuo totale controllo e non vengono mai condivise. La conoscenza del cibo che si consuma è considerata un diritto umano e una responsabilità sanitaria che deve essere accessibile e gratuita. Questo strumento dovrebbe essere utilizzato con cautela: un rigoroso monitoraggio delle calorie e comportamenti ipervigilanti possono innescare disturbi psicologici e alimentari. Ti preghiamo di considerare di cercare un aiuto psicologico o nutrizionale professionale se ne senti il bisogno. L\'app include promemoria periodici di questo messaggio, poiché prendersi cura della propria mente è una parte essenziale del prendersi cura di sé.'
+  }
 };

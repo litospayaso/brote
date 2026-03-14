@@ -7,6 +7,7 @@ export default class ComponentMaintenanceCalories extends LitElement {
   @property({ type: Number }) height = 0;
   @property({ type: Number }) weight = 0;
   @property({ type: String }) gender = '';
+  @property({ type: Number }) age = 30;
   @property({ type: Boolean }) showWarning = true;
   @property({ type: String }) set translations(translations: string) {
     if (translations) {
@@ -17,7 +18,7 @@ export default class ComponentMaintenanceCalories extends LitElement {
   @state() private _height = 0;
   @state() private _weight = 0;
   @state() private _gender = '';
-  @state() private age = 30;
+  @state() private _age = 30;
   @state() private activityLevel = 1.2;
   @state() private dietType = 'balanced';
   @state() private proteinRatio = 20;
@@ -195,16 +196,17 @@ export default class ComponentMaintenanceCalories extends LitElement {
     if (changedProperties.has('height')) this._height = this.height;
     if (changedProperties.has('weight')) this._weight = this.weight;
     if (changedProperties.has('gender')) this._gender = this.gender;
+    if (changedProperties.has('age')) this._age = this.age;
   }
 
   private _calculateCalories(): number {
-    if (!this._height || !this._weight || !this.age || !this._gender) return 0;
+    if (!this._height || !this._weight || !this._age || !this._gender) return 0;
 
     let bmr = 0;
     if (this._gender === 'male') {
-      bmr = (10 * this._weight) + (6.25 * this._height) - (5 * this.age) + 5;
+      bmr = (10 * this._weight) + (6.25 * this._height) - (5 * this._age) + 5;
     } else {
-      bmr = (10 * this._weight) + (6.25 * this._height) - (5 * this.age) - 161;
+      bmr = (10 * this._weight) + (6.25 * this._height) - (5 * this._age) - 161;
     }
 
     const totalCalories = Math.round(bmr * this.activityLevel);
@@ -257,7 +259,7 @@ export default class ComponentMaintenanceCalories extends LitElement {
         height: this._height,
         weight: this._weight,
         gender: this._gender,
-        age: this.age,
+        age: this._age,
         activityLevel: this.activityLevel,
         proteinRatio: this.proteinRatio,
         carbsRatio: this.carbsRatio,
@@ -304,7 +306,7 @@ export default class ComponentMaintenanceCalories extends LitElement {
           </div>
           <div class="form-group">
             <label>🎂 ${this.translationsTexts['age'] || 'Age'}</label>
-            <input type="number" .value="${String(this.age)}" @input="${(e: any) => this.age = Number(e.target.value)}">
+            <input type="number" .value="${String(this._age)}" @input="${(e: any) => this._age = Number(e.target.value)}">
           </div>
         </div>
 

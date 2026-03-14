@@ -40,6 +40,7 @@ export interface UserProfile {
   height: number;
   weight: number;
   gender: 'male' | 'female' | 'non-binary';
+  age?: number;
   goals: {
     calories: number;
     defaultBasalCalories?: number;
@@ -51,6 +52,8 @@ export interface UserProfile {
   },
   notificationsEnabled?: boolean;
   notificationTime?: string;
+  enableWarnings?: boolean;
+  enableStatistics?: boolean;
 }
 
 const DB_NAME = 'OpenCalDB';

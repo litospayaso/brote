@@ -27523,7 +27523,13 @@
       lowCarb: "Baja en carbohidratos",
       lowFat: "Baja en grasas",
       highProtein: "Alta en prote\xEDnas",
-      calculateMaintenance: "Calcular calor\xEDas de mantenimiento"
+      calculateMaintenance: "Calcular calor\xEDas de mantenimiento",
+      enableWarnings: "Habilitar mensajes de advertencia",
+      enableStatistics: "Habilitar estad\xEDsticas",
+      statisticsWarningTitle: "Advertencia sobre el seguimiento estad\xEDstico",
+      statisticsWarningMessage: "Cuidado: el uso continuo del seguimiento diario puede desencadenar actitudes obsesivas y de control que, pueden favorecer el desarrollo de trastornos psicol\xF3gicos o de conducta alimentaria. Utiliza esta herramienta con cuidado y responsabilidad. Se recomienda consultar con un especialista (psic\xF3logo y/o nutricionista) para establecer h\xE1bitos de seguimiento saludables. Considere desactivar esta funci\xF3n si te abruma, tu valor no disminuye por no llevar un registro.",
+      aboutApp: "Acerca de Brote",
+      aboutMessage: "Brote es una aplicaci\xF3n gratuita y de c\xF3digo abierto dise\xF1ada para ayudarte a realizar un seguimiento de tu ingesta nutricional de manera consciente. Utiliza datos de OpenFoodFacts para brindarte informaci\xF3n clara. Tu privacidad es fundamental: todos los datos se almacenan localmente en tu dispositivo bajo tu control absoluto y no se comparten. El conocimiento sobre la alimentaci\xF3n propia se considera un derecho humano y una pr\xE1ctica de responsabilidad para con la salud que debe ser accesible y libre. Se aconseja utilizar esta herramienta con precauci\xF3n: el seguimiento riguroso de calor\xEDas y los comportamientos hipervigilantes pueden desencadenar trastornos psicol\xF3gicos y nutricionales. Por favor, considera pedir apoyo profesional si lo necesitas. La aplicaci\xF3n incluye recordatorios peri\xF3dicos de esta recomendaci\xF3n, puesto que cuidar de tu mente es una parte esencial del cuidado de tu cuerpo."
     },
     en: {
       search: "Search",
@@ -27698,7 +27704,13 @@
       lowCarb: "Low Carb",
       lowFat: "Low Fat",
       highProtein: "High Protein",
-      calculateMaintenance: "Calculate maintenance calories"
+      calculateMaintenance: "Calculate maintenance calories",
+      enableWarnings: "Enable warning messages",
+      enableStatistics: "Enable statistics",
+      statisticsWarningTitle: "Warning regarding statistical tracking",
+      statisticsWarningMessage: "Be careful: continuous use of daily tracking can trigger obsessive and controlling attitudes which may favor the development of psychological or eating disorders. Use this tool with care and responsibility. It is recommended to consult with a specialist (psychologist and/or nutritionist) to establish healthy tracking habits. Consider disabling this feature if it overwhelms you, your value does not diminish by not keeping a record.",
+      aboutApp: "About Brote",
+      aboutMessage: "Brote is a free, open-source application designed to help you track your nutritional intake mindfully. It uses OpenFoodFacts to provide clear food data. Your privacy is paramount: all information is stored locally on your device under your complete control and is never shared. Knowledge about the food consumed is considered a human right and a health responsibility that MUST be accessible and free. This tool should be used with caution: rigorous calorie tracking and hypervigilant behavior can trigger psychological and eating disorders. Please consider seeking professional psychological or nutritional help if you feel you need it. The app includes periodic reminders of this message, as taking care of your mind is an essential part of taking care of yourself."
     },
     fr: {
       search: "Rechercher",
@@ -27862,7 +27874,13 @@
       metabolicWarning: "Consid\xE9rations importantes : Cette estimation m\xE9tabolique repose sur des mod\xE8les statistiques pour la population g\xE9n\xE9rale et ne tient pas compte des variations individuelles de la composition corporelle (muscle vs graisse). Ces calculs ne doivent \xEAtre utilis\xE9s qu'\xE0 titre indicatif. Pour une approche nutritionnelle pr\xE9cise et s\xFBre, nous recommandons vivement une supervision m\xE9dicale ou di\xE9t\xE9tique professionnelle, car l'autosurveillance calorique peut \xEAtre associ\xE9e au d\xE9veloppement de troubles du comportement alimentaire.",
       maintenanceCaloriesTitle: "Taux M\xE9tabolique de Base",
       mifflinStJeorSubtitle: "Calcul bas\xE9 sur la",
-      methodLabel: "m\xE9thode"
+      methodLabel: "m\xE9thode",
+      enableWarnings: "Activer les messages d'avertissement",
+      enableStatistics: "Activer les statistiques",
+      statisticsWarningTitle: "Avertissement concernant le suivi statistique",
+      statisticsWarningMessage: "Attention : l'utilisation continue du suivi quotidien peut d\xE9clencher des attitudes obsessionnelles et de contr\xF4le qui peuvent favoriser le d\xE9veloppement de troubles psychologiques ou du comportement alimentaire. Utilisez cet outil avec soin et responsabilit\xE9. Il est recommand\xE9 de consulter un sp\xE9cialiste (psychologue et/ou nutritionniste) pour \xE9tablir de saines habitudes de suivi. Pensez \xE0 d\xE9sactiver cette fonctionnalit\xE9 si elle vous submerge, votre valeur ne diminue pas si vous ne tenez pas de registre.",
+      aboutApp: "\xC0 propos de Brote",
+      aboutMessage: "Brote est une application gratuite et open-source con\xE7ue pour vous aider \xE0 suivre votre apport nutritionnel de mani\xE8re consciente. Elle utilise OpenFoodFacts pour fournir des donn\xE9es claires sur les aliments. Votre vie priv\xE9e est primordiale : toutes les informations sont stock\xE9es localement sur votre appareil sous votre contr\xF4le total et ne sont jamais partag\xE9es. La connaissance des aliments consomm\xE9s est consid\xE9r\xE9e comme un droit fondamental et une responsabilit\xE9 en mati\xE8re de sant\xE9 qui doit \xEAtre accessible et gratuite. Cet outil doit \xEAtre utilis\xE9 avec prudence : le suivi rigoureux des calories et les comportements hypervigilants peuvent d\xE9clencher des troubles psychologiques et alimentaires. N'h\xE9sitez pas \xE0 demander une aide psychologique ou nutritionnelle si vous en ressentez le besoin. L'application inclut des rappels p\xE9riodiques de ce message, car prendre soin de son esprit est une part essentielle du prendre soin de soi."
     },
     de: {
       search: "Suche",
@@ -28026,7 +28044,13 @@
       metabolicWarning: "Wichtige Hinweise: Diese Stoffwechselsch\xE4tzung basiert auf statistischen Modellen f\xFCr die Allgemeinbev\xF6lkerung und ber\xFCcksichtigt keine individuellen Schwankungen der K\xF6rperzusammensetzung (Muskelmasse vs. Fett). Diese Berechnungen sollten nur als allgemeine Orientierung dienen. F\xFCr einen pr\xE4zisen und sicheren Ern\xE4hrungsansatz empfehlen wir dringend eine professionelle medizinische oder ern\xE4hrungswissenschaftliche Betreuung, da eine eigenst\xE4ndige Kalorien\xFCberwachung mit der Entwicklung von Essst\xF6rungen in Verbindung gebracht werden kann.",
       maintenanceCaloriesTitle: "Grundumsatz",
       mifflinStJeorSubtitle: "Berechnung basierend auf der",
-      methodLabel: "Methode"
+      methodLabel: "Methode",
+      enableWarnings: "Warnmeldungen aktivieren",
+      enableStatistics: "Statistiken aktivieren",
+      statisticsWarningTitle: "Warnung bez\xFCglich der statistischen Erfassung",
+      statisticsWarningMessage: "Achtung: Die kontinuierliche Nutzung des t\xE4glichen Trackings kann zwanghafte und kontrollierende Verhaltensweisen ausl\xF6sen, die die Entwicklung von psychischen oder Essst\xF6rungen beg\xFCnstigen k\xF6nnen. Nutzen Sie dieses Tool mit Sorgfalt und Verantwortung. Es wird empfohlen, einen Spezialisten (Psychologe und/oder Ern\xE4hrungsberater) zu konsultieren, um gesunde Tracking-Gewohnheiten zu etablieren. Erw\xE4gen Sie die Deaktivierung dieser Funktion, wenn sie Sie \xFCberfordert, Ihr Wert verringert sich nicht dadurch, dass Sie keine Aufzeichnungen f\xFChren.",
+      aboutApp: "\xDCber Brote",
+      aboutMessage: "Brote ist eine kostenlose Open-Source-Anwendung, die Ihnen helfen soll, Ihre Nahrungsaufnahme achtsam zu verfolgen. Sie nutzt OpenFoodFacts, um klare Lebensmitteldaten bereitzustellen. Ihre Privatsph\xE4re steht an erster Stelle: Alle Informationen werden lokal auf Ihrem Ger\xE4t unter Ihrer vollst\xE4ndigen Kontrolle gespeichert und niemals weitergegeben. Das Wissen \xFCber die konsumierten Lebensmittel wird als grundlegendes Menschenrecht und als gesundheitliche Verantwortung betrachtet, die zug\xE4nglich und kostenlos sein muss. Dieses Tool sollte mit Vorsicht genutzt werden: Ein strenges Kalorientracking und hypervigilantes Verhalten k\xF6nnen psychische und Essst\xF6rungen ausl\xF6sen. Bitte ziehen Sie fachkundige psychologische oder ern\xE4hrungsspezifische Hilfe in Betracht, wenn Sie das Gef\xFChl haben, diese zu ben\xF6tigen. Die App enth\xE4lt regelm\xE4\xDFige Erinnerungen an diese Botschaft, da die Pflege Ihres Geistes ein wesentlicher Bestandteil der Selbstf\xFCrsorge ist."
     },
     it: {
       search: "Cerca",
@@ -28190,7 +28214,13 @@
       metabolicWarning: "Considerazioni importanti: Questa stima metabolica si basa su modelli statistici per la popolazione generale e non tiene conto delle variazioni individuali nella composizione corporea (muscolo vs. grasso). Questi calcoli devono essere utilizzati solo come guida generale. Per un approccio nutrizionale preciso e sicuro, raccomandiamo vivamente la supervisione medica o dietetica professionale, poich\xE9 l'automonitoraggio calorico pu\xF2 essere associato allo sviluppo di disturbi del comportamento alimentare.",
       maintenanceCaloriesTitle: "Tasso Metabolico Basale",
       mifflinStJeorSubtitle: "Calcolo basato sul",
-      methodLabel: "metodo"
+      methodLabel: "metodo",
+      enableWarnings: "Abilita i messaggi di avviso",
+      enableStatistics: "Abilita le statistiche",
+      statisticsWarningTitle: "Avvertenza sul tracciamento statistico",
+      statisticsWarningMessage: "Attenzione: l'uso continuo del tracciamento giornaliero pu\xF2 innescare atteggiamenti ossessivi e di controllo che possono favorire lo sviluppo di disturbi psicologici o alimentari. Usa questo strumento con cura e responsabilit\xE0. Si consiglia di consultare uno specialista (psicologo e/o nutrizionista) per stabilire abitudini di tracciamento sane. Considera la disattivazione di questa funzione se ti opprime, il tuo valore non diminuisce non tenendo un registro.",
+      aboutApp: "Informazioni su Brote",
+      aboutMessage: "Brote \xE8 un'applicazione gratuita e open-source progettata per aiutarti a monitorare il tuo apporto nutrizionale in modo consapevole. Utilizza OpenFoodFacts per fornire dati chiari sugli alimenti. La tua privacy \xE8 fondamentale: tutte le informazioni sono memorizzate localmente sul tuo dispositivo sotto il tuo totale controllo e non vengono mai condivise. La conoscenza del cibo che si consuma \xE8 considerata un diritto umano e una responsabilit\xE0 sanitaria che deve essere accessibile e gratuita. Questo strumento dovrebbe essere utilizzato con cautela: un rigoroso monitoraggio delle calorie e comportamenti ipervigilanti possono innescare disturbi psicologici e alimentari. Ti preghiamo di considerare di cercare un aiuto psicologico o nutrizionale professionale se ne senti il bisogno. L'app include promemoria periodici di questo messaggio, poich\xE9 prendersi cura della propria mente \xE8 una parte essenziale del prendersi cura di s\xE9."
     }
   };
 
@@ -28886,6 +28916,7 @@
     --input-background: transparent;
     --input-text: #191c25;
     --input-border: #a19fa2;
+    --input-grey-button: #a19fa2;
     --input-placeholder: #757575;
 
     --button-icon-color: #fff;
@@ -29127,6 +29158,17 @@
       cursor: pointer;
       font-size: 1rem;
     }
+    .btn-cancel {
+      background-color: var(--input-grey-button, #a19fa2);
+      color: white;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+    }
     .btn:hover {
       opacity: 0.9;
     }
@@ -29246,6 +29288,25 @@
     input:checked + .slider:before {
       transform: translateX(24px);
     }
+    .warning-message {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--warning-background, #fff3e0);
+      border: 1px solid var(--warning-border, #ffb74d);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--warning-text, #e65100);
+      text-align: justify;
+    }
+    .warning-icon {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      display: block;
+      text-align: center;
+    }
+
+
     `
       ];
     }
@@ -34167,7 +34228,12 @@
       if (viewMode && ["cached", "favorites", "search", "meals"].includes(viewMode)) {
         this._switchMode(viewMode);
       } else {
-        this._loadData();
+        const cachedProducts = await this.db.getAllCachedProducts();
+        if (!cachedProducts || cachedProducts.length === 0) {
+          this._switchMode("search");
+        } else {
+          this._loadData();
+        }
       }
     }
     async _loadData() {
@@ -34183,6 +34249,10 @@
               const lowerQuery = this.query.toLowerCase();
               return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
             });
+            if (products.length === 0) {
+              this._switchMode("search");
+              return;
+            }
           }
         } else if (this.viewMode === "favorites") {
           const favorites = await this.db.getFavorites();
@@ -34209,6 +34279,10 @@
               const lowerQuery = this.query.toLowerCase();
               return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
             });
+            if (products.length === 0) {
+              this._switchMode("search");
+              return;
+            }
           }
         } else if (this.viewMode === "search") {
           if (this.query) {
@@ -35890,11 +35964,12 @@
       this.height = 0;
       this.weight = 0;
       this.gender = "";
+      this.age = 30;
       this.showWarning = true;
       this._height = 0;
       this._weight = 0;
       this._gender = "";
-      this.age = 30;
+      this._age = 30;
       this.activityLevel = 1.2;
       this.dietType = "balanced";
       this.proteinRatio = 20;
@@ -35911,14 +35986,15 @@
       if (changedProperties.has("height")) this._height = this.height;
       if (changedProperties.has("weight")) this._weight = this.weight;
       if (changedProperties.has("gender")) this._gender = this.gender;
+      if (changedProperties.has("age")) this._age = this.age;
     }
     _calculateCalories() {
-      if (!this._height || !this._weight || !this.age || !this._gender) return 0;
+      if (!this._height || !this._weight || !this._age || !this._gender) return 0;
       let bmr = 0;
       if (this._gender === "male") {
-        bmr = 10 * this._weight + 6.25 * this._height - 5 * this.age + 5;
+        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age + 5;
       } else {
-        bmr = 10 * this._weight + 6.25 * this._height - 5 * this.age - 161;
+        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age - 161;
       }
       const totalCalories = Math.round(bmr * this.activityLevel);
       this.dispatchEvent(new CustomEvent("calories-calculated", {
@@ -35966,7 +36042,7 @@
           height: this._height,
           weight: this._weight,
           gender: this._gender,
-          age: this.age,
+          age: this._age,
           activityLevel: this.activityLevel,
           proteinRatio: this.proteinRatio,
           carbsRatio: this.carbsRatio,
@@ -36011,7 +36087,7 @@
           </div>
           <div class="form-group">
             <label>🎂 ${this.translationsTexts["age"] || "Age"}</label>
-            <input type="number" .value="${String(this.age)}" @input="${(e6) => this.age = Number(e6.target.value)}">
+            <input type="number" .value="${String(this._age)}" @input="${(e6) => this._age = Number(e6.target.value)}">
           </div>
         </div>
 
@@ -36249,6 +36325,9 @@
     n4({ type: String })
   ], ComponentMaintenanceCalories.prototype, "gender", 2);
   __decorateClass([
+    n4({ type: Number })
+  ], ComponentMaintenanceCalories.prototype, "age", 2);
+  __decorateClass([
     n4({ type: Boolean })
   ], ComponentMaintenanceCalories.prototype, "showWarning", 2);
   __decorateClass([
@@ -36265,7 +36344,7 @@
   ], ComponentMaintenanceCalories.prototype, "_gender", 2);
   __decorateClass([
     r5()
-  ], ComponentMaintenanceCalories.prototype, "age", 2);
+  ], ComponentMaintenanceCalories.prototype, "_age", 2);
   __decorateClass([
     r5()
   ], ComponentMaintenanceCalories.prototype, "activityLevel", 2);
@@ -36294,6 +36373,7 @@
       super(...arguments);
       this.height = 0;
       this.weight = 0;
+      this.age = 30;
       this.gender = "male";
       this.dailyCalories = 2e3;
       this.proteinRatio = 30;
@@ -36304,7 +36384,10 @@
       this.notificationTime = "20:00";
       this.theme = "light";
       this.language = "en";
+      this.enableWarnings = true;
+      this.enableStatistics = false;
       this.showClearModal = false;
+      this.showStatisticsModal = false;
       this.showWeightModal = false;
       this.weightHistory = [];
       this.newWeightDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
@@ -36320,6 +36403,27 @@
       this.importOverride = false;
       this.importMessage = null;
       this.statsReferenceDate = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+      this.showAboutModal = false;
+      this._statsTouchStartX = 0;
+      this._statsTouchStartY = 0;
+      this._handleStatsTouchStart = (e6) => {
+        this._statsTouchStartX = e6.changedTouches[0].screenX;
+        this._statsTouchStartY = e6.changedTouches[0].screenY;
+      };
+      this._handleStatsTouchEnd = (e6) => {
+        const touchEndX = e6.changedTouches[0].screenX;
+        const touchEndY = e6.changedTouches[0].screenY;
+        const diffX = touchEndX - this._statsTouchStartX;
+        const diffY = touchEndY - this._statsTouchStartY;
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+          e6.stopPropagation();
+          if (diffX > 0) {
+            this._changeStatsWeek(-1);
+          } else {
+            this._changeStatsWeek(1);
+          }
+        }
+      };
     }
     static {
       this.styles = [
@@ -36514,6 +36618,7 @@
           this.height = profile.height || 0;
           this.weight = profile.weight || 0;
           this.gender = profile.gender || "male";
+          this.age = profile.age || 30;
           this.dailyCalories = profile.goals?.calories || 2e3;
           this.proteinRatio = profile.goals?.macros?.protein || 30;
           this.carbsRatio = profile.goals?.macros?.carbs || 40;
@@ -36521,6 +36626,8 @@
           this.defaultBasalCalories = profile.goals?.defaultBasalCalories || 0;
           this.notificationsEnabled = !!profile.notificationsEnabled;
           this.notificationTime = profile.notificationTime || "20:00";
+          this.enableWarnings = profile.enableWarnings !== false;
+          this.enableStatistics = !!profile.enableStatistics;
         } catch (e6) {
           console.error("Failed to parse user profile", e6);
         }
@@ -36550,6 +36657,7 @@
         height: this.height,
         weight: this.weight,
         gender: this.gender,
+        age: this.age,
         goals: {
           calories: this.dailyCalories,
           defaultBasalCalories: this.defaultBasalCalories,
@@ -36560,7 +36668,9 @@
           }
         },
         notificationsEnabled: this.notificationsEnabled,
-        notificationTime: this.notificationTime
+        notificationTime: this.notificationTime,
+        enableWarnings: this.enableWarnings,
+        enableStatistics: this.enableStatistics
       };
       localStorage.setItem("user_profile", JSON.stringify(profile));
     }
@@ -36579,11 +36689,12 @@
       this._saveProfile();
     }
     async _handleSaveCalories(e6) {
-      const { calories, height, weight, gender, proteinRatio, carbsRatio, fatRatio } = e6.detail;
+      const { calories, height, weight, gender, age, proteinRatio, carbsRatio, fatRatio } = e6.detail;
       this.dailyCalories = calories;
       this.height = height;
       this.weight = weight;
       this.gender = gender;
+      this.age = age;
       this.proteinRatio = proteinRatio;
       this.carbsRatio = carbsRatio;
       this.fatRatio = fatRatio;
@@ -36611,6 +36722,25 @@
       this.notificationTime = e6.target.value;
       this._saveProfile();
       window.dispatchEvent(new CustomEvent("notification-settings-changed"));
+    }
+    _handleWarningsToggle(e6) {
+      this.enableWarnings = e6.target.checked;
+      this._saveProfile();
+    }
+    _handleStatisticsToggle(e6) {
+      const isActivating = e6.target.checked;
+      if (isActivating && this.enableWarnings) {
+        this.showStatisticsModal = true;
+        e6.target.checked = false;
+      } else {
+        this.enableStatistics = isActivating;
+        this._saveProfile();
+      }
+    }
+    _confirmEnableStatistics() {
+      this.enableStatistics = true;
+      this._saveProfile();
+      this.showStatisticsModal = false;
     }
     async _loadWeeklyStats() {
       const refDate = new Date(this.statsReferenceDate);
@@ -36760,9 +36890,9 @@
         ]
       };
     }
-    _changeStatsWeek(weeks) {
+    _changeStatsWeek(delta) {
       const d3 = new Date(this.statsReferenceDate);
-      d3.setDate(d3.getDate() + weeks * 7);
+      d3.setDate(d3.getDate() + delta * 7);
       this.statsReferenceDate = d3.toISOString().split("T")[0];
       this._loadWeeklyStats();
     }
@@ -37036,6 +37166,12 @@ ${countMsg}`,
           <label>${this.translations.height} (cm)</label>
           <input type="number" .value="${this.height}" @input="${(e6) => this._handleNumberInput("height", e6)}" placeholder="e.g. 175" />
         </div>
+
+        <div class="form-group">
+          <label>${this.translations.age || "Age"}</label>
+          <input type="number" .value="${this.age}" @input="${(e6) => this._handleNumberInput("age", e6)}" placeholder="e.g. 30" />
+        </div>
+        
         <div class="form-group">
           <label>${this.translations.dailyBasalCalories}</label>
           <input type="number" .value="${this.defaultBasalCalories}" @input="${(e6) => this._handleNumberInput("defaultBasalCalories", e6)}" placeholder="e.g. 1500" />
@@ -37050,6 +37186,7 @@ ${countMsg}`,
         </div>
       </div>
 
+      ${this.enableStatistics ? b2`
       <div class="card">
         <h2>${this.translations.statistics}</h2>
         <div class="week-display">
@@ -37061,23 +37198,27 @@ ${countMsg}`,
           <component-line-chart .data="${this.weightHistory.map((h3) => ({ tag: h3.date, value: h3.weight }))}"></component-line-chart>
         </div>
 
-        <div class="week-selector">
-          <button @click="${() => this._changeStatsWeek(-1)}">‹</button>
-          <div class="week-display">
-            <span>${this.translations.weekOf} ${this._getWeekRangeLabel()}</span>
+        <div class="week-statistics-container" @touchstart="${this._handleStatsTouchStart}" @touchend="${this._handleStatsTouchEnd}">
+          <div class="week-selector">
+            <button @click="${() => this._changeStatsWeek(-1)}">‹</button>
+            <div class="week-display">
+              <span>${this.translations.weekOf} ${this._getWeekRangeLabel()}</span>
+            </div>
+            <button @click="${() => this._changeStatsWeek(1)}">›</button>
           </div>
-          <button @click="${() => this._changeStatsWeek(1)}">›</button>
+            ${this.weeklyChartData ? b2`
+              <component-bar-line-chart .chartData="${this.weeklyChartData}"></component-bar-line-chart>
+            ` : ""}
+  
+            ${this.radarChartData ? b2`
+              <div style="margin-top: 20px; height: 300px;">
+                <component-shape-chart .chartData="${this.radarChartData}"></component-shape-chart>
+              </div>
+            ` : ""}
+          
         </div>
-              ${this.weeklyChartData ? b2`
-                <component-bar-line-chart .chartData="${this.weeklyChartData}"></component-bar-line-chart>
-              ` : ""}
-
-              ${this.radarChartData ? b2`
-                <div style="margin-top: 20px; height: 300px;">
-                  <component-shape-chart .chartData="${this.radarChartData}"></component-shape-chart>
-                </div>
-              ` : ""}
       </div>
+      ` : ""}
 
       <div class="card">
         <h2>${this.translations.nutritionalGoals}</h2>
@@ -37132,6 +37273,37 @@ ${countMsg}`,
         </div>
         <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
           <div style="flex: 1;">
+            <label style="margin-bottom: 2px;">${this.translations.enableWarnings || "Enable warning messages"}</label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                ?checked="${this.enableWarnings}" 
+                @change="${this._handleWarningsToggle}"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
+          <div style="flex: 1;">
+            <label style="margin-bottom: 2px;">${this.translations.enableStatistics || "Enable statistics"}</label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                .checked="${this.enableStatistics}" 
+                @change="${this._handleStatisticsToggle}"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--card-border);">
+          <div style="flex: 1;">
             <label style="margin-bottom: 2px;">${this.translations.dailyStatusReminder}</label>
             <span style="font-size: 0.8rem; opacity: 0.8;">${this.translations.reminderTime}</span>
           </div>
@@ -37145,7 +37317,7 @@ ${countMsg}`,
             />
             <label class="switch">
               <input 
-                type="checkbox" 
+                type="checkbox" c
                 ?checked="${this.notificationsEnabled}" 
                 @change="${this._handleNotificationToggle}"
               />
@@ -37187,6 +37359,28 @@ ${countMsg}`,
       ${this.version ? b2`
         <div class="app-version">
           ${this.translations.appVersion}: ${this.version}
+          <div style="margin-top: 10px;">
+            <a href="#" @click="${(e6) => {
+        e6.preventDefault();
+        this.showAboutModal = true;
+      }}" style="color: var(--palette-green); text-decoration: underline; cursor: pointer;">
+              ${this.translations.aboutApp || "About Brote"}
+            </a>
+          </div>
+        </div>
+      ` : ""}
+
+      ${this.showAboutModal ? b2`
+        <div class="modal-overlay">
+          <div class="modal" style="width: 500px; max-width: 95%;">
+            <div class="modal-header">
+              <h3>${this.translations.aboutApp || "About Brote"}</h3>
+              <button class="close-btn" @click="${() => this.showAboutModal = false}">&times;</button>
+            </div>
+            <div style="text-align: justify; line-height: 1.6; font-size: 0.95rem; margin-top: 10px;">
+              <p>${this.translations.aboutMessage}</p>
+            </div>
+          </div>
         </div>
       ` : ""}
 
@@ -37340,9 +37534,31 @@ ${countMsg}`,
               .height="${this.height}"
               .weight="${this.weight}"
               .gender="${this.gender}"
+              .age="${this.age}"
+              .showWarning="${this.enableWarnings}"
               .translations="${JSON.stringify(this.translations)}"
               @save-calories="${this._handleSaveCalories}"
             ></component-maintenance-calories>
+          </div>
+        </div>
+      ` : ""}
+
+      ${this.showStatisticsModal ? b2`
+        <div class="modal-overlay">
+          <div class="modal">
+            <div class="modal-header">
+              <h3 style="color: var(--palette-green);">${this.translations.statisticsWarningTitle || "Warning regarding statistical tracking"}</h3>
+              <button class="close-btn" @click="${() => this.showStatisticsModal = false}">&times;</button>
+            </div>
+            <div class="warning-message">
+              <span>
+                <span class="warning-icon">⚠️</span>${this.translations.statisticsWarningMessage || "Please be careful..."}
+              </span>
+            </div>
+            <div class="modal-buttons" style="justify-content: space-around;">
+              <button class="btn btn-cancel" @click="${() => this.showStatisticsModal = false}">${this.translations.cancel || "Cancel"}</button>
+              <button class="btn btn-confirm" @click="${this._confirmEnableStatistics}">${this.translations.confirm || "Confirm"}</button>
+            </div>
           </div>
         </div>
       ` : ""}
@@ -37358,6 +37574,9 @@ ${countMsg}`,
   __decorateClass([
     r5()
   ], PageUser.prototype, "weight", 2);
+  __decorateClass([
+    r5()
+  ], PageUser.prototype, "age", 2);
   __decorateClass([
     r5()
   ], PageUser.prototype, "gender", 2);
@@ -37390,7 +37609,16 @@ ${countMsg}`,
   ], PageUser.prototype, "language", 2);
   __decorateClass([
     r5()
+  ], PageUser.prototype, "enableWarnings", 2);
+  __decorateClass([
+    r5()
+  ], PageUser.prototype, "enableStatistics", 2);
+  __decorateClass([
+    r5()
   ], PageUser.prototype, "showClearModal", 2);
+  __decorateClass([
+    r5()
+  ], PageUser.prototype, "showStatisticsModal", 2);
   __decorateClass([
     r5()
   ], PageUser.prototype, "showWeightModal", 2);
@@ -37436,6 +37664,9 @@ ${countMsg}`,
   __decorateClass([
     r5()
   ], PageUser.prototype, "statsReferenceDate", 2);
+  __decorateClass([
+    r5()
+  ], PageUser.prototype, "showAboutModal", 2);
 
   // src/components/componentLineChart/componentLineChart.ts
   var ComponentLineChart = class extends i4 {
@@ -38331,6 +38562,8 @@ ${countMsg}`,
         defaultBasalCalories: 0,
         macros: { protein: 30, carbs: 40, fat: 30 }
       };
+      this.enableWarnings = true;
+      this.enableStatistics = false;
       this.openStatusModal = false;
     }
     static {
@@ -38520,6 +38753,8 @@ ${countMsg}`,
               defaultBasalCalories: profile.goals.defaultBasalCalories || 0
             };
           }
+          this.enableWarnings = profile.enableWarnings !== false;
+          this.enableStatistics = !!profile.enableStatistics;
         } catch (e6) {
           console.error("Failed to parse user profile", e6);
         }
@@ -38609,6 +38844,7 @@ ${countMsg}`,
         </div>
       </div>
 
+      ${this.enableStatistics ? b2`
       <component-user-status
         .exerciseCalories=${this.userStatus?.exerciseCalories || 0}
         .basalCalories=${this.userStatus?.basalCalories || this.userGoals.defaultBasalCalories || 0}
@@ -38620,7 +38856,7 @@ ${countMsg}`,
         .translations=${JSON.stringify(this.translations)}
         .open=${this.openStatusModal}
         @status-changed="${this._handleStatusChanged}"
-      ></component-user-status>
+      ></component-user-status>` : ""}
 
       <div class="progress-container">
         <component-progress-bar
@@ -38667,7 +38903,7 @@ ${countMsg}`,
         ${this.renderCategory(this.translations.snackEvening, "snack3")}
   
         ${!this.dailyLog || this.dailyLog.breakfast.length === 0 && this.dailyLog.snack1.length === 0 && this.dailyLog.lunch.length === 0 && this.dailyLog.snack2.length === 0 && this.dailyLog.dinner.length === 0 && this.dailyLog.snack3.length === 0 ? b2`
-          <component-day-tip .language="${this.getLanguage()}"></component-day-tip>
+          ${this.enableWarnings ? b2`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ""}
           <button class="btn" @click="${() => this.triggerPageNavigation({ page: "search" })}">${this.translations.addFood}</button>
         ` : ""}
       </div>
@@ -38755,6 +38991,12 @@ ${countMsg}`,
   __decorateClass([
     r5()
   ], PageHome.prototype, "userGoals", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "enableWarnings", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "enableStatistics", 2);
   __decorateClass([
     r5()
   ], PageHome.prototype, "openStatusModal", 2);
@@ -39623,7 +39865,10 @@ ${countMsg}`,
           "Huye de entrenadores maniqu\xED y desconf\xEDa de influencers que usan su f\xEDsico para venderte ejercicios, culp\xE1ndote despu\xE9s si no consigues resultados.",
           "Protege tus datos y v\xEDnculos evitando planes gratuitos que extraen datos; huye de gur\xFAs que te pidan aislarte de tus seres queridos.",
           "Existe una hipocres\xEDa en el mundo fitness, es contradictorio que exijan hacer deporte y al mismo tiempo desprecien a los cuerpos no normativos en el gimnasio.",
-          "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno."
+          "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno.",
+          "Consume fruta y verdura todos los d\xEDas, comprala en la fruter\xEDa de tu barrio",
+          "Haz deporte varios d\xEDas a la semana para estar fuerte. Apoya a al box / gimnasio de tu barrio",
+          "Si tomas suplementaci\xF3n en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles"
         ],
         en: [
           "Your diet must take into account your context, it must be realistic and consider your conditions.",
@@ -39676,7 +39921,10 @@ ${countMsg}`,
           "Avoid mannequin trainers and be wary of influencers who use their physique to sell you exercises, blaming you later if you don't get results.",
           "Protect your data and links by avoiding free plans that siphon data; Run away from gurus who ask you to isolate yourself from your loved ones.",
           "There is hypocrisy in the fitness world, it is contradictory that they demand sports and at the same time despise non-normative bodies in the gym.",
-          "Build community when training by using the gym to build bonds and mutual support, remembering that training should not isolate you from your environment."
+          "Build community when training by using the gym to build bonds and mutual support, remembering that training should not isolate you from your environment.",
+          "Consume fruit and vegetables every day, buy them at your neighborhood greengrocer.",
+          "Play sports several days a week to be strong. Support your neighborhood box / gym.",
+          "If you take supplements in your diet, check if you need them with your nutritionist and remember that buying them at your neighborhood box/gym is a way to support them."
         ],
         it: [
           "La tua dieta deve tenere conto del tuo contesto, deve essere realistica e considerare le tue condizioni.",
@@ -39729,7 +39977,10 @@ ${countMsg}`,
           "Evita i manichini da ginnastica e diffida degli influencer che usano il loro fisico per venderti esercizi, incolpandoti poi se non ottieni risultati.",
           "Proteggi i tuoi dati e collegamenti evitando piani gratuiti che sottraggono dati; Scappa dai guru che ti chiedono di isolarti dai tuoi cari.",
           "C\u2019\xE8 ipocrisia nel mondo del fitness, \xE8 contraddittorio che si pretenda lo sport e allo stesso tempo si disprezzino i corpi non normativi in \u200B\u200Bpalestra.",
-          "Costruisci una comunit\xE0 durante l'allenamento utilizzando la palestra per costruire legami e sostegno reciproco, ricordando che l'allenamento non dovrebbe isolarti dal tuo ambiente."
+          "Costruisci una comunit\xE0 durante l'allenamento utilizzando la palestra per costruire legami e sostegno reciproco, ricordando che l'allenamento non dovrebbe isolarti dal tuo ambiente.",
+          "Consuma frutta e verdura tutti i giorni, comprala dal fruttivendolo del tuo quartiere.",
+          "Fai sport diversi giorni alla settimana per essere forte. Sostieni il box / la palestra del tuo quartiere.",
+          "Se assumi integratori nella tua dieta, verifica se ne hai bisogno con il tuo nutrizionista e ricorda che acquistarli nel box/palestra del tuo quartiere \xE8 un modo per sostenerli."
         ],
         fr: [
           "Votre alimentation doit tenir compte de votre contexte, elle doit \xEAtre r\xE9aliste et tenir compte de vos conditions.",
@@ -39782,7 +40033,10 @@ ${countMsg}`,
           "\xC9vitez les mannequins d'entra\xEEnement et m\xE9fiez-vous des influenceurs qui utilisent leur physique pour vous vendre des exercices, vous reprochant plus tard si vous n'obtenez pas de r\xE9sultats.",
           "Prot\xE9gez vos donn\xE9es et vos liens en \xE9vitant les forfaits gratuits qui siphonnent les donn\xE9es\xA0; Fuyez les gourous qui vous demandent de vous isoler de vos proches.",
           "Il y a de l'hypocrisie dans le monde du fitness, il est contradictoire qu'ils exigent du sport et en m\xEAme temps m\xE9prisent les corps non normatifs dans la salle de sport.",
-          "Construisez une communaut\xE9 lorsque vous vous entra\xEEnez en utilisant la salle de sport pour cr\xE9er des liens et un soutien mutuel, en vous rappelant que l\u2019entra\xEEnement ne doit pas vous isoler de votre environnement."
+          "Construisez une communaut\xE9 lorsque vous vous entra\xEEnez en utilisant la salle de sport pour cr\xE9er des liens et un soutien mutuel, en vous rappelant que l\u2019entra\xEEnement ne doit pas vous isoler de votre environnement.",
+          "Consommez des fruits et l\xE9gumes tous les jours, achetez-les chez le primeur de votre quartier.",
+          "Faites du sport plusieurs jours par semaine pour \xEAtre fort. Soutenez la box / salle de sport de votre quartier.",
+          "Si vous prenez des compl\xE9ments alimentaires dans votre alimentation, v\xE9rifiez si vous en avez besoin avec votre nutritionniste et n'oubliez pas que les acheter dans la box/salle de sport de votre quartier est une fa\xE7on de les soutenir."
         ],
         de: [
           "Ihre Ern\xE4hrung muss Ihren Kontext ber\xFCcksichtigen, sie muss realistisch sein und Ihre Bedingungen ber\xFCcksichtigen.",
@@ -39835,7 +40089,10 @@ ${countMsg}`,
           "Vermeiden Sie Schaufensterpuppen-Trainer und seien Sie vorsichtig vor Influencern, die ihren K\xF6rper nutzen, um Ihnen \xDCbungen zu verkaufen, und Ihnen sp\xE4ter die Schuld geben, wenn Sie keine Ergebnisse erzielen.",
           "Sch\xFCtzen Sie Ihre Daten und Links, indem Sie kostenlose Pl\xE4ne vermeiden, die Daten absch\xF6pfen; Laufen Sie vor Gurus weg, die Sie auffordern, sich von Ihren Lieben zu isolieren.",
           "In der Fitnesswelt herrscht Heuchelei, es ist widerspr\xFCchlich, dass sie Sport fordern und gleichzeitig nicht normative K\xF6rper im Fitnessstudio verachten.",
-          "Bauen Sie beim Training eine Gemeinschaft auf, indem Sie das Fitnessstudio nutzen, um Bindungen und gegenseitige Unterst\xFCtzung aufzubauen. Denken Sie daran, dass das Training Sie nicht von Ihrer Umgebung isolieren sollte."
+          "Bauen Sie beim Training eine Gemeinschaft auf, indem Sie das Fitnessstudio nutzen, um Bindungen und gegenseitige Unterst\xFCtzung aufzubauen. Denken Sie daran, dass das Training Sie nicht von Ihrer Umgebung isolieren sollte.",
+          "Verzehren Sie jeden Tag Obst und Gem\xFCse, kaufen Sie es beim Gem\xFCseh\xE4ndler in Ihrer N\xE4he.",
+          "Treiben Sie mehrmals pro Woche Sport, um stark zu sein. Unterst\xFCtzen Sie die Box / das Fitnessstudio in Ihrer N\xE4he.",
+          "Wenn Sie Nahrungserg\xE4nzungsmittel in Ihre Ern\xE4hrung aufnehmen, kl\xE4ren Sie mit Ihrem Ern\xE4hrungsberater, ob Sie diese ben\xF6tigen, und denken Sie daran, dass der Kauf in der Box/im Fitnessstudio in Ihrer Nachbarschaft eine M\xF6glichkeit ist, diese zu unterst\xFCtzen."
         ]
       };
       this.selectedTip = "";

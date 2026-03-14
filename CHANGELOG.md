@@ -1,5 +1,14 @@
 # brote
 
+## 1.0.27
+
+### Patch Changes
+
+- changing search behavior so if there is no food in search will try to fetch it from database.
+- adding about page with information of the app
+- Adding a way to disable warning messages and statistics
+- adding age in to users personal data to calculate maintenance calores
+
 ## 1.0.26
 
 ### Patch Changes

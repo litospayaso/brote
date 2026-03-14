@@ -1,5 +1,13 @@
 # page-user
 
+## 0.0.13
+
+### Patch Changes
+
+- adding about page with information of the app
+- Adding a way to disable warning messages and statistics
+- adding age in to users personal data to calculate maintenance calores
+
 ## 0.0.12
 
 ### Patch Changes
