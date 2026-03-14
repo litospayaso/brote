@@ -29564,7 +29564,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.26",
+    version: "1.0.27",
     type: "module",
     scripts: {
       dev: "vite",
