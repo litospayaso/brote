@@ -29564,7 +29564,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.27",
+    version: "1.0.28",
     type: "module",
     scripts: {
       dev: "vite",
@@ -29588,7 +29588,8 @@
       "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
       "emulator:start:windows": 'start "" "%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
       "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
-      deploy: "npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js"
+      deploy: "npm run test && node scripts/update_badges.js && npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js",
+      lint: "tsc --noEmit"
     },
     dependencies: {
       "@capacitor/android": "^8.1.0",
@@ -29624,6 +29625,7 @@
       camelcase: "^9.0.0",
       esbuild: "^0.27.2",
       "esbuild-plugin-lit": "^0.1.1",
+      eslint: "^10.0.3",
       "gh-pages": "^6.3.0",
       glob: "^13.0.1",
       husky: "^4.0.0",
@@ -35198,7 +35200,7 @@
     _initNewProduct(code, queryName) {
       this.product = {
         code,
-        status: 1,
+        status: "1",
         status_verbose: "product found",
         product: {
           product_name: queryName || this.translations.unknownProduct || "New Product",
@@ -38058,13 +38060,18 @@ ${countMsg}`,
       const getYRange = (datasets, isLeft) => {
         let min = Infinity;
         let max = -Infinity;
+        let hasBars = false;
         datasets.forEach((ds) => {
+          if (ds.type === "bar") hasBars = true;
           ds.data.forEach((val) => {
             const sum = Array.isArray(val) ? val.reduce((a3, b3) => a3 + b3, 0) : val;
             if (sum < min) min = sum;
             if (sum > max) max = sum;
           });
         });
+        if (hasBars && min > 0) {
+          min = 0;
+        }
         if (min === Infinity) {
           min = 0;
           max = 10;

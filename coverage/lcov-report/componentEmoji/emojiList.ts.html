@@ -1,0 +1,544 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for componentEmoji/emojiList.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">componentEmoji</a> emojiList.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>153/153</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>153/153</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export interface EmojiItem {
+  emoji: string;
+  keywords: string[];
+}
+&nbsp;
+export const emojiList: EmojiItem[] = [
+  { emoji: '🍇', keywords: ['grapes', 'fruit', 'uvas', 'fruta', 'raisins', 'trauben', 'obst', 'uva'] },
+  { emoji: '🍈', keywords: ['melon', 'fruit', 'melón', 'fruta', 'melon', 'melone', 'melone'] },
+  { emoji: '🍉', keywords: ['watermelon', 'fruit', 'sandía', 'fruta', 'pastèque', 'wassermelone', 'anguria'] },
+  { emoji: '🍊', keywords: ['tangerine', 'orange', 'fruit', 'mandarina', 'naranja', 'fruta', 'mandarine', 'mandarine', 'mandarino'] },
+  { emoji: '🍋', keywords: ['lemon', 'fruit', 'limón', 'fruta', 'citron', 'zitrone', 'limone'] },
+  { emoji: '🍌', keywords: ['banana', 'fruit', 'plátano', 'banana', 'fruta', 'banane', 'banane', 'banana'] },
+  { emoji: '🍍', keywords: ['pineapple', 'fruit', 'piña', 'fruta', 'ananas', 'ananas', 'ananas'] },
+  { emoji: '🥭', keywords: ['mango', 'fruit', 'mango', 'fruta', 'mangue', 'mango', 'mango'] },
+  { emoji: '🍎', keywords: ['apple', 'red apple', 'fruit', 'manzana', 'roja', 'fruta', 'pomme', 'rouge', 'apfel', 'rot', 'mela', 'rossa'] },
+  { emoji: '🍏', keywords: ['green apple', 'apple', 'fruit', 'manzana', 'verde', 'fruta', 'pomme', 'verte', 'apfel', 'grün', 'mela', 'verde'] },
+  { emoji: '🍐', keywords: ['pear', 'fruit', 'pera', 'fruta', 'poire', 'birne', 'pera'] },
+  { emoji: '🍑', keywords: ['peach', 'fruit', 'melocotón', 'durazno', 'fruta', 'pêche', 'pfirsich', 'pesca'] },
+  { emoji: '🍒', keywords: ['cherries', 'fruit', 'cerezas', 'fruta', 'cerises', 'kirschen', 'ciliegie'] },
+  { emoji: '🍓', keywords: ['strawberry', 'fruit', 'fresa', 'frutilla', 'fruta', 'fraise', 'erdbeere', 'fragola'] },
+  { emoji: '🥝', keywords: ['kiwi', 'fruit', 'kiwi', 'fruta', 'kiwi', 'kiwi', 'kiwi'] },
+  { emoji: '🍅', keywords: ['tomato', 'vegetable', 'tomate', 'vegetal', 'tomate', 'tomate', 'pomodoro'] },
+  { emoji: '🫒', keywords: ['olive', 'oliva', 'aceituna', 'olive', 'olive', 'oliva'] },
+  { emoji: '🥥', keywords: ['coconut', 'fruit', 'coco', 'fruta', 'noix de coco', 'kokosnuss', 'cocco'] },
+&nbsp;
+  { emoji: '🥑', keywords: ['avocado', 'vegetable', 'aguacate', 'palta', 'mod', 'avocat', 'avocado', 'avocado'] },
+  { emoji: '🍆', keywords: ['eggplant', 'vegetable', 'berenjena', 'vegetal', 'aubergine', 'aubergine', 'melanzana'] },
+  { emoji: '🥔', keywords: ['potato', 'vegetable', 'patata', 'papa', 'vegetal', 'pomme de terre', 'kartoffel', 'patata'] },
+  { emoji: '🥕', keywords: ['carrot', 'vegetable', 'zanahoria', 'vegetal', 'carotte', 'karotte', 'carota'] },
+  { emoji: '🌽', keywords: ['corn', 'vegetable', 'maíz', 'choclo', 'elote', 'maïs', 'mais', 'mais'] },
+  { emoji: '🌶️', keywords: ['hot pepper', 'chili', 'spicy', 'chile', 'picante', 'piment', 'peperoni', 'peperoncino'] },
+  { emoji: '🥒', keywords: ['cucumber', 'vegetable', 'pepino', 'vegetal', 'concombre', 'gurke', 'cetriolo'] },
+  { emoji: '🥬', keywords: ['leafy green', 'lettuce', 'vegetable', 'lechuga', 'verdura', 'laitue', 'salat', 'lattuga'] },
+  { emoji: '🥦', keywords: ['broccoli', 'vegetable', 'brócoli', 'vegetal', 'brocoli', 'brokkoli', 'broccoli'] },
+  { emoji: '🧄', keywords: ['garlic', 'ajo', 'ail', 'knoblauch', 'aglio'] },
+  { emoji: '🧅', keywords: ['onion', 'cebolla', 'oignon', 'zwiebel', 'cipolla'] },
+  { emoji: '🍄', keywords: ['mushroom', 'fungus', 'hongo', 'seta', 'champiñón', 'champignon', 'pilz', 'fungo'] },
+  { emoji: '🥜', keywords: ['peanuts', 'nut', 'cacahuetes', 'maní', 'cacahuètes', 'erdnüsse', 'arachidi'] },
+  { emoji: '🌰', keywords: ['chestnut', 'nut', 'castaña', 'châtaigne', 'kastanie', 'castagna'] },
+&nbsp;
+  { emoji: '🍞', keywords: ['bread', 'pan', 'pain', 'brot', 'pane'] },
+  { emoji: '🥐', keywords: ['croissant', 'pastry', 'croissant', 'croissant', 'croissant', 'cornetto'] },
+  { emoji: '🥖', keywords: ['baguette', 'bread', 'baguette', 'barra', 'baguette', 'baguette', 'baguette'] },
+  { emoji: '🫓', keywords: ['flatbread', 'pan plano', 'pain plat', 'fladenbrot', 'pane piatto'] },
+  { emoji: '🥨', keywords: ['pretzel', 'snack', 'bretzel', 'bretzel', 'brezel', 'bretzel'] },
+  { emoji: '🥯', keywords: ['bagel', 'bread', 'bagel', 'bagel', 'bagel', 'bagel'] },
+  { emoji: '🥞', keywords: ['pancakes', 'hotcakes', 'tortitas', 'panqueques', 'pancakes', 'pfannkuchen', 'pancake'] },
+  { emoji: '🧀', keywords: ['cheese', 'wedge', 'queso', 'fromage', 'käse', 'formaggio'] },
+  { emoji: '🍖', keywords: ['meat on bone', 'meat', 'carne', 'hueso', 'viande', 'fleisch', 'carne'] },
+  { emoji: '🍗', keywords: ['poultry leg', 'chicken', 'pollo', 'pierna', 'poulet', 'hähnchen', 'pollo'] },
+  { emoji: '🥩', keywords: ['cut of meat', 'steak', 'carne', 'filete', 'bistec', 'viande', 'steak', 'fleisch', 'carne', 'bistecca'] },
+  { emoji: '🥓', keywords: ['bacon', 'meat', 'tocino', 'panceta', 'bacon', 'speck', 'pancetta'] },
+  { emoji: '🍔', keywords: ['hamburger', 'burger', 'fast food', 'hamburguesa', 'hamburger', 'hamburger', 'hamburger'] },
+  { emoji: '🍟', keywords: ['french fries', 'fries', 'chips', 'papas fritas', 'patatas fritas', 'frites', 'pommes', 'patatine'] },
+  { emoji: '🍕', keywords: ['pizza', 'food', 'pizza', 'pizza', 'pizza', 'pizza'] },
+  { emoji: '🌭', keywords: ['hot dog', 'frankfurter', 'hot dog', 'perrito caliente', 'hot-dog', 'hotdog', 'hot dog'] },
+  { emoji: '🥪', keywords: ['sandwich', 'food', 'sándwich', 'bocadillo', 'sandwich', 'sandwich', 'sandwich'] },
+  { emoji: '🌮', keywords: ['taco', 'mexican', 'taco', 'taco', 'taco', 'taco'] },
+  { emoji: '🌯', keywords: ['burrito', 'wrap', 'mexican', 'burrito', 'burrito', 'burrito', 'burrito'] },
+  { emoji: '🥙', keywords: ['stuffed flatbread', 'kebab', 'pita', 'pan de pita', 'kebab', 'pita', 'döner', 'kebab'] },
+  { emoji: '🥚', keywords: ['egg', 'food', 'huevo', 'œuf', 'ei', 'uovo'] },
+  { emoji: '🍳', keywords: ['cooking', 'fried egg', 'pan', 'cocinar', 'huevo frito', 'sartén', 'cuisine', 'œuf sur le plat', 'poêle', 'kochen', 'spiegelei', 'pfanne', 'cucinare', 'uovo fritto', 'padella'] },
+  { emoji: '🥘', keywords: ['shallow pan of food', 'paella', 'casserole', 'paella', 'cazuela', 'poêlée', 'pfannengericht', 'paella'] },
+  { emoji: '🍲', keywords: ['pot of food', 'stew', 'soup', 'estofado', 'sopa', 'ragoût', 'soupe', 'eintopf', 'suppe', 'stufato', 'zuppa'] },
+  { emoji: '🫕', keywords: ['fondue', 'fondue', 'fondue', 'fondue', 'fonduta'] },
+  { emoji: '🥣', keywords: ['bowl with spoon', 'cereal', 'soup', 'tazón', 'cereal', 'sopa', 'bol', 'céréales', 'schüssel', 'müsli', 'ciotola', 'cereali'] },
+  { emoji: '🥗', keywords: ['green salad', 'salad', 'healthy', 'ensalada', 'salade', 'salat', 'insalata'] },
+  { emoji: '🍿', keywords: ['popcorn', 'snack', 'palomitas', 'pop-corn', 'popcorn', 'popcorn'] },
+  { emoji: '🧂', keywords: ['salt', 'seasoning', 'sal', 'sel', 'salz', 'sale'] },
+  { emoji: '🥫', keywords: ['canned food', 'can', 'comida en lata', 'lata', 'conserve', 'dose', 'cibo in scatola'] },
+&nbsp;
+  { emoji: '🍱', keywords: ['bento box', 'lunch', 'bento', 'caja de almuerzo', 'bento', 'bento', 'bento'] },
+  { emoji: '🍙', keywords: ['rice ball', 'onigiri', 'bola de arroz', 'onigiri', 'boulette de riz', 'reisbällchen', 'palla di riso'] },
+  { emoji: '🍚', keywords: ['cooked rice', 'rice', 'arroz cocido', 'arroz', 'riz cuit', 'riz', 'gekochter reis', 'reis', 'riso cotto', 'riso'] },
+  { emoji: '🍛', keywords: ['curry rice', 'curry', 'arroz con curry', 'curry', 'riz au curry', 'curryreis', 'riso al curry'] },
+  { emoji: '🍜', keywords: ['steaming bowl', 'ramen', 'noodles', 'fideos', 'ramen', 'nouilles', 'nudeln', 'ramen'] },
+  { emoji: '🍝', keywords: ['spaghetti', 'pasta', 'espaguetis', 'pasta', 'spaghetti', 'spaghetti', 'spaghetti'] },
+  { emoji: '🍠', keywords: ['roasted sweet potato', 'sweet potato', 'batata', 'boniato', 'camote', 'patate douce', 'süßkartoffel', 'patata dolce'] },
+  { emoji: '🍢', keywords: ['oden', 'skewer', 'oden', 'brocheta', 'oden', 'oden', 'oden'] },
+  { emoji: '🍣', keywords: ['sushi', 'fish', 'sushi', 'pescado', 'sushi', 'sushi', 'sushi'] },
+  { emoji: '🍤', keywords: ['fried shrimp', 'shrimp', 'tempura', 'gamba frita', 'camarón', 'crevette frite', 'frittierte garnele', 'gambero fritto'] },
+  { emoji: '🍥', keywords: ['fish cake', 'naruto', 'pastel de pescado', 'gâteau de poisson', 'fischfrikadelle', 'tortino di pesce'] },
+  { emoji: '🥮', keywords: ['moon cake', 'festival', 'pastel de luna', 'gâteau de lune', 'mondkuchen', 'torta lunare'] },
+  { emoji: '🍡', keywords: ['dango', 'sweet', 'dango', 'dulce', 'dango', 'dango', 'dango'] },
+  { emoji: '🥟', keywords: ['dumpling', 'empanada', 'bollo', 'dumpling', 'teigtasche', 'gnocco'] },
+  { emoji: '🥠', keywords: ['fortune cookie', 'cookie', 'galleta de la fortuna', 'biscuit chinois', 'glückskeks', 'biscotto della fortuna'] },
+  { emoji: '🥡', keywords: ['takeout box', 'food', 'caja de comida', 'para llevar', 'boîte à emporter', 'take-away-box', 'scatola da asporto'] },
+&nbsp;
+  { emoji: '🦀', keywords: ['crab', 'seafood', 'cangrejo', 'marisco', 'crabe', 'krabbe', 'granchio'] },
+  { emoji: '🦞', keywords: ['lobster', 'seafood', 'langosta', 'bogavante', 'homard', 'hummer', 'aragosta'] },
+  { emoji: '🦐', keywords: ['shrimp', 'seafood', 'camarón', 'gamba', 'crevette', 'garnele', 'gambero'] },
+  { emoji: '🦑', keywords: ['squid', 'seafood', 'calamar', 'calmar', 'tintenfisch', 'calamaro'] },
+  { emoji: '🦪', keywords: ['oyster', 'ostras', 'huître', 'auster', 'ostrica'] },
+&nbsp;
+  { emoji: '🍦', keywords: ['soft ice cream', 'ice cream', 'helado suave', 'glace à l\'italienne', 'softeis', 'gelato soft'] },
+  { emoji: '🍧', keywords: ['shaved ice', 'dessert', 'granizado', 'raspado', 'glace pilée', 'wassereis', 'granita'] },
+  { emoji: '🍨', keywords: ['ice cream', 'dessert', 'helado', 'copa de helado', 'glace', 'eiscreme', 'gelato'] },
+  { emoji: '🍩', keywords: ['doughnut', 'donut', 'rosquilla', 'donut', 'beignet', 'donught', 'ciambella'] },
+  { emoji: '🍪', keywords: ['cookie', 'biscuit', 'galleta', 'biscuit', 'keks', 'biscotto'] },
+  { emoji: '🎂', keywords: ['birthday cake', 'cake', 'pastel', 'tarta', 'cumpleaños', 'gâteau d\'anniversaire', 'geburtstagstorte', 'torta di compleanno'] },
+  { emoji: '🍰', keywords: ['shortcake', 'cake', 'slice', 'pastel', 'trozo', 'gâteau', 'torte', 'torta'] },
+  { emoji: '🧁', keywords: ['cupcake', 'muffin', 'magdalena', 'cupcake', 'cupcake', 'cupcake', 'cupcake'] },
+  { emoji: '🥧', keywords: ['pie', 'pastry', 'pastel', 'tarta', 'tarte', 'pastete', 'torta'] },
+  { emoji: '🍫', keywords: ['chocolate bar', 'chocolate', 'chocolate', 'barrita', 'chocolat', 'schokolade', 'cioccolato'] },
+  { emoji: '🍬', keywords: ['candy', 'sweet', 'caramelo', 'dulce', 'bonbon', 'bonbon', 'caramella'] },
+  { emoji: '🍭', keywords: ['lollipop', 'candy', 'piruleta', 'chupachups', 'sucette', 'lutscher', 'lecca lecca'] },
+  { emoji: '🍮', keywords: ['custard', 'flan', 'pudding', 'flan', 'crème caramel', 'pudding', 'budino'] },
+  { emoji: '🍯', keywords: ['honey pot', 'honey', 'miel', 'tarro', 'miel', 'honig', 'miele'] },
+&nbsp;
+  { emoji: '🥛', keywords: ['glass of milk', 'milk', 'vaso de leche', 'leche', 'verre de lait', 'milch', 'bicchiere di latte'] },
+  { emoji: '🍼', keywords: ['baby bottle', 'milk', 'biberón', 'leche', 'biberon', 'babyflasche', 'biberon'] },
+  { emoji: '☕', keywords: ['hot beverage', 'coffee', 'tea', 'bebida caliente', 'café', 'té', 'boisson chaude', 'heißgetränk', 'bevanda calda'] },
+  { emoji: '🫖', keywords: ['teapot', 'tea', 'tetera', 'théière', 'teekanne', 'teiera'] },
+  { emoji: '🍵', keywords: ['teacup without handle', 'tea', 'matcha', 'taza de té', 'té', 'tasse de thé', 'teetasse', 'tazza di tè'] },
+  { emoji: '🍶', keywords: ['sake', 'bottle', 'sake', 'saké', 'sake', 'sake'] },
+  { emoji: '🍾', keywords: ['champagne', 'bottle', 'champán', 'botella', 'champagne', 'shampus', 'champagne'] },
+  { emoji: '🍷', keywords: ['wine glass', 'wine', 'vino', 'copa', 'vin', 'wein', 'vino'] },
+  { emoji: '🍸', keywords: ['cocktail glass', 'cocktail', 'cóctel', 'copa', 'cocktail', 'cocktail', 'cocktail'] },
+  { emoji: '🍹', keywords: ['tropical drink', 'cocktail', 'bebida tropical', 'cóctel', 'boisson tropicale', 'tropischer drink', 'bevanda tropicale'] },
+  { emoji: '🍺', keywords: ['beer mug', 'beer', 'cerveza', 'jarra', 'bière', 'bier', 'birra'] },
+  { emoji: '🍻', keywords: ['clinking beer mugs', 'cheers', 'beer', 'brindis', 'cerveza', 'chope', 'prost', 'salute'] },
+  { emoji: '🥂', keywords: ['clinking glasses', 'cheers', 'champagne', 'brindis', 'copas', 'trinquer', 'prost', 'cin cin'] },
+  { emoji: '🥃', keywords: ['tumbler glass', 'whisky', 'vaso', 'whisky', 'verre', 'whisky', 'bicchiere'] },
+  { emoji: '🫗', keywords: ['pouring liquid', 'drink', 'spill', 'vertido', 'derrame', 'verser', 'liquide', 'eingießen', 'verschütten', 'versare', 'liquido'] },
+  { emoji: '🥤', keywords: ['cup with straw', 'soda', 'drink', 'vaso con pajita', 'refresco', 'gobelet', 'becher', 'bicchiere con cannuccia'] },
+  { emoji: '🧋', keywords: ['bubble tea', 'boba', 'milk tea', 'té de burbujas', 'thé aux perles', 'bubble tea', 'tè con le bolle'] },
+  { emoji: '🧃', keywords: ['beverage box', 'juice', 'jugo', 'zumo', 'caja de jugo', 'jus', 'saft', 'succo'] },
+  { emoji: '🧉', keywords: ['mate', 'drink', 'mate', 'yerba', 'maté', 'mate', 'mate'] },
+  { emoji: '🧊', keywords: ['ice', 'cube', 'hielo', 'cubito', 'glace', 'eisunrfel', 'ghiaccio'] },
+  { emoji: '🫙', keywords: ['jar', 'container', 'food', 'tarro', 'bote', 'bocal', 'glas', 'barattolo'] },
+&nbsp;
+  { emoji: '🥢', keywords: ['chopsticks', 'utensils', 'palillos', 'baguettes', 'essstäbchen', 'bacchette'] },
+  { emoji: '🍽️', keywords: ['fork and knife with plate', 'dining', 'plato', 'cubiertos', 'assiette', 'teller', 'piatto'] },
+  { emoji: '🍴', keywords: ['fork and knife', 'cutlery', 'tenedor y cuchillo', 'cubiertos', 'fourchette et couteau', 'besteck', 'forchetta e coltello'] },
+  { emoji: '🥄', keywords: ['spoon', 'cutlery', 'cuchara', 'cuillère', 'löffel', 'cucchiaio'] },
+  { emoji: '🔪', keywords: ['kitchen knife', 'knife', 'cuchillo', 'couteau', 'messer', 'coltello'] },
+  { emoji: '🏺', keywords: ['amphora', 'jar', 'anfora', 'ánfora', 'amphore', 'amphore', 'anfora'] },
+&nbsp;
+  { emoji: '🐮', keywords: ['cow', 'beef', 'animal', 'vaca', 'ternera', 'vache', 'bœuf', 'kuh', 'rind', 'mucca', 'manzo'] },
+  { emoji: '🐷', keywords: ['pig', 'pork', 'animal', 'cerdo', 'puerco', 'cochon', 'porc', 'schwein', 'maiale'] },
+  { emoji: '🐑', keywords: ['sheep', 'lamb', 'animal', 'oveja', 'cordero', 'mouton', 'agneau', 'schaf', 'lamm', 'pecora', 'agnello'] },
+  { emoji: '🐇', keywords: ['rabbit', 'animal', 'conejo', 'lapin', 'hase', 'kaninchen', 'coniglio'] },
+  { emoji: '🦃', keywords: ['turkey', 'bird', 'animal', 'pavo', 'dinde', 'truthahn', 'tacchino'] },
+  { emoji: '🐔', keywords: ['chicken', 'hen', 'bird', 'animal', 'pollo', 'gallina', 'poulet', 'poule', 'huhn', 'pollo', 'gallina'] },
+  { emoji: '🦆', keywords: ['duck', 'bird', 'animal', 'pato', 'canard', 'ente', 'anatra'] },
+  { emoji: '🪿', keywords: ['goose', 'bird', 'animal', 'ganso', 'oie', 'gans', 'oca'] },
+  { emoji: '🐟', keywords: ['fish', 'animal', 'pescado', 'pez', 'poisson', 'fisch', 'pesce'] },
+  { emoji: '🐠', keywords: ['tropical fish', 'fish', 'animal', 'pez tropical', 'poisson tropical', 'tropenfisch', 'pesce tropicale'] },
+  { emoji: '🐡', keywords: ['blowfish', 'fish', 'animal', 'pez globo', 'poisson-globe', 'kugelfisch', 'pesce palla'] },
+  { emoji: '🐙', keywords: ['octopus', 'animal', 'pulpo', 'pieuvre', 'poulpe', 'oktopus', 'krake', 'polpo'] },
+  { emoji: '🐚', keywords: ['spiral shell', 'shellfish', 'animal', 'concha', 'caracola', 'coquillage', 'schneckenhaus', 'conchiglia'] },
+  { emoji: '🐌', keywords: ['snail', 'escargot', 'animal', 'caracol', 'escargot', 'schnecke', 'lumaca'] }
+];
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-03-16T11:46:04.000Z
+            </div>
+        <script src="../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
+    </body>
+</html>
+    

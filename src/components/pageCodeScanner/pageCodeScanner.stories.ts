@@ -24,7 +24,7 @@ export const Default: Story = {
 
 export const WithoutPermission: Story = {
   render: () => {
-    const originalGetUserMedia = navigator.mediaDevices.getUserMedia;
+    // Setup mocks before each test
     navigator.mediaDevices.getUserMedia = () => Promise.reject(new Error('Permission denied'));
 
     return html`
@@ -37,7 +37,7 @@ export const WithoutPermission: Story = {
 
 export const NotSupported: Story = {
   render: () => {
-    const originalBarcodeDetector = (window as any).BarcodeDetector;
+    // Restore the mock of BarcodeDetector
     (window as any).BarcodeDetector = undefined;
 
     return html`

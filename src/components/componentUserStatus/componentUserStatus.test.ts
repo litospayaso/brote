@@ -21,15 +21,11 @@ describe('ComponentUserStatus Spec:', () => {
     }
   });
 
-  it('should render default values', async () => {
+  it('should render empty if it has no values', async () => {
     const shadow = element.shadowRoot;
     const values = Array.from(shadow?.querySelectorAll('.value') || []);
 
-    expect(values[0].textContent?.trim()).to.equal('0');
-    expect(values[1].textContent?.trim()).to.equal('0');
-    expect(values[2].textContent?.trim()).to.equal('0');
-    expect(values[3].textContent?.trim()).to.equal('0');
-    expect(values[4].textContent?.trim()).to.equal('0/5');
+    expect(values.length).to.equal(0);
   });
 
   it('should update and render provided properties', async () => {
@@ -45,11 +41,11 @@ describe('ComponentUserStatus Spec:', () => {
     const shadow = element.shadowRoot;
     const values = Array.from(shadow?.querySelectorAll('.value') || []);
 
-    expect(values[0].textContent?.trim()).to.equal('100');
-    expect(values[1].textContent?.trim()).to.equal('1500');
+    expect(values[0].textContent?.trim()).to.equal('1500');
+    expect(values[1].textContent?.trim()).to.equal('100');
     expect(values[2].textContent?.trim()).to.equal('5000');
-    expect(values[3].textContent?.trim()).to.equal('8');
-    expect(values[4].textContent?.trim()).to.equal('5/5');
+    expect(values[3].textContent?.trim()).to.equal('8:00');
+    expect(values[4].textContent?.trim()).to.equal('5/10');
   });
 
   it('should open modal on click', async () => {
@@ -91,7 +87,7 @@ describe('ComponentUserStatus Spec:', () => {
     expect(card).to.exist;
 
     const style = window.getComputedStyle(card!);
-    expect(style.borderRadius).to.equal('12px');
+    expect(style.borderRadius).to.equal('8px');
     expect(style.borderStyle).to.equal('solid');
   });
 

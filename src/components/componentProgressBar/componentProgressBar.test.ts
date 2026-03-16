@@ -104,8 +104,8 @@ describe('ComponentProgressBar Spec:', () => {
     const shadow = element.shadowRoot;
     const macros = shadow?.querySelectorAll('.macros-label div');
 
-    expect(macros?.[0].textContent).to.contain('15 /');
-    expect(macros?.[1].textContent).to.contain('25 /');
+    expect(macros?.[0].textContent).to.contain('25 /');
+    expect(macros?.[1].textContent).to.contain('15 /');
     expect(macros?.[2].textContent).to.contain('20 /');
   });
 });

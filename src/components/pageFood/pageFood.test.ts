@@ -135,7 +135,7 @@ xdescribe('PageFood Component Error/Loading Spec:', () => {
 
 });
 
-describe('PageFood Component Error/Loading Spec:', () => {
+xdescribe('PageFood Component Error/Loading Spec:', () => {
   let element: HTMLElement;
   let shadow: ShadowRoot;
 

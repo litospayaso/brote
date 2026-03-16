@@ -1,5 +1,9 @@
 # Brote
 
+<!-- BADGES_START -->
+![version](https://img.shields.io/badge/version-1.0.27-blue) ![test core](https://img.shields.io/badge/test_core-failing-red) ![coverage](https://img.shields.io/badge/coverage-72%25-yellow)
+<!-- BADGES_END -->
+
 <p align="center">
   <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" alt="Brote icon"/>
 </p>

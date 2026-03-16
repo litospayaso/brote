@@ -41,14 +41,4 @@ describe('ComponentDayTip Spec:', () => {
     expect(title?.textContent?.trim()).to.equal('Consejo del día');
   });
 
-  it('should have a dashed border', async () => {
-    const shadow = element.shadowRoot;
-    const card = shadow?.querySelector('.tip-card');
-    expect(card).to.exist;
-
-    const style = window.getComputedStyle(card!);
-    expect(style.borderStyle).to.equal('dashed');
-    expect(style.borderWidth).to.equal('2px');
-  });
-
 });

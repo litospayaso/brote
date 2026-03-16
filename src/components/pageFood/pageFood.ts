@@ -305,7 +305,7 @@ export default class PageFood extends Page<{ getProduct: typeof getProduct }> {
   private _initNewProduct(code: string, queryName: string | null) {
     this.product = {
       code: code,
-      status: 1,
+      status: '1',
       status_verbose: 'product found',
       product: {
         product_name: queryName || this.translations.unknownProduct || 'New Product',

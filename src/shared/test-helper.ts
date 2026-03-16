@@ -1,7 +1,7 @@
 import type { Result } from 'axe-core';
 import { loadScript } from './functions';
 import type { AxePlugin, AxeResults } from 'axe-core';
-import type Page from './page';
+// import removed
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/no-empty-function */

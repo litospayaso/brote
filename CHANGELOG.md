@@ -1,5 +1,12 @@
 # brote
 
+## 1.0.28
+
+### Patch Changes
+
+- Adding test coverage, eslint and fixing failed test cases
+- fixing error on displaying weekly statistics calories burned
+
 ## 1.0.27
 
 ### Patch Changes

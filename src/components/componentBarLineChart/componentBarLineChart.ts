@@ -149,13 +149,19 @@ export default class ComponentBarLineChart extends LitElement {
     const getYRange = (datasets: any[], isLeft: boolean) => {
       let min = Infinity;
       let max = -Infinity;
+      let hasBars = false;
       datasets.forEach(ds => {
+        if (ds.type === 'bar') hasBars = true;
         ds.data.forEach((val: number | number[]) => {
           const sum = Array.isArray(val) ? val.reduce((a, b) => a + b, 0) : val;
           if (sum < min) min = sum;
           if (sum > max) max = sum;
         });
       });
+
+      if (hasBars && min > 0) {
+        min = 0;
+      }
 
       if (min === Infinity) { min = 0; max = 10; }
 
