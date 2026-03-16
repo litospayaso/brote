@@ -2,6 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { createComponent, accessibilityCheck, defer } from '../../shared/test-helper';
 import ComponentSlider from './componentSlider';
 
+const dispatchTouchEvent = (eventName: string, details: any) => {
+  const uiEvent = document.createEvent('UIEvent');
+  uiEvent.initUIEvent(eventName, true, true, window, 1);
+  const event = Object.assign(uiEvent, { touches: [details] });
+  details.target.dispatchEvent(event);
+}
+
 describe('ComponentSlider Spec:', () => {
   let element: HTMLElement;
   let shadow: ShadowRoot;
@@ -92,10 +99,10 @@ describe('ComponentSlider Spec:', () => {
 
     expect(tooltip.classList.contains('visible')).to.be.false;
 
-    input.dispatchEvent(new TouchEvent('touchstart'));
+    dispatchTouchEvent('touchstart', { identifier: 0, target: input, pageX: 50, pageY: 100 });
     defer(() => {
       expect(tooltip.classList.contains('visible')).to.be.true;
-      input.dispatchEvent(new TouchEvent('touchend'));
+      dispatchTouchEvent('touchend', { identifier: 0, target: input, pageX: 50, pageY: 100 });
       defer(() => {
         expect(tooltip.classList.contains('visible')).to.be.false;
         done();

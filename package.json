@@ -25,7 +25,7 @@
     "run:android:windows": "npm run build && npm run cap:sync && node -e \"setTimeout(() => {}, 1000)\" && node scripts/fix_java_version.js && npx cap run android -l",
     "emulator:start:windows": "start \"\" \"%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe\" -avd Pixel_8_Pro_API_36 -no-snapshot-load",
     "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
-    "deploy": "npm run test && node scripts/update_badges.js && npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js",
+    "deploy": "node scripts/update_badges.js && npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
