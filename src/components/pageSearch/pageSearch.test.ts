@@ -1,5 +1,6 @@
 import PageSearch from './pageSearch';
-import { accessibilityCheck, createComponent, defer } from '../../shared/test-helper';
+import { accessibilityCheck, createComponent } from '../../shared/test-helper';
+import { createMockEmptyDb, createMockDbWithCache, createMockDbWithFavorites, createMockDbWithMeals, createMockDbWithFilterEmpty, createMockDbWithCachedProduct, createMockDbEmptyCache, createMockDbWithMealId, createMockDbWithBarcode, createMockDbWithAppleAndBanana } from '../../shared/mocks';
 import { expect } from '@esm-bundle/chai';
 
 const mockApi = {
@@ -16,15 +17,7 @@ describe('SearchPage Component Spec:', () => {
       class: PageSearch,
       name: 'page-search',
       api: mockApi,
-      db: {
-        init: () => Promise.resolve(),
-        getAllCachedProducts: () => Promise.resolve([]),
-        getFavorites: () => Promise.resolve([]),
-        getCachedProduct: () => Promise.resolve(undefined),
-        isFavorite: () => Promise.resolve(false),
-        addFavorite: () => Promise.resolve(),
-        removeFavorite: () => Promise.resolve()
-      }
+      db: createMockEmptyDb()
     });
 
     shadow = component.shadow;
@@ -62,13 +55,7 @@ describe('SearchPage Component Spec:', () => {
   });
 
   it('should switch mode when group button is clicked', async () => {
-    (element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([{ product_name: 'Cached Product', code: '123' }]),
-      getFavorites: () => Promise.resolve([{ code: '456' }]),
-      getCachedProduct: (_code: string) => Promise.resolve({ product_name: 'Favorite Product', code: '456' }),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (element as any).db = createMockDbWithCache();
 
     await (element as any).onPageInit();
     await (element as any).updateComplete;
@@ -85,14 +72,7 @@ describe('SearchPage Component Spec:', () => {
   });
 
   it('should filter cached products on blur', async () => {
-    (element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([
-        { product_name: 'Apple', code: '1' },
-        { product_name: 'Banana', code: '2' }
-      ]),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (element as any).db = createMockDbWithAppleAndBanana();
 
     await (element as any).onPageInit();
     await (element as any).updateComplete;
@@ -125,7 +105,8 @@ describe('SearchPage Component Spec:', () => {
     const component = await createComponent({
       class: PageSearch,
       name: 'page-search-fav',
-      api: customApi
+      api: customApi,
+      db: createMockDbWithFavorites()
     });
 
     (component.element as any).db = {
@@ -256,7 +237,8 @@ describe('SearchPage Component Spec:', () => {
     const component = await createComponent({
       class: PageSearch,
       name: 'page-search-meals',
-      api: mockApi
+      api: mockApi,
+      db: createMockDbWithMeals()
     });
 
     (component.element as any).db = {
@@ -336,7 +318,8 @@ describe('SearchPage Component Spec:', () => {
       api: {
         ...mockApi,
         getProduct: () => Promise.resolve({ status: 'success', product: { product_name: 'Barcode Product' }, code: '12345678' })
-      }
+      },
+      db: createMockDbWithBarcode()
     });
 
     (component.element as any).db = {
@@ -382,7 +365,8 @@ describe('SearchPage Component Spec:', () => {
       api: {
         ...mockApi,
         searchProduct: () => Promise.resolve({ products: [] })
-      }
+      },
+      db: createMockEmptyDb()
     });
 
     (component.element as any).db = {
@@ -552,13 +536,7 @@ describe('SearchPage Component Spec:', () => {
       api: mockApi
     });
 
-    (component.element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([{ product_name: 'Apple', code: '1' }]),
-      getFavorites: () => Promise.resolve([]),
-      getCachedProduct: () => Promise.resolve(null),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (component.element as any).db = createMockDbWithFilterEmpty();
 
     const el = component.element;
     
@@ -645,13 +623,7 @@ describe('SearchPage Component Spec:', () => {
       route: ''
     });
 
-    (component.element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([{ product_name: 'Product', code: '1' }]),
-      getFavorites: () => Promise.resolve([]),
-      getCachedProduct: () => Promise.resolve(null),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (component.element as any).db = createMockDbWithCachedProduct();
 
     const el = component.element;
 
@@ -671,13 +643,7 @@ describe('SearchPage Component Spec:', () => {
       route: '?mealId=123'
     });
 
-    (component.element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([{ product_name: 'Product', code: '1' }]),
-      getFavorites: () => Promise.resolve([]),
-      getCachedProduct: () => Promise.resolve(null),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (component.element as any).db = createMockDbWithMealId();
 
     const el = component.element;
 
@@ -697,13 +663,7 @@ describe('SearchPage Component Spec:', () => {
       api: mockApi
     });
 
-    (component.element as any).db = {
-      init: () => Promise.resolve(),
-      getAllCachedProducts: () => Promise.resolve([]),
-      getFavorites: () => Promise.resolve([]),
-      getCachedProduct: () => Promise.resolve(null),
-      isFavorite: () => Promise.resolve(false)
-    };
+    (component.element as any).db = createMockDbEmptyCache();
 
     const el = component.element;
 

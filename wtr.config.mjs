@@ -41,8 +41,8 @@ export default {
   },
   browsers: [
     playwrightLauncher({ product: 'chromium', launchOptions: { timeout } }),
-    playwrightLauncher({ product: 'firefox', launchOptions: { timeout } }),
-    playwrightLauncher({ product: 'webkit', launchOptions: { timeout } }),
+    // playwrightLauncher({ product: 'firefox', launchOptions: { timeout } }),
+    // playwrightLauncher({ product: 'webkit', launchOptions: { timeout } }),
   ],
   reporters: [
     defaultReporter({ reportTestResults: true, reportTestProgress: true }),

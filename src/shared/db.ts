@@ -68,7 +68,7 @@ export interface IDBService {
   addFoodItem?(date: string, category: MealCategory, item: FoodEntry): Promise<void>;
   removeFoodItem?(date: string, category: MealCategory, index: number): Promise<void>;
   cacheProduct?(product: SearchProductItemInterface): Promise<void>;
-  getCachedProduct?(code: string): Promise<SearchProductItemInterface | undefined>;
+  getCachedProduct?(code: string): Promise<SearchProductItemInterface | undefined | null>;
   getAllCachedProducts?(): Promise<SearchProductItemInterface[]>;
   addFavorite?(code: string): Promise<void>;
   removeFavorite?(code: string): Promise<void>;
