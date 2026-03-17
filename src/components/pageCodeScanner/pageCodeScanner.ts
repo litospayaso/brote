@@ -18,28 +18,44 @@ export class PageCodeScanner extends Page {
     css`
       :host {
         display: block;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
+        min-height: 100vh;
+        min-width: 100vw;
         background: black;
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         overflow: hidden;
+        z-index: 9999;
       }
 
       #reader {
-        width: 100%;
-        height: 100%;
-        background: black;
-      }
-
-      /* Hide html5-qrcode built-in UI elements we don't want */
-      #reader video {
-        object-fit: cover;
         width: 100% !important;
         height: 100% !important;
+        background: black;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #reader video {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+      }
+
+      #reader img {
+        display: none !important;
       }
 
       .overlay {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
@@ -49,11 +65,12 @@ export class PageCodeScanner extends Page {
         justify-content: center;
         align-items: center;
         pointer-events: none;
+        z-index: 10;
       }
 
       .controls {
-        position: absolute;
-        bottom: 85px;
+        position: fixed;
+        bottom: 25px;
         left: 0;
         width: 100%;
         display: flex;
@@ -150,7 +167,6 @@ export class PageCodeScanner extends Page {
       const config = {
         fps: 10,
         qrbox: { width: 250, height: 250 },
-        aspectRatio: window.innerWidth / window.innerHeight,
         formatsToSupport: [
           Html5QrcodeSupportedFormats.EAN_13,
           Html5QrcodeSupportedFormats.EAN_8,
@@ -219,8 +235,6 @@ export class PageCodeScanner extends Page {
 
       <div class="overlay">
         ${this.error && this.hasPermission !== false ? html`<div class="error-msg">${this.error}</div>` : ''}
-        <!-- Visual guide only, logic handled by qrbox -->
-        ${this.scanning ? html`<div class="scan-area"></div>` : ''}
       </div>
 
       <div class="controls">

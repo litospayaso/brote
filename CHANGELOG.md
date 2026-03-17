@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.31
+
+### Patch Changes
+
+- fixing issue with camera ratio on device
+
 ## 1.0.30
 
 ### Patch Changes
