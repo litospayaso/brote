@@ -28,8 +28,28 @@ try {
   } else {
     run('chmod +x gradlew', androidDir);
     const sdkPath = path.join(process.env.HOME, 'Android', 'Sdk');
+    let javaHome = process.env.JAVA_HOME;
+
+    // Validate JAVA_HOME: if it doesn't exist or points to a likely invalid path (e.g. /run/host/...)
+    if (javaHome && (!fs.existsSync(javaHome) || javaHome.startsWith('/run/host/'))) {
+      console.log(`⚠️ JAVA_HOME (${javaHome}) appears to be invalid or a host-level path. Attempting to resolve...`);
+      try {
+        const resolvedJava = execSync('readlink -f $(which java)', { encoding: 'utf8' }).trim();
+        // The resolved path usually ends with /bin/java, we want the home directory
+        javaHome = path.dirname(path.dirname(resolvedJava));
+        console.log(`✅ Resolved JAVA_HOME to: ${javaHome}`);
+      } catch (e) {
+        console.warn('⚠️ Could not resolve JAVA_HOME automatically.');
+        javaHome = null;
+      }
+    }
+
     if (fs.existsSync(sdkPath)) {
-      buildCmd = `ANDROID_HOME=${sdkPath} ./gradlew assembleDebug`;
+      if (javaHome) {
+        buildCmd = `ANDROID_HOME=${sdkPath} JAVA_HOME=${javaHome} ./gradlew assembleDebug`;
+      } else {
+        buildCmd = `ANDROID_HOME=${sdkPath} ./gradlew assembleDebug`;
+      }
     } else {
       buildCmd = './gradlew assembleDebug';
     }

@@ -2,6 +2,7 @@ import { html, css } from 'lit';
 import { state } from 'lit/decorators.js';
 import Page from '../../shared/page';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
+import { Camera } from '@capacitor/camera';
 import { loadCss } from '../../shared/functions';
 
 export class PageCodeScanner extends Page {
@@ -114,6 +115,15 @@ export class PageCodeScanner extends Page {
   async startScanning() {
     this.error = null;
     try {
+      // Check/request camera permission using Capacitor Camera plugin
+      const permission = await Camera.requestPermissions();
+      
+      if (permission.camera !== 'granted') {
+        this.hasPermission = false;
+        this.error = this.translations.cameraError || "Camera access denied or error starting scanner. Please check permissions.";
+        return;
+      }
+
       this.html5QrCode = new Html5Qrcode("reader");
 
       const config = {

@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.29
+
+### Patch Changes
+
+- adding camera permission for fixing bug in bar code scanner in device
+
 ## 1.0.28
 
 ### Patch Changes

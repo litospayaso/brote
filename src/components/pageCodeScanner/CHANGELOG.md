@@ -1,5 +1,11 @@
 # page-code-scanner
 
+## 0.0.4
+
+### Patch Changes
+
+- adding camera permission for fixing bug in bar code scanner in device
+
 ## 0.0.3
 
 ### Patch Changes
