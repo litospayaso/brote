@@ -29564,7 +29564,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.28",
+    version: "1.0.29",
     type: "module",
     scripts: {
       dev: "vite",
@@ -29593,6 +29593,7 @@
     },
     dependencies: {
       "@capacitor/android": "^8.1.0",
+      "@capacitor/camera": "^8.0.2",
       "@capacitor/cli": "^8.1.0",
       "@capacitor/core": "^8.1.0",
       "@capacitor/filesystem": "^8.1.2",
@@ -33850,6 +33851,266 @@
     return Html5QrcodeScanner2;
   })();
 
+  // node_modules/@capacitor/camera/dist/esm/index.js
+  init_dist();
+
+  // node_modules/@capacitor/camera/dist/esm/web.js
+  init_dist();
+
+  // node_modules/@capacitor/camera/dist/esm/definitions.js
+  var CameraSource;
+  (function(CameraSource2) {
+    CameraSource2["Prompt"] = "PROMPT";
+    CameraSource2["Camera"] = "CAMERA";
+    CameraSource2["Photos"] = "PHOTOS";
+  })(CameraSource || (CameraSource = {}));
+  var CameraDirection;
+  (function(CameraDirection2) {
+    CameraDirection2["Rear"] = "REAR";
+    CameraDirection2["Front"] = "FRONT";
+  })(CameraDirection || (CameraDirection = {}));
+  var CameraResultType;
+  (function(CameraResultType2) {
+    CameraResultType2["Uri"] = "uri";
+    CameraResultType2["Base64"] = "base64";
+    CameraResultType2["DataUrl"] = "dataUrl";
+  })(CameraResultType || (CameraResultType = {}));
+
+  // node_modules/@capacitor/camera/dist/esm/web.js
+  var CameraWeb = class extends WebPlugin {
+    async getPhoto(options) {
+      return new Promise(async (resolve2, reject) => {
+        if (options.webUseInput || options.source === CameraSource.Photos) {
+          this.fileInputExperience(options, resolve2, reject);
+        } else if (options.source === CameraSource.Prompt) {
+          let actionSheet = document.querySelector("pwa-action-sheet");
+          if (!actionSheet) {
+            actionSheet = document.createElement("pwa-action-sheet");
+            document.body.appendChild(actionSheet);
+          }
+          actionSheet.header = options.promptLabelHeader || "Photo";
+          actionSheet.cancelable = true;
+          actionSheet.options = [
+            { title: options.promptLabelPhoto || "From Photos" },
+            { title: options.promptLabelPicture || "Take Picture" }
+          ];
+          actionSheet.addEventListener("onSelection", async (e6) => {
+            const selection = e6.detail;
+            if (selection === 0) {
+              this.fileInputExperience(options, resolve2, reject);
+            } else {
+              this.cameraExperience(options, resolve2, reject);
+            }
+          });
+          actionSheet.addEventListener("onCanceled", async () => {
+            reject(new CapacitorException("User cancelled photos app"));
+          });
+        } else {
+          this.cameraExperience(options, resolve2, reject);
+        }
+      });
+    }
+    async pickImages(_options) {
+      return new Promise(async (resolve2, reject) => {
+        this.multipleFileInputExperience(resolve2, reject);
+      });
+    }
+    async cameraExperience(options, resolve2, reject) {
+      if (customElements.get("pwa-camera-modal")) {
+        const cameraModal = document.createElement("pwa-camera-modal");
+        cameraModal.facingMode = options.direction === CameraDirection.Front ? "user" : "environment";
+        document.body.appendChild(cameraModal);
+        try {
+          await cameraModal.componentOnReady();
+          cameraModal.addEventListener("onPhoto", async (e6) => {
+            const photo = e6.detail;
+            if (photo === null) {
+              reject(new CapacitorException("User cancelled photos app"));
+            } else if (photo instanceof Error) {
+              reject(photo);
+            } else {
+              resolve2(await this._getCameraPhoto(photo, options));
+            }
+            cameraModal.dismiss();
+            document.body.removeChild(cameraModal);
+          });
+          cameraModal.present();
+        } catch (e6) {
+          this.fileInputExperience(options, resolve2, reject);
+        }
+      } else {
+        console.error(`Unable to load PWA Element 'pwa-camera-modal'. See the docs: https://capacitorjs.com/docs/web/pwa-elements.`);
+        this.fileInputExperience(options, resolve2, reject);
+      }
+    }
+    fileInputExperience(options, resolve2, reject) {
+      let input = document.querySelector("#_capacitor-camera-input");
+      const cleanup = () => {
+        var _a;
+        (_a = input.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(input);
+      };
+      if (!input) {
+        input = document.createElement("input");
+        input.id = "_capacitor-camera-input";
+        input.type = "file";
+        input.hidden = true;
+        document.body.appendChild(input);
+        input.addEventListener("change", (_e) => {
+          const file = input.files[0];
+          let format = "jpeg";
+          if (file.type === "image/png") {
+            format = "png";
+          } else if (file.type === "image/gif") {
+            format = "gif";
+          }
+          if (options.resultType === "dataUrl" || options.resultType === "base64") {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              if (options.resultType === "dataUrl") {
+                resolve2({
+                  dataUrl: reader.result,
+                  format
+                });
+              } else if (options.resultType === "base64") {
+                const b64 = reader.result.split(",")[1];
+                resolve2({
+                  base64String: b64,
+                  format
+                });
+              }
+              cleanup();
+            });
+            reader.readAsDataURL(file);
+          } else {
+            resolve2({
+              webPath: URL.createObjectURL(file),
+              format
+            });
+            cleanup();
+          }
+        });
+        input.addEventListener("cancel", (_e) => {
+          reject(new CapacitorException("User cancelled photos app"));
+          cleanup();
+        });
+      }
+      input.accept = "image/*";
+      input.capture = true;
+      if (options.source === CameraSource.Photos || options.source === CameraSource.Prompt) {
+        input.removeAttribute("capture");
+      } else if (options.direction === CameraDirection.Front) {
+        input.capture = "user";
+      } else if (options.direction === CameraDirection.Rear) {
+        input.capture = "environment";
+      }
+      input.click();
+    }
+    multipleFileInputExperience(resolve2, reject) {
+      let input = document.querySelector("#_capacitor-camera-input-multiple");
+      const cleanup = () => {
+        var _a;
+        (_a = input.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(input);
+      };
+      if (!input) {
+        input = document.createElement("input");
+        input.id = "_capacitor-camera-input-multiple";
+        input.type = "file";
+        input.hidden = true;
+        input.multiple = true;
+        document.body.appendChild(input);
+        input.addEventListener("change", (_e) => {
+          const photos = [];
+          for (let i5 = 0; i5 < input.files.length; i5++) {
+            const file = input.files[i5];
+            let format = "jpeg";
+            if (file.type === "image/png") {
+              format = "png";
+            } else if (file.type === "image/gif") {
+              format = "gif";
+            }
+            photos.push({
+              webPath: URL.createObjectURL(file),
+              format
+            });
+          }
+          resolve2({ photos });
+          cleanup();
+        });
+        input.addEventListener("cancel", (_e) => {
+          reject(new CapacitorException("User cancelled photos app"));
+          cleanup();
+        });
+      }
+      input.accept = "image/*";
+      input.click();
+    }
+    _getCameraPhoto(photo, options) {
+      return new Promise((resolve2, reject) => {
+        const reader = new FileReader();
+        const format = photo.type.split("/")[1];
+        if (options.resultType === "uri") {
+          resolve2({
+            webPath: URL.createObjectURL(photo),
+            format,
+            saved: false
+          });
+        } else {
+          reader.readAsDataURL(photo);
+          reader.onloadend = () => {
+            const r6 = reader.result;
+            if (options.resultType === "dataUrl") {
+              resolve2({
+                dataUrl: r6,
+                format,
+                saved: false
+              });
+            } else {
+              resolve2({
+                base64String: r6.split(",")[1],
+                format,
+                saved: false
+              });
+            }
+          };
+          reader.onerror = (e6) => {
+            reject(e6);
+          };
+        }
+      });
+    }
+    async checkPermissions() {
+      if (typeof navigator === "undefined" || !navigator.permissions) {
+        throw this.unavailable("Permissions API not available in this browser");
+      }
+      try {
+        const permission = await window.navigator.permissions.query({
+          name: "camera"
+        });
+        return {
+          camera: permission.state,
+          photos: "granted"
+        };
+      } catch (_a) {
+        throw this.unavailable("Camera permissions are not available in this browser");
+      }
+    }
+    async requestPermissions() {
+      throw this.unimplemented("Not implemented on web.");
+    }
+    async pickLimitedLibraryPhotos() {
+      throw this.unavailable("Not implemented on web.");
+    }
+    async getLimitedLibraryPhotos() {
+      throw this.unavailable("Not implemented on web.");
+    }
+  };
+  var Camera = new CameraWeb();
+
+  // node_modules/@capacitor/camera/dist/esm/index.js
+  var Camera2 = registerPlugin("Camera", {
+    web: () => new CameraWeb()
+  });
+
   // src/components/pageCodeScanner/pageCodeScanner.ts
   var _PageCodeScanner = class _PageCodeScanner extends Page {
     constructor() {
@@ -33961,6 +34222,12 @@
     async startScanning() {
       this.error = null;
       try {
+        const permission = await Camera2.requestPermissions();
+        if (permission.camera !== "granted") {
+          this.hasPermission = false;
+          this.error = this.translations.cameraError || "Camera access denied or error starting scanner. Please check permissions.";
+          return;
+        }
         this.html5QrCode = new Html5Qrcode("reader");
         const config = {
           fps: 10,
@@ -37150,6 +37417,18 @@ ${countMsg}`,
     }
     render() {
       return b2`
+      ${this._renderPersonaDetails()}
+      ${this.enableStatistics ? this._renderStatistics() : ""}
+      ${this._renderNutritionalGoals()}
+      ${this._renderSettings()}
+      ${this._renderDataManagement()}
+      ${this._renderDangerZone()}
+      ${this._renderAppVersion()}
+      ${this._renderModals()}
+    `;
+    }
+    _renderPersonaDetails() {
+      return b2`
       <div class="card">
         <h2>${this.translations.personalDetails}</h2>
         
@@ -37185,8 +37464,10 @@ ${countMsg}`,
           </button>
         </div>
       </div>
-
-      ${this.enableStatistics ? b2`
+    `;
+    }
+    _renderStatistics() {
+      return b2`
       <div class="card">
         <h2>${this.translations.statistics}</h2>
         <div class="week-display">
@@ -37209,17 +37490,19 @@ ${countMsg}`,
             ${this.weeklyChartData ? b2`
               <component-bar-line-chart .chartData="${this.weeklyChartData}"></component-bar-line-chart>
             ` : ""}
-  
+
             ${this.radarChartData ? b2`
               <div style="margin-top: 20px; height: 300px;">
                 <component-shape-chart .chartData="${this.radarChartData}"></component-shape-chart>
               </div>
             ` : ""}
-          
+        
         </div>
       </div>
-      ` : ""}
-
+    `;
+    }
+    _renderNutritionalGoals() {
+      return b2`
       <div class="card">
         <h2>${this.translations.nutritionalGoals}</h2>
         
@@ -37251,7 +37534,10 @@ ${countMsg}`,
           ${this.translations.calculateMaintenance || "Calculate Maintenance Calories"}
         </button>
       </div>
-
+    `;
+    }
+    _renderSettings() {
+      return b2`
       <div class="card">
         <h2>${this.translations.settings}</h2>
         <div class="form-group">
@@ -37326,7 +37612,10 @@ ${countMsg}`,
           </div>
         </div>
       </div>
-
+    `;
+    }
+    _renderDataManagement() {
+      return b2`
       <div class="card">
         <h2>${this.translations.dataManagement}</h2>
         <p style="margin-bottom: 10px;">${this.translations.exportDataDesc}</p>
@@ -37347,7 +37636,10 @@ ${countMsg}`,
           </div>
         ` : ""}
       </div>
-
+    `;
+    }
+    _renderDangerZone() {
+      return b2`
       <div class="card danger-zone">
         <h2>${this.translations.dangerZone}</h2>
         <p style="margin-bottom: 10px;">${this.translations.clearDataWarning}</p>
@@ -37355,7 +37647,10 @@ ${countMsg}`,
           ${this.translations.clearAllData}
         </button>
       </div>
-
+    `;
+    }
+    _renderAppVersion() {
+      return b2`
       ${this.version ? b2`
         <div class="app-version">
           ${this.translations.appVersion}: ${this.version}
@@ -37369,199 +37664,217 @@ ${countMsg}`,
           </div>
         </div>
       ` : ""}
-
-      ${this.showAboutModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal" style="width: 500px; max-width: 95%;">
-            <div class="modal-header">
-              <h3>${this.translations.aboutApp || "About Brote"}</h3>
-              <button class="close-btn" @click="${() => this.showAboutModal = false}">&times;</button>
-            </div>
-            <div style="text-align: justify; line-height: 1.6; font-size: 0.95rem; margin-top: 10px;">
-              <p>${this.translations.aboutMessage}</p>
-            </div>
+    `;
+    }
+    _renderModals() {
+      return b2`
+      ${this.showAboutModal ? this._renderAboutModal() : ""}
+      ${this.showClearModal ? this._renderClearModal() : ""}
+      ${this.showWeightModal ? this._renderWeightModal() : ""}
+      ${this.showExportModal ? this._renderExportModal() : ""}
+      ${this.showImportModal ? this._renderImportModal() : ""}
+      ${this.showMaintenanceModal ? this._renderMaintenanceModal() : ""}
+      ${this.showStatisticsModal ? this._renderStatisticsModal() : ""}
+    `;
+    }
+    _renderAboutModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal" style="width: 500px; max-width: 95%;">
+          <div class="modal-header">
+            <h3>${this.translations.aboutApp || "About Brote"}</h3>
+            <button class="close-btn" @click="${() => this.showAboutModal = false}">&times;</button>
+          </div>
+          <div style="text-align: justify; line-height: 1.6; font-size: 0.95rem; margin-top: 10px;">
+            <p>${this.translations.aboutMessage}</p>
           </div>
         </div>
-      ` : ""}
-
-      ${this.showClearModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal">
-            <div class="modal-header">
-              <h3>${this.translations.confirmClearData || "Confirm Clear Data"}</h3>
-              <button class="close-btn" @click="${() => this.showClearModal = false}">&times;</button>
-            </div>
-            <p>${this.translations.clearDataMsg || "Are you sure you want to clear all app data? This action cannot be undone."}</p>
-            <div class="modal-buttons">
-              <button class="btn" @click="${() => this.showClearModal = false}">${this.translations.cancel || "Cancel"}</button>
-              <button class="btn-danger" @click="${this._clearAllData}">${this.translations.clear || "Clear"}</button>
-            </div>
+      </div>
+    `;
+    }
+    _renderClearModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>${this.translations.confirmClearData || "Confirm Clear Data"}</h3>
+            <button class="close-btn" @click="${() => this.showClearModal = false}">&times;</button>
+          </div>
+          <p>${this.translations.clearDataMsg || "Are you sure you want to clear all app data? This action cannot be undone."}</p>
+          <div class="modal-buttons">
+            <button class="btn" @click="${() => this.showClearModal = false}">${this.translations.cancel || "Cancel"}</button>
+            <button class="btn-danger" @click="${this._clearAllData}">${this.translations.clear || "Clear"}</button>
           </div>
         </div>
-      ` : ""}
-
-      ${this.showWeightModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal" style="width: 500px; max-width: 95%;">
-            <div class="modal-header">
-              <h3>${this.translations.weightHistory || "Weight History"}</h3>
-              <button class="close-btn" @click="${() => this.showWeightModal = false}">&times;</button>
-            </div>
-            
-            <div class="weight-history-list">
-              ${this.weightHistory.length === 0 ? b2`<p style="text-align: center;">${this.translations.noResultsFound || "No history found"}</p>` : ""}
-              ${this.weightHistory.sort((a3, b3) => new Date(b3.date).getTime() - new Date(a3.date).getTime()).map((entry) => b2`
-                <div class="weight-history-item">
-                  <span>${this._formatDate(entry.date)}</span>
-                  <div style="display: flex; align-items: center; gap: 12px; padding-right: 8px;">
-                    <strong>${entry.weight} kg</strong>
-                    ${this._renderTrashIcon(entry)}
-                  </div>
+      </div>
+    `;
+    }
+    _renderWeightModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal" style="width: 500px; max-width: 95%;">
+          <div class="modal-header">
+            <h3>${this.translations.weightHistory || "Weight History"}</h3>
+            <button class="close-btn" @click="${() => this.showWeightModal = false}">&times;</button>
+          </div>
+          
+          <div class="weight-history-list">
+            ${this.weightHistory.length === 0 ? b2`<p style="text-align: center;">${this.translations.noResultsFound || "No history found"}</p>` : ""}
+            ${this.weightHistory.sort((a3, b3) => new Date(b3.date).getTime() - new Date(a3.date).getTime()).map((entry) => b2`
+              <div class="weight-history-item">
+                <span>${this._formatDate(entry.date)}</span>
+                <div style="display: flex; align-items: center; gap: 12px; padding-right: 8px;">
+                  <strong>${entry.weight} kg</strong>
+                  ${this._renderTrashIcon(entry)}
                 </div>
-              `)}
-            </div>
-
-            <div class="weight-history-form">
-              <div class="form-group" style="text-align: left;">
-                <label>${this.translations.date || "Date"}</label>
-                <input type="date" .value="${this.newWeightDate}" @change="${(e6) => this.newWeightDate = e6.target.value}" />
               </div>
-              <div class="form-group" style="text-align: left;">
-                <label>${this.translations.weight || "Weight"} (kg)</label>
-                <input type="number" step="0.1" .value="${this.newWeightValue}" @input="${(e6) => this.newWeightValue = Number(e6.target.value)}" />
-              </div>
-              <button class="btn" @click="${this._saveNewWeightEntry}">
-                ${this.translations.saveEntry || "Save Entry"}
-              </button>
-            </div>
+            `)}
           </div>
-        </div>
-      ` : ""}
 
-      ${this.showExportModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal" style="width: 450px; max-width: 95%;">
-            <div class="modal-header">
-              <h3>${this.translations.exportData}</h3>
-              <button class="close-btn" @click="${() => this.showExportModal = false}">&times;</button>
+          <div class="weight-history-form">
+            <div class="form-group" style="text-align: left;">
+              <label>${this.translations.date || "Date"}</label>
+              <input type="date" .value="${this.newWeightDate}" @change="${(e6) => this.newWeightDate = e6.target.value}" />
             </div>
-
-            <div style="text-align: left; margin-bottom: 20px;">
-              <p style="font-weight: bold; margin-bottom: 10px;">${this.translations.selectDataToExport}:</p>
-              
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("daily_consumption")}" @change="${() => this._toggleExportStore("daily_consumption")}">
-                ${this.translations.dailyConsumption}
-              </label>
-              
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("user_data")}" @change="${() => this._toggleExportStore("user_data")}">
-                ${this.translations.userData}
-              </label>
-
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("meals")}" @change="${() => this._toggleExportStore("meals")}">
-                ${this.translations.savedMeals}
-              </label>
-
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("products")}" @change="${() => this._toggleExportStore("products")}">
-                ${this.translations.cachedProducts}
-              </label>
-
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("favorites")}" @change="${() => this._toggleExportStore("favorites")}">
-                ${this.translations.favorites}
-              </label>
-
-              <label class="checkbox-label">
-                <input type="checkbox" ?checked="${this.exportStores.has("user_status")}" @change="${() => this._toggleExportStore("user_status")}">
-                ${this.translations.dailyStatus}
-              </label>
-
-              <p style="font-weight: bold; margin: 20px 0 10px;">${this.translations.selectExportFormat}:</p>
-              
-              <div style="display: flex; gap: 20px; justify-content: center;">
-                <label class="radio-label">
-                  <input type="radio" name="format" value="json" ?checked="${this.exportFormat === "json"}" @change="${() => this.exportFormat = "json"}">
-                  JSON
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="format" value="csv" ?checked="${this.exportFormat === "csv"}" @change="${() => this.exportFormat = "csv"}">
-                  CSV
-                </label>
-              </div>
+            <div class="form-group" style="text-align: left;">
+              <label>${this.translations.weight || "Weight"} (kg)</label>
+              <input type="number" step="0.1" .value="${this.newWeightValue}" @input="${(e6) => this.newWeightValue = Number(e6.target.value)}" />
             </div>
-
-            <button class="btn" style="width: 100%;" ?disabled="${this.exportStores.size === 0}" @click="${this._handleExport}">
-              ${this.translations.exportConfirm}
+            <button class="btn" @click="${this._saveNewWeightEntry}">
+              ${this.translations.saveEntry || "Save Entry"}
             </button>
           </div>
         </div>
-      ` : ""}
+      </div>
+    `;
+    }
+    _renderExportModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal" style="width: 450px; max-width: 95%;">
+          <div class="modal-header">
+            <h3>${this.translations.exportData}</h3>
+            <button class="close-btn" @click="${() => this.showExportModal = false}">&times;</button>
+          </div>
 
-      ${this.showImportModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal" style="width: 400px; max-width: 95%;">
-            <div class="modal-header">
-              <h3>${this.translations.confirmImport}</h3>
-              <button class="close-btn" @click="${() => this.showImportModal = false}">&times;</button>
-            </div>
-            <p>${this.translations.confirmOverrideMsg}</p>
+          <div style="text-align: left; margin-bottom: 20px;">
+            <p style="font-weight: bold; margin-bottom: 10px;">${this.translations.selectDataToExport}:</p>
             
-            <label class="checkbox-label" style="justify-content: center; margin: 20px 0;">
-              <input type="checkbox" .checked="${this.importOverride}" @change="${(e6) => this.importOverride = e6.target.checked}">
-              ${this.translations.overrideCurrentData}
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("daily_consumption")}" @change="${() => this._toggleExportStore("daily_consumption")}">
+              ${this.translations.dailyConsumption}
+            </label>
+            
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("user_data")}" @change="${() => this._toggleExportStore("user_data")}">
+              ${this.translations.userData}
             </label>
 
-            <div class="modal-buttons">
-              <button class="btn" @click="${() => this.showImportModal = false}">${this.translations.cancel}</button>
-              <button class="btn" @click="${this._proceedImport}">${this.translations.import}</button>
-            </div>
-          </div>
-        </div>
-      ` : ""}
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("meals")}" @change="${() => this._toggleExportStore("meals")}">
+              ${this.translations.savedMeals}
+            </label>
 
-      ${this.showMaintenanceModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal" style="width: 500px; max-width: 95%; position: relative;">
-            <div class="modal-header">
-              <h3>${this.translations.calculateMaintenance || "Calculate Maintenance Calories"}</h3>
-              <button class="close-btn" @click="${() => this.showMaintenanceModal = false}">&times;</button>
-            </div>
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("products")}" @change="${() => this._toggleExportStore("products")}">
+              ${this.translations.cachedProducts}
+            </label>
+
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("favorites")}" @change="${() => this._toggleExportStore("favorites")}">
+              ${this.translations.favorites}
+            </label>
+
+            <label class="checkbox-label">
+              <input type="checkbox" ?checked="${this.exportStores.has("user_status")}" @change="${() => this._toggleExportStore("user_status")}">
+              ${this.translations.dailyStatus}
+            </label>
+
+            <p style="font-weight: bold; margin: 20px 0 10px;">${this.translations.selectExportFormat}:</p>
             
-            <component-maintenance-calories
-              .height="${this.height}"
-              .weight="${this.weight}"
-              .gender="${this.gender}"
-              .age="${this.age}"
-              .showWarning="${this.enableWarnings}"
-              .translations="${JSON.stringify(this.translations)}"
-              @save-calories="${this._handleSaveCalories}"
-            ></component-maintenance-calories>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+              <label class="radio-label">
+                <input type="radio" name="format" value="json" ?checked="${this.exportFormat === "json"}" @change="${() => this.exportFormat = "json"}">
+                JSON
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="format" value="csv" ?checked="${this.exportFormat === "csv"}" @change="${() => this.exportFormat = "csv"}">
+                CSV
+              </label>
+            </div>
           </div>
-        </div>
-      ` : ""}
 
-      ${this.showStatisticsModal ? b2`
-        <div class="modal-overlay">
-          <div class="modal">
-            <div class="modal-header">
-              <h3 style="color: var(--palette-green);">${this.translations.statisticsWarningTitle || "Warning regarding statistical tracking"}</h3>
-              <button class="close-btn" @click="${() => this.showStatisticsModal = false}">&times;</button>
-            </div>
-            <div class="warning-message">
-              <span>
-                <span class="warning-icon">⚠️</span>${this.translations.statisticsWarningMessage || "Please be careful..."}
-              </span>
-            </div>
-            <div class="modal-buttons" style="justify-content: space-around;">
-              <button class="btn btn-cancel" @click="${() => this.showStatisticsModal = false}">${this.translations.cancel || "Cancel"}</button>
-              <button class="btn btn-confirm" @click="${this._confirmEnableStatistics}">${this.translations.confirm || "Confirm"}</button>
-            </div>
+          <button class="btn" style="width: 100%;" ?disabled="${this.exportStores.size === 0}" @click="${this._handleExport}">
+            ${this.translations.exportConfirm}
+          </button>
+        </div>
+      </div>
+    `;
+    }
+    _renderImportModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal" style="width: 400px; max-width: 95%;">
+          <div class="modal-header">
+            <h3>${this.translations.confirmImport}</h3>
+            <button class="close-btn" @click="${() => this.showImportModal = false}">&times;</button>
+          </div>
+          <p>${this.translations.confirmOverrideMsg}</p>
+          
+          <label class="checkbox-label" style="justify-content: center; margin: 20px 0;">
+            <input type="checkbox" .checked="${this.importOverride}" @change="${(e6) => this.importOverride = e6.target.checked}">
+            ${this.translations.overrideCurrentData}
+          </label>
+
+          <div class="modal-buttons">
+            <button class="btn" @click="${() => this.showImportModal = false}">${this.translations.cancel}</button>
+            <button class="btn" @click="${this._proceedImport}">${this.translations.import}</button>
           </div>
         </div>
-      ` : ""}
+      </div>
+    `;
+    }
+    _renderMaintenanceModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal" style="width: 500px; max-width: 95%; position: relative;">
+          <div class="modal-header">
+            <h3>${this.translations.calculateMaintenance || "Calculate Maintenance Calories"}</h3>
+            <button class="close-btn" @click="${() => this.showMaintenanceModal = false}">&times;</button>
+          </div>
+          
+          <component-maintenance-calories
+            .height="${this.height}"
+            .weight="${this.weight}"
+            .gender="${this.gender}"
+            .age="${this.age}"
+            .showWarning="${this.enableWarnings}"
+            .translations="${JSON.stringify(this.translations)}"
+            @save-calories="${this._handleSaveCalories}"
+          ></component-maintenance-calories>
+        </div>
+      </div>
+    `;
+    }
+    _renderStatisticsModal() {
+      return b2`
+      <div class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <h3 style="color: var(--palette-green);">${this.translations.statisticsWarningTitle || "Warning regarding statistical tracking"}</h3>
+            <button class="close-btn" @click="${() => this.showStatisticsModal = false}">&times;</button>
+          </div>
+          <div class="warning-message">
+            <span>
+              <span class="warning-icon">⚠️</span>${this.translations.statisticsWarningMessage || "Please be careful..."}
+            </span>
+          </div>
+          <div class="modal-buttons" style="justify-content: space-around;">
+            <button class="btn btn-cancel" @click="${() => this.showStatisticsModal = false}">${this.translations.cancel || "Cancel"}</button>
+            <button class="btn btn-confirm" @click="${this._confirmEnableStatistics}">${this.translations.confirm || "Confirm"}</button>
+          </div>
+        </div>
+      </div>
     `;
     }
   };
