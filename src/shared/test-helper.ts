@@ -1,6 +1,7 @@
 import type { Result } from 'axe-core';
 import { loadScript } from './functions';
 import type { AxePlugin, AxeResults } from 'axe-core';
+import type { IDBService } from './db';
 // import removed
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/await-thenable */
@@ -32,6 +33,8 @@ export interface ComponentData {
   slot?: HTMLElement[] | string;
   api?: { [key: string]: any };
   mock?: { [key: string]: any };
+  navigation?: any;
+  db?: IDBService;
   route?: string;
 }
 
@@ -104,6 +107,8 @@ export const waitForElement = (selector: () => HTMLElement | null, timeout: numb
  * @param {any} component.listeners Object using the key as listener name and value as the callback function that will be call on listener
  * @param {String} component.route route to mock the location.href of the page for the web-component
  * @param {any} component.api Object using the key as API calls to override and value as the mock api function to override
+ * @param {IDBService} component.db Object to mock local db responses
+ * @param {any} component.navigation Object to override triggerPageNavigation call
  * @param {HTMLElement[] | string} component.slot Arrays of elements to append inside of the webcomponent as slot
  * @returns {ComponentObject} An object as Element as HTMLElement, shadow as shadow root and uid as uuid of the new component
  */
@@ -117,8 +122,19 @@ export const createComponent: CreateComponentType = async component => {
       component.class.prototype.api[key] = (component.api as any)[key];
     });
   }
+  if (component.db) {
+    if (!component.class.prototype.db) {
+      component.class.prototype.db = {};
+    }
+    Object.keys(component.db).forEach(key => {
+      component.class.prototype.db[key] = (component.db as any)[key];
+    });
+  }
   if (component.route) {
     component.class.prototype['getHref'] = (): string => `localhost:8000${component.route}`;
+  }
+  if (component.navigation) {
+    component.class.prototype['triggerPageNavigation'] = component.navigation;
   }
   if (component.mock) {
     Object.keys(component.mock).forEach(key => {

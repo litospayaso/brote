@@ -56,6 +56,36 @@ export interface UserProfile {
   enableStatistics?: boolean;
 }
 
+export interface IDBService {
+  init?(): Promise<void>;
+  saveWeightEntry?(date: string, weight: number): Promise<void>;
+  getWeightHistory?(): Promise<{ date: string, weight: number }[]>;
+  deleteWeightEntry?(date: string): Promise<void>;
+  getDailyLog?(date: string): Promise<DailyLog>;
+  saveDailyLog?(log: DailyLog): Promise<void>;
+  getUserStatus?(date: string): Promise<UserStatus>;
+  saveUserStatus?(status: UserStatus): Promise<void>;
+  addFoodItem?(date: string, category: MealCategory, item: FoodEntry): Promise<void>;
+  removeFoodItem?(date: string, category: MealCategory, index: number): Promise<void>;
+  cacheProduct?(product: SearchProductItemInterface): Promise<void>;
+  getCachedProduct?(code: string): Promise<SearchProductItemInterface | undefined>;
+  getAllCachedProducts?(): Promise<SearchProductItemInterface[]>;
+  addFavorite?(code: string): Promise<void>;
+  removeFavorite?(code: string): Promise<void>;
+  isFavorite?(code: string): Promise<boolean>;
+  getFavorites?(): Promise<{ code: string }[]>;
+  saveMeal?(meal: Meal): Promise<void>;
+  getMeal?(id: string): Promise<Meal | undefined>;
+  getAllMeals?(): Promise<Meal[]>;
+  deleteMeal?(id: string): Promise<void>;
+  clearAllData?(): Promise<void>;
+  updateProductInMeals?(product: SearchProductItemInterface): Promise<void>;
+  updateProductInLogs?(product: SearchProductItemInterface): Promise<void>;
+  deleteMealReference?(mealId: string): Promise<void>;
+  getExportData?(selectedStores: string[], format: 'json' | 'csv'): Promise<{ content: string, extension: string }>;
+  importData?(data: any, override: boolean): Promise<number>;
+}
+
 const DB_NAME = 'OpenCalDB';
 const DB_VERSION = 5;
 const STORE_NAME = 'daily_consumption';
@@ -65,7 +95,7 @@ const STORE_MEALS = 'meals';
 const STORE_WEIGHT_HISTORY = 'weight_history';
 const STORE_USER_STATUS = 'user_status';
 
-export class DBService {
+export class DBService implements IDBService {
   private db: IDBDatabase | null = null;
 
   async init(): Promise<void> {
