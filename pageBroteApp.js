@@ -33897,7 +33897,7 @@
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.33",
+    version: "1.0.34",
     type: "module",
     scripts: {
       dev: "vite",
@@ -34497,10 +34497,11 @@
         qrReader.style.display = "block";
       }
       this.html5QrCode = new Html5Qrcode2("qr-reader");
+      const isNative = Capacitor.isNativePlatform();
       const config = {
-        fps: 15,
+        fps: isNative ? 15 : 10,
         qrbox: { width: 250, height: 250 },
-        aspectRatio: 1,
+        aspectRatio: isNative ? 1 : window.innerWidth / window.innerHeight,
         formatsToSupport: [
           Html5QrcodeSupportedFormats2.EAN_13,
           Html5QrcodeSupportedFormats2.EAN_8,
@@ -34531,6 +34532,7 @@
       }
     }
     fixVideoStyles() {
+      if (!Capacitor.isNativePlatform()) return;
       setTimeout(() => {
         const video = this.querySelector("#qr-reader video");
         if (video) {
@@ -34585,13 +34587,14 @@
           </div>
         ` : ""}
 
-        ${this.scanning ? b2`
-          <div class="overlay">
+        <div class="overlay">
+          ${this.error && this.hasPermission !== false ? b2`<div class="error-msg">${this.error}</div>` : ""}
+          ${this.scanning ? b2`
             <div class="scan-area">
-              <div class="scan-line"></div>
+              ${Capacitor.isNativePlatform() ? b2`<div class="scan-line"></div>` : ""}
             </div>
-          </div>
-        ` : ""}
+          ` : ""}
+        </div>
 
         <div class="controls">
           <button class="back-btn" @click="${this.handleBack}">${this.translations.cancel || "Cancel"}</button>
