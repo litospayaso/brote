@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.34
+
+### Patch Changes
+
+- Fixing issue in code scanner in web version, leaving apk as the current version
+
 ## 1.0.33
 
 ### Patch Changes

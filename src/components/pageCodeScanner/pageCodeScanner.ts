@@ -222,10 +222,11 @@ export class PageCodeScanner extends Page {
     
     this.html5QrCode = new Html5Qrcode("qr-reader");
     
+    const isNative = Capacitor.isNativePlatform();
     const config = {
-      fps: 15,
+      fps: isNative ? 15 : 10,
       qrbox: { width: 250, height: 250 },
-      aspectRatio: 1.0,
+      aspectRatio: isNative ? 1.0 : window.innerWidth / window.innerHeight,
       formatsToSupport: [
         Html5QrcodeSupportedFormats.EAN_13,
         Html5QrcodeSupportedFormats.EAN_8,
@@ -258,6 +259,7 @@ export class PageCodeScanner extends Page {
   }
 
   private fixVideoStyles() {
+    if (!Capacitor.isNativePlatform()) return;
     setTimeout(() => {
       const video = this.querySelector('#qr-reader video') as HTMLVideoElement;
       if (video) {
@@ -321,13 +323,14 @@ export class PageCodeScanner extends Page {
           </div>
         ` : ''}
 
-        ${this.scanning ? html`
-          <div class="overlay">
+        <div class="overlay">
+          ${this.error && this.hasPermission !== false ? html`<div class="error-msg">${this.error}</div>` : ''}
+          ${this.scanning ? html`
             <div class="scan-area">
-              <div class="scan-line"></div>
+              ${Capacitor.isNativePlatform() ? html`<div class="scan-line"></div>` : ''}
             </div>
-          </div>
-        ` : ''}
+          ` : ''}
+        </div>
 
         <div class="controls">
           <button class="back-btn" @click="${this.handleBack}">${this.translations.cancel || 'Cancel'}</button>

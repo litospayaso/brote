@@ -1,5 +1,11 @@
 # page-code-scanner
 
+## 0.0.9
+
+### Patch Changes
+
+- Fixing issue in code scanner in web version, leaving apk as the current version
+
 ## 0.0.8
 
 ### Patch Changes
