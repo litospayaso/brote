@@ -33237,6 +33237,8 @@
   --group-button-hover-bg: rgba(0, 0, 0, 0.05);
   --icon-section-color: #f1f1f1;
   --card-background-color: #f1f1f1;
+  --selected-group-button-color: #272a33;
+  --unselected-group-button-color: #dbdddc;
 }
 [data-theme=dark] {
   --background-color: #212429;
@@ -33257,6 +33259,8 @@
   --group-button-hover-bg: rgba(255, 255, 255, 0.1);
   --card-background-color: #34393f;
   --icon-section-color: #212429;
+  --selected-group-button-color: #a285bb;
+  --unselected-group-button-color: #272c34;
 }
 body {
   font-family: "Inter", sans-serif;
@@ -33890,7 +33894,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.35",
+    version: "1.0.36",
     type: "module",
     scripts: {
       dev: "vite",
@@ -33977,9 +33981,9 @@ body {
       this._notificationTimeout = null;
       this.page = "home";
       this.groupButtonOptions = [
-        { text: "\u{1F3E0}", id: "home", active: true },
-        { text: "\u{1F50D}", id: "search", active: false },
-        { text: "\u{1F464}", id: "user", active: false }
+        { text: "home", id: "home", active: true, emoji: true },
+        { text: "search", id: "search", active: false, emoji: true },
+        { text: "user", id: "user", active: false, emoji: true }
       ];
     }
     static {
@@ -33995,14 +33999,14 @@ body {
         left: 50%;
         transform: translateX(-50%);
         z-index: 1000;
-        padding: 0 0 1.6rem 0;
+        padding: 0 0 2rem 0;
         display: flex;
         justify-content: center;
         width: fit-content;
       }
       .app-container {
         padding-top: env(safe-area-inset-top);
-        padding-bottom: 60px; 
+        padding-bottom: 80px; 
         touch-action: pan-y;
       }
     `
@@ -34183,6 +34187,7 @@ body {
     <div class="group-button-container">
       <component-group-button 
         .options="${this.groupButtonOptions}" 
+        size="l"
         @group-button-click="${this.handleGroupButtonClick}">
       </component-group-button>
     </div>
@@ -34202,6 +34207,7 @@ body {
     constructor() {
       super(...arguments);
       this.optionsState = [];
+      this.size = "xs";
     }
     set options(value) {
       this.optionsState = typeof value === "string" ? JSON.parse(value) : value;
@@ -34216,11 +34222,10 @@ body {
     .group-button-container {
       display: flex;
       flex-direction: row;
-      border: 1px solid var(--input-border, var(--palette-grey));
-      border-radius: 20px;
+      border-radius: 40px;
       overflow: hidden;
       width: fit-content;
-      background-color: var(--card-background, #fff);
+      background-color: var(--unselected-group-button-color, #fff);
     }
 
     .group-button {
@@ -34232,33 +34237,54 @@ body {
       transition: background-color 0.3s ease, color 0.3s ease;
       color: var(--input-text, #000);
       flex: 1;
-      border-right: 1px solid var(--input-border, var(--palette-grey));
+      border-radius: 40px;
     }
 
     .group-button:last-child {
       border-right: none;
     }
 
-    .group-button:hover {
-      background-color: var(--group-button-hover-bg, rgba(0, 0, 0, 0.05));
+    .group-button.active {
+      background-color: var(--selected-group-button-color, var(--palette-green));
+      color: var(--group-button-active-text, #fff);
     }
 
-    .group-button.active {
-      background-color: var(--group-button-active-bg, var(--palette-green));
-      color: var(--group-button-active-text, #fff);
+    .size-xs .group-button {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .size-s .group-button {
+      padding: 10px 20px;
+      font-size: 1rem;
+    }
+
+    .size-m .group-button {
+      padding: 12px 24px;
+      font-size: 1.125rem;
+    }
+
+    .size-l .group-button {
+      padding: 14px 28px;
+      font-size: 1.25rem;
+    }
+
+    .size-xl .group-button {
+      padding: 16px 32px;
+      font-size: 1.375rem;
     }
   `;
     }
     render() {
       return b2`
-      <div class="group-button-container" role="group">
+      <div class="group-button-container size-${this.size}" role="group">
         ${this.optionsState.map((option) => b2`
           <button
             class="group-button ${option.active ? "active" : ""}"
             @click="${() => this._handleClick(option.id)}"
             type="button"
           >
-            ${option.text}
+            ${option.emoji ? b2`<component-emoji text="${option.text}"></component-emoji>` : option.text}
           </button>
         `)}
       </div>
@@ -34278,1184 +34304,9 @@ body {
   __decorateClass([
     r5()
   ], ComponentGroupButton.prototype, "optionsState", 2);
-
-  // src/components/componentGroupButton/index.ts
-  register("component-group-button", ComponentGroupButton);
-
-  // src/components/pageCodeScanner/pageCodeScanner.ts
-  init_dist();
-  var _PageCodeScanner = class _PageCodeScanner extends Page {
-    constructor() {
-      super(...arguments);
-      this.hasPermission = null;
-      this.error = null;
-      this.scanning = false;
-      this.html5QrCode = null;
-    }
-    static {
-      this.styles = [
-        Page.styles,
-        i`
-      :host {
-        display: block;
-        height: 100vh;
-        width: 100vw;
-        background: black;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        overflow: hidden;
-        z-index: 9999;
-      }
-
-      #scanner-container {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: black;
-      }
-
-      #qr-reader {
-        width: 100% !important;
-        height: 100% !important;
-        background: black;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: none !important;
-      }
-
-      /* Fix internal html5-qrcode video element */
-      #qr-reader video {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-      }
-
-      .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-        z-index: 10;
-      }
-
-      .scan-area {
-        width: 250px;
-        height: 250px;
-        border: 2px solid rgba(255, 255, 255, 0.5);
-        border-radius: 12px;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
-        position: relative;
-        background: transparent;
-      }
-
-      .scan-line {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: var(--palette-green, #4fb9ad);
-        box-shadow: 0 0 8px var(--palette-green, #4fb9ad);
-        animation: scan 2s linear infinite;
-      }
-
-      @keyframes scan {
-        0% { top: 0; }
-        100% { top: 100%; }
-      }
-
-      .controls {
-        position: fixed;
-        bottom: 40px;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        pointer-events: auto;
-        z-index: 20;
-      }
-
-      .back-btn {
-        border: none;
-        background-color: var(--palette-green, #4fb9ad);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 25px;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 1rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      }
-
-      .permission-request {
-        color: white;
-        text-align: center;
-        padding: 20px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: #121212;
-        z-index: 30;
-      }
-
-      .permission-request h2 {
-        color: var(--palette-green, #4fb9ad);
-        margin-bottom: 15px;
-      }
-
-      .permission-request p {
-        margin-bottom: 25px;
-        max-width: 80%;
-        line-height: 1.5;
-        opacity: 0.8;
-      }
-    `
-      ];
-    }
-    firstUpdated() {
-      _PageCodeScanner.styles.forEach((style, i5) => {
-        loadCss(String(style), `page-code-scanner-styles-${i5}`);
-      });
-      setTimeout(() => this.startScanning(), 100);
-    }
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      this.stopScanning();
-    }
-    async checkCameraPermission() {
-      if (Capacitor.isNativePlatform()) {
-        try {
-          const { Camera: Camera3 } = await Promise.resolve().then(() => (init_esm(), esm_exports));
-          const permission = await Camera3.checkPermissions();
-          if (permission.camera === "granted") return true;
-          const request2 = await Camera3.requestPermissions();
-          return request2.camera === "granted";
-        } catch (err) {
-          console.error("Native permission check error:", err);
-          return true;
-        }
-      } else {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          stream.getTracks().forEach((track) => track.stop());
-          return true;
-        } catch (err) {
-          console.error("Web camera permission error:", err);
-          return false;
-        }
-      }
-    }
-    async startScanning() {
-      this.error = null;
-      this.hasPermission = null;
-      try {
-        const hasPermission = await this.checkCameraPermission();
-        if (!hasPermission) {
-          this.hasPermission = false;
-          this.error = this.translations.cameraError || "Camera access denied. Please check permissions.";
-          return;
-        }
-        this.hasPermission = true;
-        await this.setupScanner();
-        this.scanning = true;
-      } catch (err) {
-        console.error("Error starting scanner:", err);
-        this.hasPermission = false;
-        this.error = this.translations.cameraError || "Error starting scanner.";
-      }
-    }
-    async setupScanner() {
-      console.log("setupScanner - starting");
-      const { Html5Qrcode: Html5Qrcode2, Html5QrcodeSupportedFormats: Html5QrcodeSupportedFormats2 } = await Promise.resolve().then(() => (init_esm2(), esm_exports2));
-      const qrReader = this.querySelector("#qr-reader");
-      if (qrReader) {
-        qrReader.style.display = "block";
-      }
-      this.html5QrCode = new Html5Qrcode2("qr-reader");
-      const isNative = Capacitor.isNativePlatform();
-      const config = {
-        fps: isNative ? 15 : 10,
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: isNative ? 1 : window.innerWidth / window.innerHeight,
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats2.EAN_13,
-          Html5QrcodeSupportedFormats2.EAN_8,
-          Html5QrcodeSupportedFormats2.UPC_A,
-          Html5QrcodeSupportedFormats2.UPC_E,
-          Html5QrcodeSupportedFormats2.QR_CODE
-        ]
-      };
-      try {
-        await this.html5QrCode.start(
-          { facingMode: "environment" },
-          config,
-          (decodedText) => {
-            console.log(`Scan result: ${decodedText}`);
-            this.stopScanning();
-            this.triggerPageNavigation({ page: "food", code: decodedText });
-          },
-          () => {
-          }
-          // Ignore scan errors
-        );
-        this.fixVideoStyles();
-        console.log("Scanner started successfully");
-      } catch (err) {
-        console.error("Error starting scanner implementation:", err);
-        this.hasPermission = false;
-        this.error = String(err);
-      }
-    }
-    fixVideoStyles() {
-      if (!Capacitor.isNativePlatform()) return;
-      setTimeout(() => {
-        const video = this.querySelector("#qr-reader video");
-        if (video) {
-          video.style.cssText = "width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute; top: 0; left: 0;";
-          const dashboard = this.querySelector("#qr-reader__dashboard");
-          if (dashboard) dashboard.style.display = "none";
-          const region = this.querySelector("#qr-reader__scan_region");
-          if (region) {
-            region.style.width = "100%";
-            region.style.height = "100%";
-          }
-        }
-      }, 300);
-    }
-    async stopScanning() {
-      this.scanning = false;
-      if (this.html5QrCode) {
-        try {
-          if (this.html5QrCode.isScanning) {
-            await this.html5QrCode.stop();
-          }
-          this.html5QrCode.clear();
-        } catch (err) {
-          console.error("Error stopping scanner:", err);
-        }
-        this.html5QrCode = null;
-        const qrReader = this.querySelector("#qr-reader");
-        if (qrReader) {
-          qrReader.style.display = "none";
-        }
-      }
-    }
-    handleBack() {
-      this.stopScanning();
-      this.triggerPageNavigation({ page: "search" });
-    }
-    createRenderRoot() {
-      return this;
-    }
-    render() {
-      return b2`
-      <div id="scanner-container">
-        <div id="qr-reader"></div>
-        
-        ${this.hasPermission === false ? b2`
-          <div class="permission-request">
-            <h2>${this.translations.cameraPermissionRequired || "Camera Permission Required"}</h2>
-            <p>${this.error || this.translations.cameraPermissionDesc || "Camera access is needed to scan barcodes."}</p>
-            <button class="back-btn" @click="${() => this.startScanning()}">${this.translations.retry || "Retry"}</button>
-            <br><br>
-            <button class="back-btn" @click="${this.handleBack}">${this.translations.goBack || "Go Back"}</button>
-          </div>
-        ` : ""}
-
-        <div class="overlay">
-          ${this.error && this.hasPermission !== false ? b2`<div class="error-msg">${this.error}</div>` : ""}
-          ${this.scanning ? b2`
-            <div class="scan-area">
-              ${Capacitor.isNativePlatform() ? b2`<div class="scan-line"></div>` : ""}
-            </div>
-          ` : ""}
-        </div>
-
-        <div class="controls">
-          <button class="back-btn" @click="${this.handleBack}">${this.translations.cancel || "Cancel"}</button>
-        </div>
-      </div>
-    `;
-    }
-  };
-  __decorateClass([
-    r5()
-  ], _PageCodeScanner.prototype, "hasPermission", 2);
-  __decorateClass([
-    r5()
-  ], _PageCodeScanner.prototype, "error", 2);
-  __decorateClass([
-    r5()
-  ], _PageCodeScanner.prototype, "scanning", 2);
-  var PageCodeScanner = _PageCodeScanner;
-
-  // src/components/pageCodeScanner/index.ts
-  register("page-code-scanner", PageCodeScanner);
-
-  // src/shared/httpRequest.ts
-  var isJsonString = (input) => {
-    try {
-      JSON.parse(input);
-    } catch (e6) {
-      return false;
-    }
-    return true;
-  };
-  var handleResponse = async (response) => {
-    return new Promise((resolve2, reject) => {
-      if (response.ok) {
-        response.text().then((result) => {
-          const res = isJsonString(result) ? JSON.parse(result) : result;
-          resolve2(res);
-        }).catch((err) => {
-          resolve2(err);
-        });
-      } else {
-        response.text().then((result) => {
-          reject(isJsonString(result) ? JSON.parse(result) : result);
-        });
-      }
-    });
-  };
-  var request = async (url, http) => {
-    const lang = localStorage.getItem("language") || "en";
-    const subdomain = lang === "en" ? "world" : lang;
-    const domain = `https://${subdomain}.openfoodfacts.org`;
-    const method = http?.method ? http.method : "GET";
-    const options = {
-      method,
-      mode: "cors",
-      headers: {
-        "User-Agent": "Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/brote"
-      },
-      cache: "no-cache",
-      credentials: "omit"
-    };
-    if (http?.body) {
-      if (http.body instanceof URLSearchParams) {
-        options.body = http.body;
-      } else {
-        options.body = JSON.stringify(http.body);
-      }
-    }
-    const response = await fetch(`${domain}/${url}`, options);
-    return handleResponse(response);
-  };
-
-  // src/shared/httpEndpoints.ts
-  var cachedPopularProducts = {};
-  var getProduct = async (barcode) => {
-    const lang = localStorage.getItem("language") || "en";
-    const response = await request(`api/v3/product/${barcode}?product_type=food&cc=${lang}&lc=${lang}&fields=brands,nutriments,product_name,product_name_${lang},product_name_en&knowledge_panel_client=web&activate_knowledge_panels_simplified=true&activate_knowledge_panel_physical_activities=false&knowledge_panels_included=nutriments&knowledge_panels_excluded=+allergens_hierarchy&blame=0`);
-    return response;
-  };
-  var searchProduct = async (query) => {
-    const lang = localStorage.getItem("language") || "en";
-    if (!cachedPopularProducts[lang]) {
-      try {
-        const response = await fetch(`https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/assets/data/popular_${lang}.json`);
-        if (response.ok) {
-          cachedPopularProducts[lang] = await response.json();
-        } else {
-          cachedPopularProducts[lang] = [];
-        }
-      } catch (error) {
-        console.error(`Error fetching popular products for ${lang}:`, error);
-        cachedPopularProducts[lang] = [];
-      }
-    }
-    const popularProducts = cachedPopularProducts[lang];
-    const lowerQuery = query.toLowerCase();
-    const filtered = popularProducts.filter((item) => item.toLowerCase().includes(lowerQuery));
-    const products = filtered.slice(0, 35).map((item) => {
-      const parts = item.split(" :: ");
-      const code = parts[0];
-      const rest = parts[1] || "";
-      const lastDashIndex = rest.lastIndexOf(" - ");
-      let productName = rest;
-      let brands = "";
-      if (lastDashIndex !== -1) {
-        productName = rest.substring(0, lastDashIndex);
-        brands = rest.substring(lastDashIndex + 3);
-      }
-      return {
-        code,
-        product_name: productName,
-        brands,
-        nutriments: {},
-        nutrition_data: "",
-        nutrition_data_per: "",
-        nutrition_data_prepared_per: ""
-      };
-    });
-    return {
-      count: filtered.length,
-      page: 1,
-      page_count: Math.ceil(filtered.length / 35),
-      page_size: 35,
-      skip: 0,
-      products
-    };
-  };
-
-  // src/shared/api.decorator.ts
-  var api = function PluginDecorator(apis) {
-    return (ctor) => {
-      ctor.prototype.api = {};
-      Object.entries(apis).forEach(([key, value]) => ctor.prototype.api[key] = value);
-    };
-  };
-
-  // src/components/pageSearch/pageSearch.ts
-  var PageSearch = class extends Page {
-    constructor() {
-      super(...arguments);
-      this.searchResult = [];
-      this.loading = false;
-      this.mealId = null;
-      this.query = "";
-      this.viewMode = "cached";
-      this.groupButtonOptions = [
-        { text: this.translations.recents, id: "cached", active: true },
-        { text: this.translations.favorites, id: "favorites", active: false },
-        { text: this.translations.search, id: "search", active: false },
-        { text: this.translations.meals, id: "meals", active: false }
-      ];
-    }
-    handleSwipe(diffX) {
-      if (this.viewMode === "cached") {
-        if (diffX > 0) {
-          this.triggerPageNavigation({ page: "home" });
-        } else {
-          this._switchMode("favorites");
-        }
-      } else if (this.viewMode === "favorites") {
-        if (diffX > 0) {
-          this._switchMode("cached");
-        } else {
-          this._switchMode("search");
-        }
-      } else if (this.viewMode === "search") {
-        if (diffX > 0) {
-          this._switchMode("favorites");
-        } else {
-          this._switchMode("meals");
-        }
-      } else if (this.viewMode === "meals") {
-        if (diffX < 0) {
-          this.triggerPageNavigation({ page: "user" });
-        } else {
-          this._switchMode("search");
-        }
-      }
-    }
-    async onPageInit() {
-      await this.db.init();
-      const params = this.getQueryParamsURL();
-      const viewMode = params.get("viewMode");
-      this.mealId = params.get("mealId");
-      if (this.mealId) {
-        this.groupButtonOptions = [
-          { text: this.translations.recents, id: "cached", active: true },
-          { text: this.translations.favorites, id: "favorites", active: false },
-          { text: this.translations.search, id: "search", active: false }
-        ];
-      } else {
-        this.groupButtonOptions = [
-          { text: this.translations.recents, id: "cached", active: true },
-          { text: this.translations.favorites, id: "favorites", active: false },
-          { text: this.translations.search, id: "search", active: false },
-          { text: this.translations.meals, id: "meals", active: false }
-        ];
-      }
-      if (viewMode && ["cached", "favorites", "search", "meals"].includes(viewMode)) {
-        this._switchMode(viewMode);
-      } else {
-        const cachedProducts = await this.db.getAllCachedProducts();
-        if (!cachedProducts || cachedProducts.length === 0) {
-          this._switchMode("search");
-        } else {
-          this._loadData();
-        }
-      }
-    }
-    async _loadData() {
-      this.loading = true;
-      try {
-        let products = [];
-        if (this.viewMode === "cached") {
-          products = await this.db.getAllCachedProducts();
-          if (products && products.length > 0 && this.query) {
-            products = products.filter((p3) => {
-              const name = p3.product_name || p3.product?.product_name || "";
-              const brands = p3.brands || p3.product?.brands || "";
-              const lowerQuery = this.query.toLowerCase();
-              return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
-            });
-            if (products.length === 0) {
-              this._switchMode("search");
-              return;
-            }
-          }
-        } else if (this.viewMode === "favorites") {
-          const favorites = await this.db.getFavorites();
-          const promises = favorites.map(async (fav) => {
-            return await this.db.getCachedProduct(fav.code);
-          });
-          const results = await Promise.all(promises);
-          const cachedProducts = results.filter((p3) => !!p3);
-          const allMeals = await this.db.getAllMeals();
-          const favoriteMeals = allMeals.filter((m2) => favorites.some((f4) => f4.code === m2.id));
-          const mealItems = favoriteMeals.map((m2) => ({
-            code: m2.id,
-            product_name: m2.name,
-            isMeal: true,
-            nutriments: {
-              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
-            }
-          }));
-          products = [...cachedProducts, ...mealItems];
-          if (products && products.length > 0 && this.query) {
-            products = products.filter((p3) => {
-              const name = p3.product_name || p3.product?.product_name || "";
-              const brands = p3.brands || p3.product?.brands || "";
-              const lowerQuery = this.query.toLowerCase();
-              return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
-            });
-            if (products.length === 0) {
-              this._switchMode("search");
-              return;
-            }
-          }
-        } else if (this.viewMode === "search") {
-          if (this.query) {
-            const isBarcode = /^\d{8,14}$/.test(this.query);
-            if (isBarcode) {
-              const productResponse = await this.api.getProduct(this.query);
-              if (productResponse && productResponse.status === "success" && productResponse.product) {
-                const params = this.getQueryParamsURL();
-                const mealId = params.get("mealId");
-                const navParams = { page: "food", code: this.query };
-                if (mealId) {
-                  navParams.mealId = mealId;
-                }
-                this.triggerPageNavigation(navParams);
-                return;
-              }
-            }
-            const searchResponse = await this.api.searchProduct(this.query);
-            const rawProducts = searchResponse.products || [];
-            products = await Promise.all(rawProducts.map(async (p3) => {
-              const cached = await this.db.getCachedProduct(p3.code);
-              return cached || p3;
-            }));
-          } else {
-            products = [];
-          }
-        } else if (this.viewMode === "meals") {
-          let meals = await this.db.getAllMeals();
-          if (this.query) {
-            const lowerQuery = this.query.toLowerCase();
-            meals = meals.filter((m2) => m2.name.toLowerCase().includes(lowerQuery));
-          }
-          products = meals.map((m2) => ({
-            code: m2.id,
-            url: "",
-            product_name: m2.name,
-            isMeal: true,
-            nutriments: {
-              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
-            }
-          }));
-        }
-        this.searchResult = await Promise.all(products.map(async (product) => {
-          const isFavorite = await this.db.isFavorite(product.code);
-          if (product.isMeal) return { ...product, isFavorite };
-          const normalized = { ...product, isFavorite };
-          if (product.product) {
-            normalized.product_name = product.product.product_name || normalized.product_name;
-            normalized.nutriments = product.product.nutriments || normalized.nutriments;
-            normalized.brands = product.product.brands || normalized.brands;
-          }
-          return normalized;
-        }));
-      } catch (e6) {
-        console.error("Error loading data", e6);
-        this.searchResult = [];
-      } finally {
-        this.loading = false;
-      }
-    }
-    _generateId() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-    async _handleSearchInit(e6) {
-      const { query, isButtonClick } = e6.detail;
-      this.query = query;
-      if (isButtonClick) {
-        this._switchMode("search");
-      } else {
-        this._loadData();
-      }
-    }
-    _handleSearchBlur(e6) {
-      this.query = e6.detail.query;
-      this._loadData();
-    }
-    _handleModeSwitch(e6) {
-      this._switchMode(e6.detail.id);
-    }
-    _switchMode(mode) {
-      this.viewMode = mode;
-      this.groupButtonOptions = this.groupButtonOptions.map((opt) => ({
-        ...opt,
-        active: opt.id === mode
-      }));
-      this._loadData();
-    }
-    async _handleFavoriteClick(e6) {
-      if (e6.detail?.code) {
-        const product = this.searchResult.find((product2) => product2.code === e6.detail.code);
-        if (product) {
-          product.isFavorite = e6.detail.value === "true";
-          this.requestUpdate();
-          if (product.isFavorite) {
-            try {
-              if (!product.isMeal) {
-                const fullProduct = await this.api.getProduct(e6.detail.code);
-                if (fullProduct) {
-                  await this.db.cacheProduct(fullProduct);
-                }
-              }
-              await this.db.addFavorite(e6.detail.code);
-            } catch (err) {
-              console.error("Error adding favorite", err);
-            }
-          } else {
-            await this.db.removeFavorite(e6.detail.code);
-          }
-        }
-      }
-    }
-    _handleElementClick(e6) {
-      if (e6.detail?.code) {
-        if (this.viewMode === "meals" || this.searchResult.find((p3) => p3.code === e6.detail.code)?.isMeal) {
-          this.triggerPageNavigation({ page: "meal", mealId: e6.detail.code });
-        } else {
-          const params = this.getQueryParamsURL();
-          const mealId = params.get("mealId");
-          const navParams = { page: "food", code: e6.detail.code };
-          if (mealId) {
-            navParams.mealId = mealId;
-          }
-          this.triggerPageNavigation(navParams);
-        }
-      }
-    }
-    render() {
-      return b2`
-      <div class="page-container">
-        <h1>${this.mealId ? this.translations.addFood : this.translations.searchProduct}</h1>
-        <div class="search-container">
-          <component-search-input 
-            placeholder="${this.translations.searchProductplacholder}" 
-            search-button-text="${this.translations.search}" 
-            @search-init="${this._handleSearchInit}"
-            @search-blur="${this._handleSearchBlur}"
-          ></component-search-input>
-          <button class="scan-btn" @click="${() => this.triggerPageNavigation({ page: "scanner" })}">
-            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-              <title>ionicons-v5-d</title>
-              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-            </svg>
-          </button>
-        </div>
-        
-        <div class="group-button-wrapper">
-             <component-group-button
-                .options="${this.groupButtonOptions}"
-                @group-button-click="${this._handleModeSwitch}"
-             ></component-group-button>
-        </div>
-
-        ${this.viewMode === "meals" ? b2`
-          <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "meal", mealId: this._generateId() })}">
-              ${this.translations.createNewMeal}
-          </button>
-        ` : b2``}
-
-        <div class="search-result-container">
-        ${this.loading ? b2`
-          <component-spinner class="loading-spinner"></component-spinner>
-        ` : b2`
-          ${this.searchResult.length > 0 ? b2`
-            ${this.viewMode === "search" ? b2`
-              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
-                ${this.translations.createNewProduct}
-              </button>
-            ` : ""}
-            <div>
-              ${this.searchResult.map((product) => b2`
-                <component-search-result 
-                  name="${product.product_name}" 
-                  code="${product.code}" 
-                  brands="${product.brands || ""}"
-                  calories="${product.nutriments && product.nutriments["energy-kcal"] ? product.nutriments["energy-kcal"] : -1}" 
-                  favorite="${product.isFavorite}"
-                  @favorite-click="${this._handleFavoriteClick}"
-                  @element-click="${this._handleElementClick}"
-                ></component-search-result>
-              `)}
-            </div>
-          ` : ""}
-          ${this.searchResult.length === 0 && this.query.length > 0 ? b2`
-            <p>${this.translations.noResultsFound}</p>
-            ${this.viewMode === "search" ? b2`
-              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
-                ${this.translations.createNewProduct}
-              </button>
-            ` : ""}
-
-          ` : ""}
-        `}
-        </div>
-      </div>
-    `;
-    }
-  };
-  PageSearch.styles = [
-    Page.styles,
-    i`
-      :host {
-        display: block;
-        padding: 20px;
-        font-family: sans-serif;
-        color: var(--text-color);
-      }
-      .page-container {
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      .search-container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 20px;
-      }
-      .group-button-wrapper {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-      }
-      .search-container component-search-input{
-        flex: 1;
-      }
-      .btn-create {
-        margin-bottom: 16px;
-      }
-      button.scan-btn {
-        padding: 0;
-        width: 52px;
-        height: 52px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        padding:8px;
-        cursor: pointer;
-        background-color: var(--group-button-active-bg, var(--palette-green));
-        color: var(--group-button-active-text, #fff);
-        border: none;
-        border-radius: 50%;
-        transition: transform 0.2s ease, background-color 0.3s ease;
-        margin-left: 10px;
-      }
-      button.scan-btn:hover {
-        transform: scale(1.05);
-        opacity: 0.9;
-      }
-      button.scan-btn:active {
-        transform: scale(0.95);
-        opacity: 0.9;
-      }
-      .loading-spinner {
-        display: flex;
-        justify-content: center;
-        padding: 2rem;
-      }
-      .search-result-container {
-        min-height: calc(100vh - 450px);
-      }
-      h1 {
-        text-align: center;
-      }
-    `
-  ];
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "searchResult", 2);
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "loading", 2);
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "mealId", 2);
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "query", 2);
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "viewMode", 2);
-  __decorateClass([
-    r5()
-  ], PageSearch.prototype, "groupButtonOptions", 2);
-  PageSearch = __decorateClass([
-    api({ searchProduct, getProduct })
-  ], PageSearch);
-
-  // src/components/componentSearchInput/componentSearchInput.ts
-  var ComponentSearchInput = class extends i4 {
-    constructor() {
-      super(...arguments);
-      this.value = "";
-      this.placeholder = "";
-      this.previousValue = "";
-    }
-    static {
-      this.styles = i`
-    :host {
-      display: block;
-      padding: 1rem;
-    }
-    .input-container {
-      display: flex;
-      align-items: center;
-      border: 2px solid var(--input-border, var(--palette-grey));
-      border-radius: 25px;
-      padding: 5px 5px 5px 20px;
-      background: var(--card-background, white);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .input-container:focus-within {
-      border-color: var(--palette-purple);
-      box-shadow: 0 0 5px rgba(162, 133, 187, 0.3);
-    }
-    input {
-      font-size: 1rem;
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: var(--input-text, var(--palette-black));
-      padding: 5px 0;
-    }
-    input::placeholder {
-      color: var(--input-placeholder, #757575);
-    }
-    button {
-      padding: 0;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      cursor: pointer;
-      background-color: var(--group-button-active-bg, var(--palette-green));
-      color: var(--group-button-active-text, #fff);
-      border: none;
-      border-radius: 50%;
-      transition: transform 0.2s ease, background-color 0.3s ease;
-      margin-left: 10px;
-    }
-    button:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
-    }
-    button:active {
-      transform: scale(0.95);
-    }
-  `;
-    }
-    render() {
-      return b2`
-      <div class="input-container">
-        <input 
-          type="text" 
-          .value="${this.value}" 
-          @input="${this._handleInput}" 
-          @blur="${this._handleBlur}" 
-          @keydown="${this._handleKeyDown}"
-          placeholder="${this.placeholder}"
-          aria-label="Search"
-        />
-        <button @click="${this._handleSearchClick}" aria-label="Search button">🔎</button>
-      </div>
-    `;
-    }
-    _handleInput(e6) {
-      const target = e6.target;
-      this.value = target.value;
-    }
-    _handleBlur() {
-      this.dispatchEvent(new CustomEvent("search-blur", {
-        detail: { query: this.value },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    _handleSearchClick() {
-      this.dispatchEvent(new CustomEvent("search-init", {
-        detail: { query: this.value, isButtonClick: true },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    _handleKeyDown(e6) {
-      if (e6.key === "Enter") {
-        this.dispatchEvent(new CustomEvent("search-init", {
-          detail: { query: this.value, isButtonClick: false },
-          bubbles: true,
-          composed: true
-        }));
-      }
-    }
-  };
   __decorateClass([
     n4({ type: String })
-  ], ComponentSearchInput.prototype, "value", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchInput.prototype, "placeholder", 2);
-  __decorateClass([
-    r5()
-  ], ComponentSearchInput.prototype, "previousValue", 2);
-
-  // src/components/componentSearchInput/index.ts
-  register("component-search-input", ComponentSearchInput);
-
-  // src/components/componentSearchResult/componentSearchResult.ts
-  var ComponentSearchResult = class extends i4 {
-    constructor() {
-      super(...arguments);
-      this.name = "";
-      this.code = "";
-      this.brands = "";
-      this.calories = "";
-      this.quantity = "";
-      this.removable = false;
-      this.favoriteState = false;
-    }
-    set favorite(favorite) {
-      this.favoriteState = favorite === "true";
-      this.requestUpdate();
-    }
-    static {
-      this.styles = i`
-    :host {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .result-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--card-background-color, #fff);
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
-      margin-bottom: 8px;
-    }
-
-    .icon-section {
-      background: var(--icon-section-color, #fff);
-      /* padding: 14px 10px; */
-      width: 48px;
-      height: 48px;
-      border: solid 1px var(--card-border-color);
-      border-radius: 8px;
-      flex: 0 0 auto;
-      margin-right: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    
-    .name-section {
-      flex: 1 1 auto;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--card-text);
-      cursor: pointer;
-    }
-
-    .brand-section {
-      font-size: 0.8rem;
-      color: var(--input-placeholder);
-      margin-top: 2px;
-    }
-
-    .quantity-section {
-      font-size: 0.8rem;
-      color: var(--input-placeholder);
-      margin-top: 4px;
-    }
-
-    .calories-section {
-      font-size: .87rem;
-      font-weight: 500;
-      color: var(--input-placeholder);
-    }
-
-    .favorite-section {
-      flex: 0 0 auto;
-      margin-left: 16px;
-      cursor: pointer;
-    }
-
-    .favorite-icon {
-      width: 24px;
-      height: 24px;
-      fill: none;
-      stroke: #666;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      transition: fill 0.3s ease, stroke 0.3s ease;
-    }
-
-    .favorite-icon.is-favorite {
-      fill: var(--favorite-color, #ffd700);
-      stroke: var(--favorite-color, #ffd700);
-    }
-  `;
-    }
-    render() {
-      return b2`
-      <div class="result-card">
-        <div class="icon-section" @click="${this._handleElementClick}">
-          <component-emoji text="${this.name}" width="28px" height="28px"></component-emoji>
-        </div>
-        <div class="name-section" @click="${this._handleElementClick}">
-          <div>${this.name}</div>
-          ${this.brands ? b2`<div class="brand-section">${this.brands}</div>` : ""}
-          ${this.quantity ? b2`<div class="quantity-section">${this.quantity}</div>` : ""}
-        </div>
-        ${this.calories && Number(this.calories) > 0 ? b2`
-          <div class="calories-section">
-            ${Math.trunc(Number(this.calories))} Kcal
-          </div>
-        ` : ""}
-        ${this.removable ? b2`
-           <div class="favorite-section" @click="${this._handleRemoveClick}">
-              ${this._renderTrashIcon()}
-           </div>
-        ` : b2`
-           <div class="favorite-section" @click="${this._handleFavoriteClick}">
-              ${this._renderFavoriteIcon()}
-           </div>
-        `}
-      </div>
-    `;
-    }
-    _renderTrashIcon() {
-      return b2`
-      <svg
-        class="favorite-icon"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-        style="stroke: var(--palette-grey);"
-      >
-        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      </svg>
-    `;
-    }
-    _renderFavoriteIcon() {
-      return b2`
-      <svg
-        class="favorite-icon ${this.favoriteState ? "is-favorite" : ""}"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-    `;
-    }
-    _handleElementClick() {
-      this.dispatchEvent(new CustomEvent("element-click", {
-        detail: { code: this.code },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    _handleFavoriteClick() {
-      this.dispatchEvent(new CustomEvent("favorite-click", {
-        detail: { code: this.code, value: this.favoriteState ? "false" : "true" },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    _handleRemoveClick(e6) {
-      e6.stopPropagation();
-      this.dispatchEvent(new CustomEvent("remove-click", {
-        detail: { code: this.code },
-        bubbles: true,
-        composed: true
-      }));
-    }
-  };
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "name", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "code", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "brands", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "calories", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "quantity", 2);
-  __decorateClass([
-    n4({ type: Boolean })
-  ], ComponentSearchResult.prototype, "removable", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentSearchResult.prototype, "favorite", 1);
-  __decorateClass([
-    r5()
-  ], ComponentSearchResult.prototype, "favoriteState", 2);
+  ], ComponentGroupButton.prototype, "size", 2);
 
   // src/components/componentEmoji/emojiList.ts
   var emojiList = [
@@ -36648,6 +35499,1184 @@ body {
   // src/components/componentEmoji/index.ts
   register("component-emoji", ComponentEmoji);
 
+  // src/components/componentGroupButton/index.ts
+  register("component-group-button", ComponentGroupButton);
+
+  // src/components/pageCodeScanner/pageCodeScanner.ts
+  init_dist();
+  var _PageCodeScanner = class _PageCodeScanner extends Page {
+    constructor() {
+      super(...arguments);
+      this.hasPermission = null;
+      this.error = null;
+      this.scanning = false;
+      this.html5QrCode = null;
+    }
+    static {
+      this.styles = [
+        Page.styles,
+        i`
+      :host {
+        display: block;
+        height: 100vh;
+        width: 100vw;
+        background: black;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        z-index: 9999;
+      }
+
+      #scanner-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: black;
+      }
+
+      #qr-reader {
+        width: 100% !important;
+        height: 100% !important;
+        background: black;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: none !important;
+      }
+
+      /* Fix internal html5-qrcode video element */
+      #qr-reader video {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .scan-area {
+        width: 250px;
+        height: 250px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+        position: relative;
+        background: transparent;
+      }
+
+      .scan-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--palette-green, #4fb9ad);
+        box-shadow: 0 0 8px var(--palette-green, #4fb9ad);
+        animation: scan 2s linear infinite;
+      }
+
+      @keyframes scan {
+        0% { top: 0; }
+        100% { top: 100%; }
+      }
+
+      .controls {
+        position: fixed;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        pointer-events: auto;
+        z-index: 20;
+      }
+
+      .back-btn {
+        border: none;
+        background-color: var(--palette-green, #4fb9ad);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+
+      .permission-request {
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #121212;
+        z-index: 30;
+      }
+
+      .permission-request h2 {
+        color: var(--palette-green, #4fb9ad);
+        margin-bottom: 15px;
+      }
+
+      .permission-request p {
+        margin-bottom: 25px;
+        max-width: 80%;
+        line-height: 1.5;
+        opacity: 0.8;
+      }
+    `
+      ];
+    }
+    firstUpdated() {
+      _PageCodeScanner.styles.forEach((style, i5) => {
+        loadCss(String(style), `page-code-scanner-styles-${i5}`);
+      });
+      setTimeout(() => this.startScanning(), 100);
+    }
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.stopScanning();
+    }
+    async checkCameraPermission() {
+      if (Capacitor.isNativePlatform()) {
+        try {
+          const { Camera: Camera3 } = await Promise.resolve().then(() => (init_esm(), esm_exports));
+          const permission = await Camera3.checkPermissions();
+          if (permission.camera === "granted") return true;
+          const request2 = await Camera3.requestPermissions();
+          return request2.camera === "granted";
+        } catch (err) {
+          console.error("Native permission check error:", err);
+          return true;
+        }
+      } else {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          stream.getTracks().forEach((track) => track.stop());
+          return true;
+        } catch (err) {
+          console.error("Web camera permission error:", err);
+          return false;
+        }
+      }
+    }
+    async startScanning() {
+      this.error = null;
+      this.hasPermission = null;
+      try {
+        const hasPermission = await this.checkCameraPermission();
+        if (!hasPermission) {
+          this.hasPermission = false;
+          this.error = this.translations.cameraError || "Camera access denied. Please check permissions.";
+          return;
+        }
+        this.hasPermission = true;
+        await this.setupScanner();
+        this.scanning = true;
+      } catch (err) {
+        console.error("Error starting scanner:", err);
+        this.hasPermission = false;
+        this.error = this.translations.cameraError || "Error starting scanner.";
+      }
+    }
+    async setupScanner() {
+      console.log("setupScanner - starting");
+      const { Html5Qrcode: Html5Qrcode2, Html5QrcodeSupportedFormats: Html5QrcodeSupportedFormats2 } = await Promise.resolve().then(() => (init_esm2(), esm_exports2));
+      const qrReader = this.querySelector("#qr-reader");
+      if (qrReader) {
+        qrReader.style.display = "block";
+      }
+      this.html5QrCode = new Html5Qrcode2("qr-reader");
+      const isNative = Capacitor.isNativePlatform();
+      const config = {
+        fps: isNative ? 15 : 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: isNative ? 1 : window.innerWidth / window.innerHeight,
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats2.EAN_13,
+          Html5QrcodeSupportedFormats2.EAN_8,
+          Html5QrcodeSupportedFormats2.UPC_A,
+          Html5QrcodeSupportedFormats2.UPC_E,
+          Html5QrcodeSupportedFormats2.QR_CODE
+        ]
+      };
+      try {
+        await this.html5QrCode.start(
+          { facingMode: "environment" },
+          config,
+          (decodedText) => {
+            console.log(`Scan result: ${decodedText}`);
+            this.stopScanning();
+            this.triggerPageNavigation({ page: "food", code: decodedText });
+          },
+          () => {
+          }
+          // Ignore scan errors
+        );
+        this.fixVideoStyles();
+        console.log("Scanner started successfully");
+      } catch (err) {
+        console.error("Error starting scanner implementation:", err);
+        this.hasPermission = false;
+        this.error = String(err);
+      }
+    }
+    fixVideoStyles() {
+      if (!Capacitor.isNativePlatform()) return;
+      setTimeout(() => {
+        const video = this.querySelector("#qr-reader video");
+        if (video) {
+          video.style.cssText = "width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute; top: 0; left: 0;";
+          const dashboard = this.querySelector("#qr-reader__dashboard");
+          if (dashboard) dashboard.style.display = "none";
+          const region = this.querySelector("#qr-reader__scan_region");
+          if (region) {
+            region.style.width = "100%";
+            region.style.height = "100%";
+          }
+        }
+      }, 300);
+    }
+    async stopScanning() {
+      this.scanning = false;
+      if (this.html5QrCode) {
+        try {
+          if (this.html5QrCode.isScanning) {
+            await this.html5QrCode.stop();
+          }
+          this.html5QrCode.clear();
+        } catch (err) {
+          console.error("Error stopping scanner:", err);
+        }
+        this.html5QrCode = null;
+        const qrReader = this.querySelector("#qr-reader");
+        if (qrReader) {
+          qrReader.style.display = "none";
+        }
+      }
+    }
+    handleBack() {
+      this.stopScanning();
+      this.triggerPageNavigation({ page: "search" });
+    }
+    createRenderRoot() {
+      return this;
+    }
+    render() {
+      return b2`
+      <div id="scanner-container">
+        <div id="qr-reader"></div>
+        
+        ${this.hasPermission === false ? b2`
+          <div class="permission-request">
+            <h2>${this.translations.cameraPermissionRequired || "Camera Permission Required"}</h2>
+            <p>${this.error || this.translations.cameraPermissionDesc || "Camera access is needed to scan barcodes."}</p>
+            <button class="back-btn" @click="${() => this.startScanning()}">${this.translations.retry || "Retry"}</button>
+            <br><br>
+            <button class="back-btn" @click="${this.handleBack}">${this.translations.goBack || "Go Back"}</button>
+          </div>
+        ` : ""}
+
+        <div class="overlay">
+          ${this.error && this.hasPermission !== false ? b2`<div class="error-msg">${this.error}</div>` : ""}
+          ${this.scanning ? b2`
+            <div class="scan-area">
+              ${Capacitor.isNativePlatform() ? b2`<div class="scan-line"></div>` : ""}
+            </div>
+          ` : ""}
+        </div>
+
+        <div class="controls">
+          <button class="back-btn" @click="${this.handleBack}">${this.translations.cancel || "Cancel"}</button>
+        </div>
+      </div>
+    `;
+    }
+  };
+  __decorateClass([
+    r5()
+  ], _PageCodeScanner.prototype, "hasPermission", 2);
+  __decorateClass([
+    r5()
+  ], _PageCodeScanner.prototype, "error", 2);
+  __decorateClass([
+    r5()
+  ], _PageCodeScanner.prototype, "scanning", 2);
+  var PageCodeScanner = _PageCodeScanner;
+
+  // src/components/pageCodeScanner/index.ts
+  register("page-code-scanner", PageCodeScanner);
+
+  // src/shared/httpRequest.ts
+  var isJsonString = (input) => {
+    try {
+      JSON.parse(input);
+    } catch (e6) {
+      return false;
+    }
+    return true;
+  };
+  var handleResponse = async (response) => {
+    return new Promise((resolve2, reject) => {
+      if (response.ok) {
+        response.text().then((result) => {
+          const res = isJsonString(result) ? JSON.parse(result) : result;
+          resolve2(res);
+        }).catch((err) => {
+          resolve2(err);
+        });
+      } else {
+        response.text().then((result) => {
+          reject(isJsonString(result) ? JSON.parse(result) : result);
+        });
+      }
+    });
+  };
+  var request = async (url, http) => {
+    const lang = localStorage.getItem("language") || "en";
+    const subdomain = lang === "en" ? "world" : lang;
+    const domain = `https://${subdomain}.openfoodfacts.org`;
+    const method = http?.method ? http.method : "GET";
+    const options = {
+      method,
+      mode: "cors",
+      headers: {
+        "User-Agent": "Brote - Android/iOS/Web - Version 1.0 - https://github.com/litospayaso/brote"
+      },
+      cache: "no-cache",
+      credentials: "omit"
+    };
+    if (http?.body) {
+      if (http.body instanceof URLSearchParams) {
+        options.body = http.body;
+      } else {
+        options.body = JSON.stringify(http.body);
+      }
+    }
+    const response = await fetch(`${domain}/${url}`, options);
+    return handleResponse(response);
+  };
+
+  // src/shared/httpEndpoints.ts
+  var cachedPopularProducts = {};
+  var getProduct = async (barcode) => {
+    const lang = localStorage.getItem("language") || "en";
+    const response = await request(`api/v3/product/${barcode}?product_type=food&cc=${lang}&lc=${lang}&fields=brands,nutriments,product_name,product_name_${lang},product_name_en&knowledge_panel_client=web&activate_knowledge_panels_simplified=true&activate_knowledge_panel_physical_activities=false&knowledge_panels_included=nutriments&knowledge_panels_excluded=+allergens_hierarchy&blame=0`);
+    return response;
+  };
+  var searchProduct = async (query) => {
+    const lang = localStorage.getItem("language") || "en";
+    if (!cachedPopularProducts[lang]) {
+      try {
+        const response = await fetch(`https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/assets/data/popular_${lang}.json`);
+        if (response.ok) {
+          cachedPopularProducts[lang] = await response.json();
+        } else {
+          cachedPopularProducts[lang] = [];
+        }
+      } catch (error) {
+        console.error(`Error fetching popular products for ${lang}:`, error);
+        cachedPopularProducts[lang] = [];
+      }
+    }
+    const popularProducts = cachedPopularProducts[lang];
+    const lowerQuery = query.toLowerCase();
+    const filtered = popularProducts.filter((item) => item.toLowerCase().includes(lowerQuery));
+    const products = filtered.slice(0, 35).map((item) => {
+      const parts = item.split(" :: ");
+      const code = parts[0];
+      const rest = parts[1] || "";
+      const lastDashIndex = rest.lastIndexOf(" - ");
+      let productName = rest;
+      let brands = "";
+      if (lastDashIndex !== -1) {
+        productName = rest.substring(0, lastDashIndex);
+        brands = rest.substring(lastDashIndex + 3);
+      }
+      return {
+        code,
+        product_name: productName,
+        brands,
+        nutriments: {},
+        nutrition_data: "",
+        nutrition_data_per: "",
+        nutrition_data_prepared_per: ""
+      };
+    });
+    return {
+      count: filtered.length,
+      page: 1,
+      page_count: Math.ceil(filtered.length / 35),
+      page_size: 35,
+      skip: 0,
+      products
+    };
+  };
+
+  // src/shared/api.decorator.ts
+  var api = function PluginDecorator(apis) {
+    return (ctor) => {
+      ctor.prototype.api = {};
+      Object.entries(apis).forEach(([key, value]) => ctor.prototype.api[key] = value);
+    };
+  };
+
+  // src/components/pageSearch/pageSearch.ts
+  var PageSearch = class extends Page {
+    constructor() {
+      super(...arguments);
+      this.searchResult = [];
+      this.loading = false;
+      this.mealId = null;
+      this.query = "";
+      this.viewMode = "cached";
+      this.groupButtonOptions = [
+        { text: this.translations.recents, id: "cached", active: true },
+        { text: this.translations.favorites, id: "favorites", active: false },
+        { text: this.translations.search, id: "search", active: false },
+        { text: this.translations.meals, id: "meals", active: false }
+      ];
+    }
+    handleSwipe(diffX) {
+      if (this.viewMode === "cached") {
+        if (diffX > 0) {
+          this.triggerPageNavigation({ page: "home" });
+        } else {
+          this._switchMode("favorites");
+        }
+      } else if (this.viewMode === "favorites") {
+        if (diffX > 0) {
+          this._switchMode("cached");
+        } else {
+          this._switchMode("search");
+        }
+      } else if (this.viewMode === "search") {
+        if (diffX > 0) {
+          this._switchMode("favorites");
+        } else {
+          this._switchMode("meals");
+        }
+      } else if (this.viewMode === "meals") {
+        if (diffX < 0) {
+          this.triggerPageNavigation({ page: "user" });
+        } else {
+          this._switchMode("search");
+        }
+      }
+    }
+    async onPageInit() {
+      await this.db.init();
+      const params = this.getQueryParamsURL();
+      const viewMode = params.get("viewMode");
+      this.mealId = params.get("mealId");
+      if (this.mealId) {
+        this.groupButtonOptions = [
+          { text: this.translations.recents, id: "cached", active: true },
+          { text: this.translations.favorites, id: "favorites", active: false },
+          { text: this.translations.search, id: "search", active: false }
+        ];
+      } else {
+        this.groupButtonOptions = [
+          { text: this.translations.recents, id: "cached", active: true },
+          { text: this.translations.favorites, id: "favorites", active: false },
+          { text: this.translations.search, id: "search", active: false },
+          { text: this.translations.meals, id: "meals", active: false }
+        ];
+      }
+      if (viewMode && ["cached", "favorites", "search", "meals"].includes(viewMode)) {
+        this._switchMode(viewMode);
+      } else {
+        const cachedProducts = await this.db.getAllCachedProducts();
+        if (!cachedProducts || cachedProducts.length === 0) {
+          this._switchMode("search");
+        } else {
+          this._loadData();
+        }
+      }
+    }
+    async _loadData() {
+      this.loading = true;
+      try {
+        let products = [];
+        if (this.viewMode === "cached") {
+          products = await this.db.getAllCachedProducts();
+          if (products && products.length > 0 && this.query) {
+            products = products.filter((p3) => {
+              const name = p3.product_name || p3.product?.product_name || "";
+              const brands = p3.brands || p3.product?.brands || "";
+              const lowerQuery = this.query.toLowerCase();
+              return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
+            });
+            if (products.length === 0) {
+              this._switchMode("search");
+              return;
+            }
+          }
+        } else if (this.viewMode === "favorites") {
+          const favorites = await this.db.getFavorites();
+          const promises = favorites.map(async (fav) => {
+            return await this.db.getCachedProduct(fav.code);
+          });
+          const results = await Promise.all(promises);
+          const cachedProducts = results.filter((p3) => !!p3);
+          const allMeals = await this.db.getAllMeals();
+          const favoriteMeals = allMeals.filter((m2) => favorites.some((f4) => f4.code === m2.id));
+          const mealItems = favoriteMeals.map((m2) => ({
+            code: m2.id,
+            product_name: m2.name,
+            isMeal: true,
+            nutriments: {
+              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
+            }
+          }));
+          products = [...cachedProducts, ...mealItems];
+          if (products && products.length > 0 && this.query) {
+            products = products.filter((p3) => {
+              const name = p3.product_name || p3.product?.product_name || "";
+              const brands = p3.brands || p3.product?.brands || "";
+              const lowerQuery = this.query.toLowerCase();
+              return name.toLowerCase().includes(lowerQuery) || brands.toLowerCase().includes(lowerQuery);
+            });
+            if (products.length === 0) {
+              this._switchMode("search");
+              return;
+            }
+          }
+        } else if (this.viewMode === "search") {
+          if (this.query) {
+            const isBarcode = /^\d{8,14}$/.test(this.query);
+            if (isBarcode) {
+              const productResponse = await this.api.getProduct(this.query);
+              if (productResponse && productResponse.status === "success" && productResponse.product) {
+                const params = this.getQueryParamsURL();
+                const mealId = params.get("mealId");
+                const navParams = { page: "food", code: this.query };
+                if (mealId) {
+                  navParams.mealId = mealId;
+                }
+                this.triggerPageNavigation(navParams);
+                return;
+              }
+            }
+            const searchResponse = await this.api.searchProduct(this.query);
+            const rawProducts = searchResponse.products || [];
+            products = await Promise.all(rawProducts.map(async (p3) => {
+              const cached = await this.db.getCachedProduct(p3.code);
+              return cached || p3;
+            }));
+          } else {
+            products = [];
+          }
+        } else if (this.viewMode === "meals") {
+          let meals = await this.db.getAllMeals();
+          if (this.query) {
+            const lowerQuery = this.query.toLowerCase();
+            meals = meals.filter((m2) => m2.name.toLowerCase().includes(lowerQuery));
+          }
+          products = meals.map((m2) => ({
+            code: m2.id,
+            url: "",
+            product_name: m2.name,
+            isMeal: true,
+            nutriments: {
+              "energy-kcal": m2.foods.reduce((acc, f4) => acc + (f4.product.nutriments?.["energy-kcal"] || 0) * (f4.quantity / 100), 0)
+            }
+          }));
+        }
+        this.searchResult = await Promise.all(products.map(async (product) => {
+          const isFavorite = await this.db.isFavorite(product.code);
+          if (product.isMeal) return { ...product, isFavorite };
+          const normalized = { ...product, isFavorite };
+          if (product.product) {
+            normalized.product_name = product.product.product_name || normalized.product_name;
+            normalized.nutriments = product.product.nutriments || normalized.nutriments;
+            normalized.brands = product.product.brands || normalized.brands;
+          }
+          return normalized;
+        }));
+      } catch (e6) {
+        console.error("Error loading data", e6);
+        this.searchResult = [];
+      } finally {
+        this.loading = false;
+      }
+    }
+    _generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+    async _handleSearchInit(e6) {
+      const { query, isButtonClick } = e6.detail;
+      this.query = query;
+      if (isButtonClick) {
+        this._switchMode("search");
+      } else {
+        this._loadData();
+      }
+    }
+    _handleSearchBlur(e6) {
+      this.query = e6.detail.query;
+      this._loadData();
+    }
+    _handleModeSwitch(e6) {
+      this._switchMode(e6.detail.id);
+    }
+    _switchMode(mode) {
+      this.viewMode = mode;
+      this.groupButtonOptions = this.groupButtonOptions.map((opt) => ({
+        ...opt,
+        active: opt.id === mode
+      }));
+      this._loadData();
+    }
+    async _handleFavoriteClick(e6) {
+      if (e6.detail?.code) {
+        const product = this.searchResult.find((product2) => product2.code === e6.detail.code);
+        if (product) {
+          product.isFavorite = e6.detail.value === "true";
+          this.requestUpdate();
+          if (product.isFavorite) {
+            try {
+              if (!product.isMeal) {
+                const fullProduct = await this.api.getProduct(e6.detail.code);
+                if (fullProduct) {
+                  await this.db.cacheProduct(fullProduct);
+                }
+              }
+              await this.db.addFavorite(e6.detail.code);
+            } catch (err) {
+              console.error("Error adding favorite", err);
+            }
+          } else {
+            await this.db.removeFavorite(e6.detail.code);
+          }
+        }
+      }
+    }
+    _handleElementClick(e6) {
+      if (e6.detail?.code) {
+        if (this.viewMode === "meals" || this.searchResult.find((p3) => p3.code === e6.detail.code)?.isMeal) {
+          this.triggerPageNavigation({ page: "meal", mealId: e6.detail.code });
+        } else {
+          const params = this.getQueryParamsURL();
+          const mealId = params.get("mealId");
+          const navParams = { page: "food", code: e6.detail.code };
+          if (mealId) {
+            navParams.mealId = mealId;
+          }
+          this.triggerPageNavigation(navParams);
+        }
+      }
+    }
+    render() {
+      return b2`
+      <div class="page-container">
+        <h1>${this.mealId ? this.translations.addFood : this.translations.searchProduct}</h1>
+        <div class="search-container">
+          <component-search-input 
+            placeholder="${this.translations.searchProductplacholder}" 
+            search-button-text="${this.translations.search}" 
+            @search-init="${this._handleSearchInit}"
+            @search-blur="${this._handleSearchBlur}"
+          ></component-search-input>
+          <button class="scan-btn" @click="${() => this.triggerPageNavigation({ page: "scanner" })}">
+            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <title>ionicons-v5-d</title>
+              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="group-button-wrapper">
+             <component-group-button
+                .options="${this.groupButtonOptions}"
+                @group-button-click="${this._handleModeSwitch}"
+             ></component-group-button>
+        </div>
+
+        ${this.viewMode === "meals" ? b2`
+          <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "meal", mealId: this._generateId() })}">
+              ${this.translations.createNewMeal}
+          </button>
+        ` : b2``}
+
+        <div class="search-result-container">
+        ${this.loading ? b2`
+          <component-spinner class="loading-spinner"></component-spinner>
+        ` : b2`
+          ${this.searchResult.length > 0 ? b2`
+            ${this.viewMode === "search" ? b2`
+              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
+                ${this.translations.createNewProduct}
+              </button>
+            ` : ""}
+            <div>
+              ${this.searchResult.map((product) => b2`
+                <component-search-result 
+                  name="${product.product_name}" 
+                  code="${product.code}" 
+                  brands="${product.brands || ""}"
+                  calories="${product.nutriments && product.nutriments["energy-kcal"] ? product.nutriments["energy-kcal"] : -1}" 
+                  favorite="${product.isFavorite}"
+                  @favorite-click="${this._handleFavoriteClick}"
+                  @element-click="${this._handleElementClick}"
+                ></component-search-result>
+              `)}
+            </div>
+          ` : ""}
+          ${this.searchResult.length === 0 && this.query.length > 0 ? b2`
+            <p>${this.translations.noResultsFound}</p>
+            ${this.viewMode === "search" ? b2`
+              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
+                ${this.translations.createNewProduct}
+              </button>
+            ` : ""}
+
+          ` : ""}
+        `}
+        </div>
+      </div>
+    `;
+    }
+  };
+  PageSearch.styles = [
+    Page.styles,
+    i`
+      :host {
+        display: block;
+        padding: 20px;
+        font-family: sans-serif;
+        color: var(--text-color);
+      }
+      .page-container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .search-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 20px;
+      }
+      .group-button-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .search-container component-search-input{
+        flex: 1;
+      }
+      .btn-create {
+        margin-bottom: 16px;
+      }
+      button.scan-btn {
+        padding: 0;
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        padding:8px;
+        cursor: pointer;
+        background-color: var(--group-button-active-bg, var(--palette-green));
+        color: var(--group-button-active-text, #fff);
+        border: none;
+        border-radius: 50%;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+        margin-left: 10px;
+      }
+      button.scan-btn:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+      button.scan-btn:active {
+        transform: scale(0.95);
+        opacity: 0.9;
+      }
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .search-result-container {
+        min-height: calc(100vh - 450px);
+      }
+      h1 {
+        text-align: center;
+      }
+    `
+  ];
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "searchResult", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "loading", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "mealId", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "query", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "viewMode", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "groupButtonOptions", 2);
+  PageSearch = __decorateClass([
+    api({ searchProduct, getProduct })
+  ], PageSearch);
+
+  // src/components/componentSearchInput/componentSearchInput.ts
+  var ComponentSearchInput = class extends i4 {
+    constructor() {
+      super(...arguments);
+      this.value = "";
+      this.placeholder = "";
+      this.previousValue = "";
+    }
+    static {
+      this.styles = i`
+    :host {
+      display: block;
+      padding: 1rem;
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--input-border, var(--palette-grey));
+      border-radius: 25px;
+      padding: 5px 5px 5px 20px;
+      background: var(--card-background, white);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .input-container:focus-within {
+      border-color: var(--palette-purple);
+      box-shadow: 0 0 5px rgba(162, 133, 187, 0.3);
+    }
+    input {
+      font-size: 1rem;
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--input-text, var(--palette-black));
+      padding: 5px 0;
+    }
+    input::placeholder {
+      color: var(--input-placeholder, #757575);
+    }
+    button {
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background-color: var(--group-button-active-bg, var(--palette-green));
+      color: var(--group-button-active-text, #fff);
+      border: none;
+      border-radius: 50%;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      margin-left: 10px;
+    }
+    button:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+  `;
+    }
+    render() {
+      return b2`
+      <div class="input-container">
+        <input 
+          type="text" 
+          .value="${this.value}" 
+          @input="${this._handleInput}" 
+          @blur="${this._handleBlur}" 
+          @keydown="${this._handleKeyDown}"
+          placeholder="${this.placeholder}"
+          aria-label="Search"
+        />
+        <button @click="${this._handleSearchClick}" aria-label="Search button">🔎</button>
+      </div>
+    `;
+    }
+    _handleInput(e6) {
+      const target = e6.target;
+      this.value = target.value;
+    }
+    _handleBlur() {
+      this.dispatchEvent(new CustomEvent("search-blur", {
+        detail: { query: this.value },
+        bubbles: true,
+        composed: true
+      }));
+    }
+    _handleSearchClick() {
+      this.dispatchEvent(new CustomEvent("search-init", {
+        detail: { query: this.value, isButtonClick: true },
+        bubbles: true,
+        composed: true
+      }));
+    }
+    _handleKeyDown(e6) {
+      if (e6.key === "Enter") {
+        this.dispatchEvent(new CustomEvent("search-init", {
+          detail: { query: this.value, isButtonClick: false },
+          bubbles: true,
+          composed: true
+        }));
+      }
+    }
+  };
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchInput.prototype, "value", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchInput.prototype, "placeholder", 2);
+  __decorateClass([
+    r5()
+  ], ComponentSearchInput.prototype, "previousValue", 2);
+
+  // src/components/componentSearchInput/index.ts
+  register("component-search-input", ComponentSearchInput);
+
+  // src/components/componentSearchResult/componentSearchResult.ts
+  var ComponentSearchResult = class extends i4 {
+    constructor() {
+      super(...arguments);
+      this.name = "";
+      this.code = "";
+      this.brands = "";
+      this.calories = "";
+      this.quantity = "";
+      this.removable = false;
+      this.favoriteState = false;
+    }
+    set favorite(favorite) {
+      this.favoriteState = favorite === "true";
+      this.requestUpdate();
+    }
+    static {
+      this.styles = i`
+    :host {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .result-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-background-color, #fff);
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
+      margin-bottom: 8px;
+    }
+
+    .icon-section {
+      background: var(--icon-section-color, #fff);
+      /* padding: 14px 10px; */
+      width: 48px;
+      height: 48px;
+      border: solid 1px var(--card-border-color);
+      border-radius: 8px;
+      flex: 0 0 auto;
+      margin-right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .name-section {
+      flex: 1 1 auto;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--card-text);
+      cursor: pointer;
+    }
+
+    .brand-section {
+      font-size: 0.8rem;
+      color: var(--input-placeholder);
+      margin-top: 2px;
+    }
+
+    .quantity-section {
+      font-size: 0.8rem;
+      color: var(--input-placeholder);
+      margin-top: 4px;
+    }
+
+    .calories-section {
+      font-size: .87rem;
+      font-weight: 500;
+      color: var(--input-placeholder);
+    }
+
+    .favorite-section {
+      flex: 0 0 auto;
+      margin-left: 16px;
+      cursor: pointer;
+    }
+
+    .favorite-icon {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: #666;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    .favorite-icon.is-favorite {
+      fill: var(--favorite-color, #ffd700);
+      stroke: var(--favorite-color, #ffd700);
+    }
+  `;
+    }
+    render() {
+      return b2`
+      <div class="result-card">
+        <div class="icon-section" @click="${this._handleElementClick}">
+          <component-emoji text="${this.name}" width="28px" height="28px"></component-emoji>
+        </div>
+        <div class="name-section" @click="${this._handleElementClick}">
+          <div>${this.name}</div>
+          ${this.brands ? b2`<div class="brand-section">${this.brands}</div>` : ""}
+          ${this.quantity ? b2`<div class="quantity-section">${this.quantity}</div>` : ""}
+        </div>
+        ${this.calories && Number(this.calories) > 0 ? b2`
+          <div class="calories-section">
+            ${Math.trunc(Number(this.calories))} Kcal
+          </div>
+        ` : ""}
+        ${this.removable ? b2`
+           <div class="favorite-section" @click="${this._handleRemoveClick}">
+              ${this._renderTrashIcon()}
+           </div>
+        ` : b2`
+           <div class="favorite-section" @click="${this._handleFavoriteClick}">
+              ${this._renderFavoriteIcon()}
+           </div>
+        `}
+      </div>
+    `;
+    }
+    _renderTrashIcon() {
+      return b2`
+      <svg
+        class="favorite-icon"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        style="stroke: var(--palette-grey);"
+      >
+        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      </svg>
+    `;
+    }
+    _renderFavoriteIcon() {
+      return b2`
+      <svg
+        class="favorite-icon ${this.favoriteState ? "is-favorite" : ""}"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    `;
+    }
+    _handleElementClick() {
+      this.dispatchEvent(new CustomEvent("element-click", {
+        detail: { code: this.code },
+        bubbles: true,
+        composed: true
+      }));
+    }
+    _handleFavoriteClick() {
+      this.dispatchEvent(new CustomEvent("favorite-click", {
+        detail: { code: this.code, value: this.favoriteState ? "false" : "true" },
+        bubbles: true,
+        composed: true
+      }));
+    }
+    _handleRemoveClick(e6) {
+      e6.stopPropagation();
+      this.dispatchEvent(new CustomEvent("remove-click", {
+        detail: { code: this.code },
+        bubbles: true,
+        composed: true
+      }));
+    }
+  };
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "name", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "code", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "brands", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "calories", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "quantity", 2);
+  __decorateClass([
+    n4({ type: Boolean })
+  ], ComponentSearchResult.prototype, "removable", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentSearchResult.prototype, "favorite", 1);
+  __decorateClass([
+    r5()
+  ], ComponentSearchResult.prototype, "favoriteState", 2);
+
   // src/components/componentSearchResult/index.ts
   register("component-search-result", ComponentSearchResult);
 
@@ -37105,7 +37134,7 @@ body {
       .emoji-container {
         border: 1px solid var(--card-border);
         background: var(--card-background, #fff);
-        padding: 20px 10px;
+        padding: 20px;
         border-radius: 8px;
         display: flex;
         justify-content: center;
