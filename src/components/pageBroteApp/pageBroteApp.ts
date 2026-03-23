@@ -24,14 +24,14 @@ export default class PageBroteApp extends Page {
         left: 50%;
         transform: translateX(-50%);
         z-index: 1000;
-        padding: 0 0 1.6rem 0;
+        padding: 0 0 2rem 0;
         display: flex;
         justify-content: center;
         width: fit-content;
       }
       .app-container {
         padding-top: env(safe-area-inset-top);
-        padding-bottom: 60px; 
+        padding-bottom: 80px; 
         touch-action: pan-y;
       }
     `
@@ -39,9 +39,9 @@ export default class PageBroteApp extends Page {
 
   @state() page: string = 'home';
   @state() groupButtonOptions: GroupButtonOption[] = [
-    { text: '🏠', id: 'home', active: true },
-    { text: '🔍', id: 'search', active: false },
-    { text: '👤', id: 'user', active: false },
+    { text: 'home', id: 'home', active: true, emoji: true },
+    { text: 'search', id: 'search', active: false, emoji: true },
+    { text: 'user', id: 'user', active: false, emoji: true },
   ];
 
   createRenderRoot() {
@@ -250,6 +250,7 @@ export default class PageBroteApp extends Page {
     <div class="group-button-container">
       <component-group-button 
         .options="${this.groupButtonOptions}" 
+        size="l"
         @group-button-click="${this.handleGroupButtonClick}">
       </component-group-button>
     </div>

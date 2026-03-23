@@ -1,5 +1,11 @@
 # brote-app
 
+## 0.0.15
+
+### Patch Changes
+
+- Implementing new UI for group button
+
 ## 0.0.14
 
 ### Patch Changes

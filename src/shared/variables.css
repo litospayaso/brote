@@ -44,6 +44,8 @@
   --icon-section-color: #f1f1f1;
   --card-background-color: #f1f1f1;
 
+  --selected-group-button-color: #272a33;
+  --unselected-group-button-color: #dbdddc;
 
 }
 
@@ -71,6 +73,10 @@
 
   --card-background-color: #34393f;
   --icon-section-color: #212429;
+
+  --selected-group-button-color: #a285bb;
+  --unselected-group-button-color: #272c34;
+
 }
 
 body {

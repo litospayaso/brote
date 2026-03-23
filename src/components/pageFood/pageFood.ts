@@ -29,7 +29,7 @@ export default class PageFood extends Page<{ getProduct: typeof getProduct }> {
       .emoji-container {
         border: 1px solid var(--card-border);
         background: var(--card-background, #fff);
-        padding: 20px 10px;
+        padding: 20px;
         border-radius: 8px;
         display: flex;
         justify-content: center;

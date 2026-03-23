@@ -5,6 +5,7 @@ export interface GroupButtonOption {
   text: string;
   id: string;
   active: boolean;
+  emoji?: boolean;
 }
 
 export class ComponentGroupButton extends LitElement {
@@ -13,6 +14,8 @@ export class ComponentGroupButton extends LitElement {
   }
 
   @state() optionsState: GroupButtonOption[] = [];
+
+  @property({ type: String }) size: 'xs' | 's' | 'm' | 'l' | 'xl' = 'xs';
 
   static styles = css`
     :host {
@@ -23,11 +26,10 @@ export class ComponentGroupButton extends LitElement {
     .group-button-container {
       display: flex;
       flex-direction: row;
-      border: 1px solid var(--input-border, var(--palette-grey));
-      border-radius: 20px;
+      border-radius: 40px;
       overflow: hidden;
       width: fit-content;
-      background-color: var(--card-background, #fff);
+      background-color: var(--unselected-group-button-color, #fff);
     }
 
     .group-button {
@@ -39,33 +41,54 @@ export class ComponentGroupButton extends LitElement {
       transition: background-color 0.3s ease, color 0.3s ease;
       color: var(--input-text, #000);
       flex: 1;
-      border-right: 1px solid var(--input-border, var(--palette-grey));
+      border-radius: 40px;
     }
 
     .group-button:last-child {
       border-right: none;
     }
 
-    .group-button:hover {
-      background-color: var(--group-button-hover-bg, rgba(0, 0, 0, 0.05));
+    .group-button.active {
+      background-color: var(--selected-group-button-color, var(--palette-green));
+      color: var(--group-button-active-text, #fff);
     }
 
-    .group-button.active {
-      background-color: var(--group-button-active-bg, var(--palette-green));
-      color: var(--group-button-active-text, #fff);
+    .size-xs .group-button {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+    }
+
+    .size-s .group-button {
+      padding: 10px 20px;
+      font-size: 1rem;
+    }
+
+    .size-m .group-button {
+      padding: 12px 24px;
+      font-size: 1.125rem;
+    }
+
+    .size-l .group-button {
+      padding: 14px 28px;
+      font-size: 1.25rem;
+    }
+
+    .size-xl .group-button {
+      padding: 16px 32px;
+      font-size: 1.375rem;
     }
   `;
 
   render() {
     return html`
-      <div class="group-button-container" role="group">
+      <div class="group-button-container size-${this.size}" role="group">
         ${this.optionsState.map(option => html`
           <button
             class="group-button ${option.active ? 'active' : ''}"
             @click="${() => this._handleClick(option.id)}"
             type="button"
           >
-            ${option.text}
+            ${option.emoji ? html`<component-emoji text="${option.text}"></component-emoji>` : option.text}
           </button>
         `)}
       </div>

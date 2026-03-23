@@ -1,5 +1,6 @@
 import path from 'path';
 import process from 'process';
+import fs from 'fs';
 
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
@@ -32,6 +33,31 @@ export default {
       js: true,
       tsconfig: path.join(process.cwd(), 'tsconfig.json'),
     }),
+    {
+      name: 'raw-css-loader',
+      transform(context) {
+        if (context.url.endsWith('.css?raw')) {
+          return {
+            type: 'js',
+          };
+        }
+      },
+      resolveImport({ source }) {
+        if (source.endsWith('.css?raw')) {
+          return source;
+        }
+      },
+      async serve(context) {
+        if (context.url.endsWith('.css?raw')) {
+          const filePath = path.join(process.cwd(), context.url.split('?')[0]);
+          const content = await fs.promises.readFile(filePath, 'utf-8');
+          return {
+            body: `export default ${JSON.stringify(content)};`,
+            type: 'js',
+          };
+        }
+      },
+    },
   ],
   nodeResolve: true,
   testFramework: {
