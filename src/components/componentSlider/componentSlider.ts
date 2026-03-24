@@ -1,6 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { variableStyles } from '../../shared/functions';
+import '../componentEmoji/componentEmoji';
 
 @customElement('component-slider')
 export default class ComponentSlider extends LitElement {
@@ -123,6 +124,7 @@ export default class ComponentSlider extends LitElement {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
   @property({ type: Number }) value = 50;
+  @property({ type: Boolean }) emoji = false;
 
   @state() private isDragging = false;
   @state() private tooltipPosition = 0;
@@ -196,8 +198,8 @@ export default class ComponentSlider extends LitElement {
         />
         ${this.minTag || this.maxTag ? html`
           <div class="labels">
-            <span>${this.minTag}</span>
-            <span>${this.maxTag}</span>
+            <span>${this.emoji ? html`<component-emoji text="${this.minTag}" size="m"></component-emoji>` : this.minTag}</span>
+            <span>${this.emoji ? html`<component-emoji text="${this.maxTag}" size="m"></component-emoji>` : this.maxTag}</span>
           </div>
         ` : ''}
       </div>

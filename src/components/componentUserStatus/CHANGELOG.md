@@ -1,5 +1,11 @@
 # component-user-status
 
+## 0.0.6
+
+### Patch Changes
+
+- Updating ui for icons, home page, search input and cards in user settings page
+
 ## 0.0.5
 
 ### Patch Changes

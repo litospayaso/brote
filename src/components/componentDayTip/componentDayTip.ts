@@ -62,7 +62,8 @@ export default class ComponentDayTip extends LitElement {
       "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno.",
       "Consume fruta y verdura todos los días, comprala en la frutería de tu barrio",
       "Haz deporte varios días a la semana para estar fuerte. Apoya a al box / gimnasio de tu barrio",
-      "Si tomas suplementación en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles"
+      "Si tomas suplementación en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles",
+      "Tu progreso no se mide bajo un único factor, tu progreso es visible de muchas cosas (ser capaz de mantener los hábitos, sentirte más saludable, tener más energía, tener más disciplina...) medirlo sólo a través de la evolución de tu peso es un error y no refleja de manera real el trabajo que estás haciendo."
     ],
     en: [
       "Your diet must take into account your context, it must be realistic and consider your conditions.",

@@ -49,20 +49,21 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
         font-size: 1.2rem;
         padding:8px;
         cursor: pointer;
-        background-color: var(--group-button-active-bg, var(--palette-green));
-        color: var(--group-button-active-text, #fff);
+        background-color: var(--card-background-color, var(--palette-green));
+        color: var(--text-color);
+        box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
         border: none;
         border-radius: 50%;
         transition: transform 0.2s ease, background-color 0.3s ease;
         margin-left: 10px;
       }
       button.scan-btn:hover {
-        transform: scale(1.05);
-        opacity: 0.9;
+        background: var(--selected-group-button-color);
+        color: var(--group-button-active-text, #fff);
       }
       button.scan-btn:active {
-        transform: scale(0.95);
-        opacity: 0.9;
+        background: var(--selected-group-button-color);
+        color: var(--group-button-active-text, #fff);
       }
       .loading-spinner {
         display: flex;
@@ -369,15 +370,15 @@ export default class PageSearch extends Page<{ searchProduct: typeof searchProdu
             @search-blur="${this._handleSearchBlur}"
           ></component-search-input>
           <button class="scan-btn" @click="${() => this.triggerPageNavigation({ page: 'scanner' })}">
-            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="color:inherit">
               <title>ionicons-v5-d</title>
-              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
             </svg>
           </button>
         </div>

@@ -50,13 +50,6 @@ describe('SearchInput Component Spec:', () => {
     expect(searchInput.placeholder).to.equal('');
   });
 
-  it('should render input and button', () => {
-    const input = shadow.querySelector('input');
-    const button = shadow.querySelector('button');
-    expect(input).to.exist;
-    expect(button).to.exist;
-  });
-
   it('should reflect properties to attributes/DOM', (done) => {
     element.setAttribute('value', 'Test Value');
     element.setAttribute('placeholder', 'Search here...');
@@ -88,20 +81,6 @@ describe('SearchInput Component Spec:', () => {
       expect(searchBlurEvent?.detail.query).to.equal('Search Term');
       done();
     });
-  });
-
-  it('should dispatch search-init event on button click if value changed', (done) => {
-    const input = shadow.querySelector('input')!;
-    const button = shadow.querySelector('button')!;
-    input.value = 'Button Search';
-    input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
-
-    button.click();
-    defer(() => {
-      expect(searchInitEvent?.detail.query).to.equal('Button Search');
-      done();
-    });
-
   });
 
   it('should not dispatch search-init if value has not changed', (done) => {

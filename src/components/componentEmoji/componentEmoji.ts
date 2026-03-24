@@ -372,10 +372,12 @@ export class ComponentEmoji extends LitElement {
 
     const allEmojis = [...emojiList, ...utilityEmojiList];
     for (const item of allEmojis) {
-      if (item.keywords.some(keyword =>
-        keyword.toLowerCase() === normalizedText ||
-        normalizedText.includes(keyword.toLowerCase())
-      )) {
+      if (item.keywords.some(keyword => keyword.toLowerCase() === normalizedText)) {
+        return item.emoji;
+      }
+    }
+    for (const item of allEmojis) {
+      if (item.keywords.some(keyword => normalizedText.includes(keyword.toLowerCase()))) {
         return item.emoji;
       }
     }

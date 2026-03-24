@@ -177,6 +177,7 @@ export default class PageFood extends Page<{ getProduct: typeof getProduct }> {
         background: none;
         border: none;
         cursor: pointer;
+        color: var(--card-text, #333);
         font-size: 1.5rem;
         padding: 0 10px;
         position: absolute;
@@ -557,7 +558,11 @@ export default class PageFood extends Page<{ getProduct: typeof getProduct }> {
         <div class="calculator">
           ${!this.mealId ? html`
             <button class="edit-btn" @click="${this._toggleEditMode}">
-              ${this.isEditing ? '❌' : '✏️'}
+              ${this.isEditing ? html`
+                  <component-emoji text="buttoncancel" size="l"></componentEmoji>
+                ` : html`
+                  <component-emoji text="pencil" size="l"></componentEmoji>
+                  `}
             </button>
             ` : ''}
             <div class="calculator-top">

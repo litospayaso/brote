@@ -26,12 +26,11 @@ export default class Page<api = {}> extends LitElement {
     variableStyles,
     css`
     .card {
-      background: var(--card-background);
+      background: var(--card-background-color);
       color: var(--card-text);
-      border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
       margin-bottom: 1rem;
     }
     h2 {
@@ -55,11 +54,11 @@ export default class Page<api = {}> extends LitElement {
     }
     input, select, textarea {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
       background-color: var(--input-background);
       color: var(--input-text);
       border: 1px solid var(--input-border, #a19fa2);
-      border-radius: 4px;
       font-size: 1rem;
       box-sizing: border-box;
     }
@@ -83,6 +82,7 @@ export default class Page<api = {}> extends LitElement {
       background-color: var(--input-background, transparent);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      padding: 0.5rem;
     }
     input[type="checkbox"]:checked {
       background-color: var(--group-button-active-bg, #4fb9ad);
@@ -115,6 +115,7 @@ export default class Page<api = {}> extends LitElement {
       background-color: var(--input-background, transparent);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      padding: 0.5rem;
     }
     input[type="radio"]:checked {
       border-color: var(--group-button-active-bg, #4fb9ad);
@@ -386,10 +387,10 @@ export default class Page<api = {}> extends LitElement {
     const theme = localStorage.getItem('theme') || 'light';
     if (theme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.style.background = '#191c25';
+      document.documentElement.style.background = '#212429';
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.style.background = 'white';
+      document.documentElement.style.background = '#ebebeb';
     }
     window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme } }));
   }

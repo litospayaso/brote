@@ -20,7 +20,7 @@ export class ComponentSearchInput extends LitElement {
     .input-container {
       display: flex;
       align-items: center;
-      border: 2px solid var(--input-border, var(--palette-grey));
+      border: 1px solid var(--input-border, var(--palette-grey));
       border-radius: 25px;
       padding: 5px 5px 5px 20px;
       background: var(--card-background, white);
@@ -79,7 +79,6 @@ export class ComponentSearchInput extends LitElement {
           placeholder="${this.placeholder}"
           aria-label="Search"
         />
-        <button @click="${this._handleSearchClick}" aria-label="Search button">🔎</button>
       </div>
     `;
   }

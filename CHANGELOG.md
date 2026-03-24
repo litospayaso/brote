@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.37
+
+### Patch Changes
+
+- Updating ui for icons, home page, search input and cards in user settings page
+
 ## 1.0.36
 
 ### Patch Changes

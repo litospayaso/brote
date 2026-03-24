@@ -55,7 +55,7 @@ export default class PageHome extends Page {
         z-index: 1;
       }
       .progress-container{
-        margin: 16px 0;
+        margin: 24px 0 16px 0;
       }
       .summary-cards {
         display: grid;

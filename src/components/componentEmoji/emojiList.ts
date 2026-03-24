@@ -164,7 +164,7 @@ export const utilityEmojiList: EmojiItem[] = [
   { emoji: '👣', keywords: ['footprints'] },
   { emoji: '🏠', keywords: ['home'] },
   { emoji: '🏃', keywords: ['running'] },
-  { emoji: '❌', keywords: ['cancel'] },
+  { emoji: '❌', keywords: ['buttoncancel'] },
   { emoji: '⚡', keywords: ['lightning'] },
   { emoji: '⚠️', keywords: ['warning'] },
   { emoji: '⚖️', keywords: ['balance'] },

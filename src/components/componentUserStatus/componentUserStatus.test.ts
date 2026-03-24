@@ -88,7 +88,6 @@ describe('ComponentUserStatus Spec:', () => {
 
     const style = window.getComputedStyle(card!);
     expect(style.borderRadius).to.equal('8px');
-    expect(style.borderStyle).to.equal('solid');
   });
 
   it('should render all five activity items', async () => {

@@ -35,15 +35,14 @@ export default class ComponentUserStatus extends LitElement {
     }
 
     .status-card {
-      background: var(--card-background, #fff);
-      border: 1px solid var(--card-border, #4fb9ad);
+      background: var(--card-background-color, #fff);
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
       border-radius: 8px;
       padding: 0 10px;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       height: 35px;
       box-sizing: border-box;
       overflow: visible;
@@ -198,27 +197,27 @@ export default class ComponentUserStatus extends LitElement {
       <div class="status-card" @click="${this.openModal}">
         ${this.thoughts ? html`<div class="thoughts-icon" title="${this.thoughts}">📝</div>` : ''}
         <div class="status-item" title="${this.translationsTexts['basalCalories']}">
-          <span class="emoji">🔥</span>
+          <span class="emoji"><component-emoji text="fire" size="s"></component-emoji></span>
           ${this.basalCalories > 0 ? html`<span class="value">${this.basalCalories} ${this.translationsTexts['kcal']}</span>` : ''}
         </div>
         <div class="status-item" title="${this.translationsTexts['exerciseCalories']}">
-          <span class="emoji">💪</span>
+          <span class="emoji"><component-emoji text="strong" size="s"></component-emoji></span>
           ${this.exerciseCalories > 0 ? html`<span class="value">${this.exerciseCalories} ${this.translationsTexts['kcal']}</span>` : ''}
         </div>
         <div class="status-item" title="${this.translationsTexts['stepsTaken']}">
-          <span class="emoji">👣</span>
+          <span class="emoji"><component-emoji text="footprints" size="s"></component-emoji></span>
           ${this.steps > 0 ? html`<span class="value">${this.steps} ${this.translationsTexts['stepsSuffix']}</span>` : ''}
         </div>
         <div class="status-item" title="${this.translationsTexts['sleepHours']}">
-          <span class="emoji">😴</span>
+          <span class="emoji"><component-emoji text="sleeping" size="s"></component-emoji></span>
           ${this.sleepHours > 0 ? html`<span class="value">${this.formatTime(this.sleepHours)} ${this.translationsTexts['hoursSuffix']}</span>` : ''}
         </div>
         <div class="status-item" title="${this.translationsTexts['energyLevel']}">
-          <span class="emoji">⚡</span>
+          <span class="emoji"><component-emoji text="lightning" size="s"></component-emoji></span>
           ${this.energyLevel > 0 ? html`<span class="value">${this.energyLevel}/10</span>` : ''}
         </div>
         <div class="status-item" title="${this.translationsTexts['hungerLevel']}">
-          <span class="emoji">🍕</span>
+          <span class="emoji"><component-emoji text="pizza" size="s"></component-emoji></span>
           ${this.hungerLevel > 0 ? html`<span class="value">${this.hungerLevel}/10</span>` : ''}
         </div>
       </div>
@@ -234,22 +233,22 @@ export default class ComponentUserStatus extends LitElement {
             <div class="modal-content">
               <div class="form-row">
                 <div class="form-group">
-                  <label>🔥 ${this.translationsTexts['basalCalories']} (${this._basalCalories})</label>
+                  <label><component-emoji text="fire" size="s"></component-emoji>${this.translationsTexts['basalCalories']} (${this._basalCalories})</label>
                   <input type="number" .value="${String(this._basalCalories)}" @input="${(e: Event) => this.handleInputChange(e, 'basalCalories')}" />
                 </div>
                 <div class="form-group">
-                  <label>💪 ${this.translationsTexts['exerciseCalories']} (${this._exerciseCalories})</label>
+                  <label><component-emoji text="strong" size="s"></component-emoji> ${this.translationsTexts['exerciseCalories']} (${this._exerciseCalories})</label>
                   <input type="number" .value="${String(this._exerciseCalories)}" @input="${(e: Event) => this.handleInputChange(e, 'exerciseCalories')}" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label>👣 ${this.translationsTexts['stepsTaken']} (${this._steps})</label>
+                <label><component-emoji text="footprints" size="s"></component-emoji> ${this.translationsTexts['stepsTaken']} (${this._steps})</label>
                 <input type="number" .value="${String(this._steps)}" @input="${(e: Event) => this.handleInputChange(e, 'steps')}" />
               </div>
 
               <div class="form-group">
-                <label>😴 ${this.translationsTexts['sleepHours']} (${this.formatTime(this._sleepHours)})</label>
+                <label><component-emoji text="sleeping" size="s"></component-emoji> ${this.translationsTexts['sleepHours']} (${this.formatTime(this._sleepHours)})</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute('data-theme') || 'light'}"
@@ -266,7 +265,7 @@ export default class ComponentUserStatus extends LitElement {
               </div>
 
               <div class="form-group">
-                <label>⚡ ${this.translationsTexts['energyLevel']} (${this._energyLevel}/10)</label>
+                <label><component-emoji text="lightning" size="s"></component-emoji> ${this.translationsTexts['energyLevel']} (${this._energyLevel}/10)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute('data-theme') || 'light'}"
@@ -275,14 +274,15 @@ export default class ComponentUserStatus extends LitElement {
                     .steps="${1}"
                     .value="${this._energyLevel}"
                     @value-changed="${(e: CustomEvent) => this._energyLevel = e.detail.value}"
-                    minTag="🪫"
-                    maxTag="⚡"
+                    emoji="true"
+                    minTag="battery"
+                    maxTag="lightning"
                   ></component-slider>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>🍕 ${this.translationsTexts['hungerLevel']} (${this._hungerLevel}/10)</label>
+                <label><component-emoji text="pizza" size="s"></component-emoji> ${this.translationsTexts['hungerLevel']} (${this._hungerLevel}/10)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute('data-theme') || 'light'}"
@@ -291,8 +291,9 @@ export default class ComponentUserStatus extends LitElement {
                     .steps="${1}"
                     .value="${this._hungerLevel}"
                     @value-changed="${(e: CustomEvent) => this._hungerLevel = e.detail.value}"
-                    minTag="😫"
-                    maxTag="🤤"
+                    emoji="true"
+                    minTag="weary"
+                    maxTag="drooling"
                   ></component-slider>
                 </div>
               </div>
