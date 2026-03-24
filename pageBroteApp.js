@@ -33336,12 +33336,11 @@ body {
         variableStyles,
         i`
     .card {
-      background: var(--card-background);
+      background: var(--card-background-color);
       color: var(--card-text);
-      border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
       margin-bottom: 1rem;
     }
     h2 {
@@ -33365,11 +33364,11 @@ body {
     }
     input, select, textarea {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
       background-color: var(--input-background);
       color: var(--input-text);
       border: 1px solid var(--input-border, #a19fa2);
-      border-radius: 4px;
       font-size: 1rem;
       box-sizing: border-box;
     }
@@ -33393,6 +33392,7 @@ body {
       background-color: var(--input-background, transparent);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      padding: 0.5rem;
     }
     input[type="checkbox"]:checked {
       background-color: var(--group-button-active-bg, #4fb9ad);
@@ -33425,6 +33425,7 @@ body {
       background-color: var(--input-background, transparent);
       transition: all 0.2s ease;
       flex-shrink: 0;
+      padding: 0.5rem;
     }
     input[type="radio"]:checked {
       border-color: var(--group-button-active-bg, #4fb9ad);
@@ -33693,10 +33694,10 @@ body {
       const theme = localStorage.getItem("theme") || "light";
       if (theme === "dark") {
         document.documentElement.setAttribute("data-theme", "dark");
-        document.documentElement.style.background = "#191c25";
+        document.documentElement.style.background = "#212429";
       } else {
         document.documentElement.setAttribute("data-theme", "light");
-        document.documentElement.style.background = "white";
+        document.documentElement.style.background = "#ebebeb";
       }
       window.dispatchEvent(new CustomEvent("theme-changed", { detail: { theme } }));
     }
@@ -33894,7 +33895,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.36",
+    version: "1.0.37",
     type: "module",
     scripts: {
       dev: "vite",
@@ -34461,7 +34462,7 @@ body {
     { emoji: "\u{1F463}", keywords: ["footprints"] },
     { emoji: "\u{1F3E0}", keywords: ["home"] },
     { emoji: "\u{1F3C3}", keywords: ["running"] },
-    { emoji: "\u274C", keywords: ["cancel"] },
+    { emoji: "\u274C", keywords: ["buttoncancel"] },
     { emoji: "\u26A1", keywords: ["lightning"] },
     { emoji: "\u26A0\uFE0F", keywords: ["warning"] },
     { emoji: "\u2696\uFE0F", keywords: ["balance"] },
@@ -35451,9 +35452,12 @@ body {
       if (!normalizedText) return "\u{1FAD9}";
       const allEmojis = [...emojiList, ...utilityEmojiList];
       for (const item of allEmojis) {
-        if (item.keywords.some(
-          (keyword) => keyword.toLowerCase() === normalizedText || normalizedText.includes(keyword.toLowerCase())
-        )) {
+        if (item.keywords.some((keyword) => keyword.toLowerCase() === normalizedText)) {
+          return item.emoji;
+        }
+      }
+      for (const item of allEmojis) {
+        if (item.keywords.some((keyword) => normalizedText.includes(keyword.toLowerCase()))) {
           return item.emoji;
         }
       }
@@ -36202,15 +36206,15 @@ body {
             @search-blur="${this._handleSearchBlur}"
           ></component-search-input>
           <button class="scan-btn" @click="${() => this.triggerPageNavigation({ page: "scanner" })}">
-            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <svg width="800px" height="35px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="color:inherit">
               <title>ionicons-v5-d</title>
-              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
-              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:#000000;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <polyline points="400 400.33 448 400 448 112 400 112.33" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <polyline points="112 112 64 112.33 64 400.33 112 400" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="384" y1="192" x2="384" y2="320" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="320" y1="160" x2="320" y2="352" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="256" y1="176" x2="256" y2="336" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="192" y1="160" x2="192" y2="352" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
+              <line x1="128" y1="192" x2="128" y2="320" style="fill:none;stroke:currentColor;stroke-linecap:square;stroke-linejoin:round;stroke-width:32px"/>
             </svg>
           </button>
         </div>
@@ -36308,20 +36312,21 @@ body {
         font-size: 1.2rem;
         padding:8px;
         cursor: pointer;
-        background-color: var(--group-button-active-bg, var(--palette-green));
-        color: var(--group-button-active-text, #fff);
+        background-color: var(--card-background-color, var(--palette-green));
+        color: var(--text-color);
+        box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
         border: none;
         border-radius: 50%;
         transition: transform 0.2s ease, background-color 0.3s ease;
         margin-left: 10px;
       }
       button.scan-btn:hover {
-        transform: scale(1.05);
-        opacity: 0.9;
+        background: var(--selected-group-button-color);
+        color: var(--group-button-active-text, #fff);
       }
       button.scan-btn:active {
-        transform: scale(0.95);
-        opacity: 0.9;
+        background: var(--selected-group-button-color);
+        color: var(--group-button-active-text, #fff);
       }
       .loading-spinner {
         display: flex;
@@ -36375,7 +36380,7 @@ body {
     .input-container {
       display: flex;
       align-items: center;
-      border: 2px solid var(--input-border, var(--palette-grey));
+      border: 1px solid var(--input-border, var(--palette-grey));
       border-radius: 25px;
       padding: 5px 5px 5px 20px;
       background: var(--card-background, white);
@@ -36434,7 +36439,6 @@ body {
           placeholder="${this.placeholder}"
           aria-label="Search"
         />
-        <button @click="${this._handleSearchClick}" aria-label="Search button">🔎</button>
       </div>
     `;
     }
@@ -36999,7 +37003,11 @@ body {
         <div class="calculator">
           ${!this.mealId ? b2`
             <button class="edit-btn" @click="${this._toggleEditMode}">
-              ${this.isEditing ? "\u274C" : "\u270F\uFE0F"}
+              ${this.isEditing ? b2`
+                  <component-emoji text="buttoncancel" size="l"></componentEmoji>
+                ` : b2`
+                  <component-emoji text="pencil" size="l"></componentEmoji>
+                  `}
             </button>
             ` : ""}
             <div class="calculator-top">
@@ -37282,6 +37290,7 @@ body {
         background: none;
         border: none;
         cursor: pointer;
+        color: var(--card-text, #333);
         font-size: 1.5rem;
         padding: 0 10px;
         position: absolute;
@@ -40244,7 +40253,7 @@ ${countMsg}`,
         z-index: 1;
       }
       .progress-container{
-        margin: 16px 0;
+        margin: 24px 0 16px 0;
       }
       .summary-cards {
         display: grid;
@@ -40880,15 +40889,14 @@ ${countMsg}`,
     }
 
     .status-card {
-      background: var(--card-background, #fff);
-      border: 1px solid var(--card-border, #4fb9ad);
+      background: var(--card-background-color, #fff);
+      box-shadow: rgba(0, 0, 0, 0.2) 2px 8px 12px;
       border-radius: 8px;
       padding: 0 10px;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       height: 35px;
       box-sizing: border-box;
       overflow: visible;
@@ -41036,27 +41044,27 @@ ${countMsg}`,
       <div class="status-card" @click="${this.openModal}">
         ${this.thoughts ? b2`<div class="thoughts-icon" title="${this.thoughts}">📝</div>` : ""}
         <div class="status-item" title="${this.translationsTexts["basalCalories"]}">
-          <span class="emoji">🔥</span>
+          <span class="emoji"><component-emoji text="fire" size="s"></component-emoji></span>
           ${this.basalCalories > 0 ? b2`<span class="value">${this.basalCalories} ${this.translationsTexts["kcal"]}</span>` : ""}
         </div>
         <div class="status-item" title="${this.translationsTexts["exerciseCalories"]}">
-          <span class="emoji">💪</span>
+          <span class="emoji"><component-emoji text="strong" size="s"></component-emoji></span>
           ${this.exerciseCalories > 0 ? b2`<span class="value">${this.exerciseCalories} ${this.translationsTexts["kcal"]}</span>` : ""}
         </div>
         <div class="status-item" title="${this.translationsTexts["stepsTaken"]}">
-          <span class="emoji">👣</span>
+          <span class="emoji"><component-emoji text="footprints" size="s"></component-emoji></span>
           ${this.steps > 0 ? b2`<span class="value">${this.steps} ${this.translationsTexts["stepsSuffix"]}</span>` : ""}
         </div>
         <div class="status-item" title="${this.translationsTexts["sleepHours"]}">
-          <span class="emoji">😴</span>
+          <span class="emoji"><component-emoji text="sleeping" size="s"></component-emoji></span>
           ${this.sleepHours > 0 ? b2`<span class="value">${this.formatTime(this.sleepHours)} ${this.translationsTexts["hoursSuffix"]}</span>` : ""}
         </div>
         <div class="status-item" title="${this.translationsTexts["energyLevel"]}">
-          <span class="emoji">⚡</span>
+          <span class="emoji"><component-emoji text="lightning" size="s"></component-emoji></span>
           ${this.energyLevel > 0 ? b2`<span class="value">${this.energyLevel}/10</span>` : ""}
         </div>
         <div class="status-item" title="${this.translationsTexts["hungerLevel"]}">
-          <span class="emoji">🍕</span>
+          <span class="emoji"><component-emoji text="pizza" size="s"></component-emoji></span>
           ${this.hungerLevel > 0 ? b2`<span class="value">${this.hungerLevel}/10</span>` : ""}
         </div>
       </div>
@@ -41072,22 +41080,22 @@ ${countMsg}`,
             <div class="modal-content">
               <div class="form-row">
                 <div class="form-group">
-                  <label>🔥 ${this.translationsTexts["basalCalories"]} (${this._basalCalories})</label>
+                  <label><component-emoji text="fire" size="s"></component-emoji>${this.translationsTexts["basalCalories"]} (${this._basalCalories})</label>
                   <input type="number" .value="${String(this._basalCalories)}" @input="${(e6) => this.handleInputChange(e6, "basalCalories")}" />
                 </div>
                 <div class="form-group">
-                  <label>💪 ${this.translationsTexts["exerciseCalories"]} (${this._exerciseCalories})</label>
+                  <label><component-emoji text="strong" size="s"></component-emoji> ${this.translationsTexts["exerciseCalories"]} (${this._exerciseCalories})</label>
                   <input type="number" .value="${String(this._exerciseCalories)}" @input="${(e6) => this.handleInputChange(e6, "exerciseCalories")}" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label>👣 ${this.translationsTexts["stepsTaken"]} (${this._steps})</label>
+                <label><component-emoji text="footprints" size="s"></component-emoji> ${this.translationsTexts["stepsTaken"]} (${this._steps})</label>
                 <input type="number" .value="${String(this._steps)}" @input="${(e6) => this.handleInputChange(e6, "steps")}" />
               </div>
 
               <div class="form-group">
-                <label>😴 ${this.translationsTexts["sleepHours"]} (${this.formatTime(this._sleepHours)})</label>
+                <label><component-emoji text="sleeping" size="s"></component-emoji> ${this.translationsTexts["sleepHours"]} (${this.formatTime(this._sleepHours)})</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -41104,7 +41112,7 @@ ${countMsg}`,
               </div>
 
               <div class="form-group">
-                <label>⚡ ${this.translationsTexts["energyLevel"]} (${this._energyLevel}/10)</label>
+                <label><component-emoji text="lightning" size="s"></component-emoji> ${this.translationsTexts["energyLevel"]} (${this._energyLevel}/10)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -41113,14 +41121,15 @@ ${countMsg}`,
                     .steps="${1}"
                     .value="${this._energyLevel}"
                     @value-changed="${(e6) => this._energyLevel = e6.detail.value}"
-                    minTag="🪫"
-                    maxTag="⚡"
+                    emoji="true"
+                    minTag="battery"
+                    maxTag="lightning"
                   ></component-slider>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>🍕 ${this.translationsTexts["hungerLevel"]} (${this._hungerLevel}/10)</label>
+                <label><component-emoji text="pizza" size="s"></component-emoji> ${this.translationsTexts["hungerLevel"]} (${this._hungerLevel}/10)</label>
                 <div class="slider-container">
                   <component-slider
                     data-theme="${document.documentElement.getAttribute("data-theme") || "light"}"
@@ -41129,8 +41138,9 @@ ${countMsg}`,
                     .steps="${1}"
                     .value="${this._hungerLevel}"
                     @value-changed="${(e6) => this._hungerLevel = e6.detail.value}"
-                    minTag="😫"
-                    maxTag="🤤"
+                    emoji="true"
+                    minTag="weary"
+                    maxTag="drooling"
                   ></component-slider>
                 </div>
               </div>
@@ -41219,6 +41229,7 @@ ${countMsg}`,
       this.min = 0;
       this.max = 100;
       this.value = 50;
+      this.emoji = false;
       this.isDragging = false;
       this.tooltipPosition = 0;
     }
@@ -41281,8 +41292,8 @@ ${countMsg}`,
         />
         ${this.minTag || this.maxTag ? b2`
           <div class="labels">
-            <span>${this.minTag}</span>
-            <span>${this.maxTag}</span>
+            <span>${this.emoji ? b2`<component-emoji text="${this.minTag}" size="m"></component-emoji>` : this.minTag}</span>
+            <span>${this.emoji ? b2`<component-emoji text="${this.maxTag}" size="m"></component-emoji>` : this.maxTag}</span>
           </div>
         ` : ""}
       </div>
@@ -41422,6 +41433,9 @@ ${countMsg}`,
     n4({ type: Number })
   ], ComponentSlider.prototype, "value", 2);
   __decorateClass([
+    n4({ type: Boolean })
+  ], ComponentSlider.prototype, "emoji", 2);
+  __decorateClass([
     r5()
   ], ComponentSlider.prototype, "isDragging", 2);
   __decorateClass([
@@ -41494,7 +41508,8 @@ ${countMsg}`,
           "Haz comunidad al entrenar usando el gimnasio para tejer lazos y apoyo mutuo, recordando que el entrenamiento no debe aislarte de tu entorno.",
           "Consume fruta y verdura todos los d\xEDas, comprala en la fruter\xEDa de tu barrio",
           "Haz deporte varios d\xEDas a la semana para estar fuerte. Apoya a al box / gimnasio de tu barrio",
-          "Si tomas suplementaci\xF3n en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles"
+          "Si tomas suplementaci\xF3n en tu dieta, revisa si lo necesitas con tu nutricionista y recuerda que compararla en el box/gimnasio de tu barrio es una manera de apoyarles",
+          "Tu progreso no se mide bajo un \xFAnico factor, tu progreso es visible de muchas cosas (ser capaz de mantener los h\xE1bitos, sentirte m\xE1s saludable, tener m\xE1s energ\xEDa, tener m\xE1s disciplina...) medirlo s\xF3lo a trav\xE9s de la evoluci\xF3n de tu peso es un error y no refleja de manera real el trabajo que est\xE1s haciendo."
         ],
         en: [
           "Your diet must take into account your context, it must be realistic and consider your conditions.",
