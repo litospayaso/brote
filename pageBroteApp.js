@@ -33244,6 +33244,7 @@
   --card-background-color: #f1f1f1;
   --selected-group-button-color: #272a33;
   --unselected-group-button-color: #dbdddc;
+  --modal-box-shadow: inset 0 0 10px var(--protein-color);
 }
 [data-theme=dark] {
   --background-color: #212429;
@@ -33266,6 +33267,7 @@
   --icon-section-color: #212429;
   --selected-group-button-color: #a285bb;
   --unselected-group-button-color: #272c34;
+  --modal-box-shadow: inset 0 0 10px white;
 }
 body {
   font-family: "Inter", sans-serif;
@@ -33528,9 +33530,8 @@ body {
       border-radius: 12px;
       max-width: 90%;
       width: 400px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: var(--modal-box-shadow);
       text-align: center;
-      border: 1px solid var(--card-border);
       position: relative;
       max-height: 90vh;
       overflow-y: auto;
@@ -33900,7 +33901,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.39",
+    version: "1.0.40",
     type: "module",
     scripts: {
       dev: "vite",
@@ -37562,414 +37563,6 @@ body {
     web: () => Promise.resolve().then(() => (init_web4(), web_exports3)).then((m2) => new m2.ShareWeb())
   });
 
-  // src/components/componentMaintenanceCalories/componentMaintenanceCalories.ts
-  var ComponentMaintenanceCalories = class extends i4 {
-    constructor() {
-      super(...arguments);
-      this.height = 0;
-      this.weight = 0;
-      this.gender = "";
-      this.age = 30;
-      this.showWarning = true;
-      this._height = 0;
-      this._weight = 0;
-      this._gender = "";
-      this._age = 30;
-      this.activityLevel = 1.2;
-      this.dietType = "balanced";
-      this.proteinRatio = 20;
-      this.carbsRatio = 50;
-      this.fatRatio = 30;
-      this.translationsTexts = {};
-    }
-    set translations(translations2) {
-      if (translations2) {
-        this.translationsTexts = JSON.parse(translations2);
-      }
-    }
-    updated(changedProperties) {
-      if (changedProperties.has("height")) this._height = this.height;
-      if (changedProperties.has("weight")) this._weight = this.weight;
-      if (changedProperties.has("gender")) this._gender = this.gender;
-      if (changedProperties.has("age")) this._age = this.age;
-    }
-    _calculateCalories() {
-      if (!this._height || !this._weight || !this._age || !this._gender) return 0;
-      let bmr = 0;
-      if (this._gender === "male") {
-        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age + 5;
-      } else {
-        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age - 161;
-      }
-      const totalCalories = Math.round(bmr * this.activityLevel);
-      this.dispatchEvent(new CustomEvent("calories-calculated", {
-        detail: {
-          calories: totalCalories,
-          protein: Math.round(totalCalories * (this.proteinRatio / 100) / 4),
-          carbs: Math.round(totalCalories * (this.carbsRatio / 100) / 4),
-          fat: Math.round(totalCalories * (this.fatRatio / 100) / 9)
-        },
-        bubbles: true,
-        composed: true
-      }));
-      return totalCalories;
-    }
-    _onDietTypeChange(e6) {
-      this.dietType = e6.target.value;
-      switch (this.dietType) {
-        case "balanced":
-          this.proteinRatio = 20;
-          this.carbsRatio = 50;
-          this.fatRatio = 30;
-          break;
-        case "lowCarb":
-          this.proteinRatio = 25;
-          this.carbsRatio = 45;
-          this.fatRatio = 30;
-          break;
-        case "lowFat":
-          this.proteinRatio = 15;
-          this.carbsRatio = 65;
-          this.fatRatio = 20;
-          break;
-        case "highProtein":
-          this.proteinRatio = 35;
-          this.carbsRatio = 45;
-          this.fatRatio = 20;
-          break;
-      }
-    }
-    _handleSave() {
-      const calories = this._calculateCalories();
-      this.dispatchEvent(new CustomEvent("save-calories", {
-        detail: {
-          calories,
-          height: this._height,
-          weight: this._weight,
-          gender: this._gender,
-          age: this._age,
-          activityLevel: this.activityLevel,
-          proteinRatio: this.proteinRatio,
-          carbsRatio: this.carbsRatio,
-          fatRatio: this.fatRatio
-        },
-        bubbles: true,
-        composed: true
-      }));
-    }
-    render() {
-      const calories = this._calculateCalories();
-      return b2`
-      <div class="form-container">
-        <div class="header">
-          <h2>${this.translationsTexts["maintenanceCaloriesTitle"] || "Basal Metabolic Rate"}</h2>
-          <div class="subtitle">
-            ${(this.translationsTexts["mifflinStJeorSubtitle"] || "Calculation based on the {link} method").split("{link}").map((part, index, array) => b2`${part}${index === array.length - 1 ? "" : b2`<a href="https://en.wikipedia.org/wiki/Basal_metabolic_rate#Mifflin-St_Jeor_equation" target="_blank" rel="noopener">Mifflin-St Jeor</a>`}`)}
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>📏 ${this.translationsTexts["height"] || "Height"} (cm)</label>
-            <input type="number" .value="${String(this._height)}" @input="${(e6) => this._height = Number(e6.target.value)}">
-          </div>
-          <div class="form-group">
-            <label>⚖️ ${this.translationsTexts["weight"] || "Weight"} (kg)</label>
-            <input type="number" .value="${String(this._weight)}" @input="${(e6) => this._weight = Number(e6.target.value)}">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>👤 ${this.translationsTexts["gender"] || "Gender"}</label>
-            <select .value="${this._gender}" @change="${(e6) => this._gender = e6.target.value}">
-              <option value="" disabled>${this.translationsTexts["select"] || "Select..."}</option>
-              <option value="male">${this.translationsTexts["male"] || "Male"}</option>
-              <option value="female">${this.translationsTexts["female"] || "Female"}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>🎂 ${this.translationsTexts["age"] || "Age"}</label>
-            <input type="number" .value="${String(this._age)}" @input="${(e6) => this._age = Number(e6.target.value)}">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>🏃 ${this.translationsTexts["activityLevel"] || "Activity Level"}</label>
-          <select .value="${this.activityLevel}" @change="${(e6) => this.activityLevel = e6.target.value}">
-            <option value="1.2">${this.translationsTexts["sedentary"] || "Sedentary (little or no exercise)"}</option>
-            <option value="1.375">${this.translationsTexts["lightlyActive"] || "Lightly active (light exercise/sports 1-3 days/week)"}</option>
-            <option value="1.55">${this.translationsTexts["moderatelyActive"] || "Moderately active (moderate exercise/sports 3-5 days/week)"}</option>
-            <option value="1.725">${this.translationsTexts["veryActive"] || "Very active (hard exercise/sports 6-7 days a week)"}</option>
-            <option value="1.9">${this.translationsTexts["extraActive"] || "Extra active (very hard exercise/sports & physical job)"}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>🍽️ ${this.translationsTexts["dietType"] || "Diet Type"}</label>
-          <select .value="${this.dietType}" @change="${this._onDietTypeChange}">
-            <option value="balanced">${this.translationsTexts["balanced"] || "Balanced"}</option>
-            <option value="lowCarb">${this.translationsTexts["lowCarb"] || "Low Carb"}</option>
-            <option value="lowFat">${this.translationsTexts["lowFat"] || "Low Fat"}</option>
-            <option value="highProtein">${this.translationsTexts["highProtein"] || "High Protein"}</option>
-          </select>
-        </div>
-
-        ${calories > 0 ? b2`
-          ${this.showWarning ? b2`
-            <div class="warning-message">
-              <span class="warning-icon">⚠️</span>
-              ${this.translationsTexts["metabolicWarning"] || "Important considerations: This metabolic estimation relies on statistical models for the general population and does not account for individual variations in body composition (muscle vs. fat). These calculations should be used as general guidance only. For a precise and safe nutritional approach, we strongly recommend professional medical or dietetic supervision, as self-directed calorie monitoring can be associated with the development of disordered eating patterns."}
-            </div>
-          ` : ""}
-          <div class="result-container">
-            <div class="result-label">${this.translationsTexts["dailyCalories"] || "Maintenance Calories"}</div>
-            <div class="result-value">${calories} ${this.translationsTexts["kcal"] || "kcal"}</div>
-            
-            <div class="macro-display">
-              <div class="macro-item">
-                <span class="macro-label">${this.translationsTexts["protein"] || "Protein"}</span>
-                <span class="macro-value macro-protein">${this.proteinRatio}%</span>
-                <span class="macro-label">${Math.round(calories * (this.proteinRatio / 100) / 4)}g</span>
-              </div>
-              <div class="macro-item">
-                <span class="macro-label">${this.translationsTexts["carbs"] || "Carbs"}</span>
-                <span class="macro-value macro-carbs">${this.carbsRatio}%</span>
-                <span class="macro-label">${Math.round(calories * (this.carbsRatio / 100) / 4)}g</span>
-              </div>
-              <div class="macro-item">
-                <span class="macro-label">${this.translationsTexts["fat"] || "Fat"}</span>
-                <span class="macro-value macro-fat">${this.fatRatio}%</span>
-                <span class="macro-label">${Math.round(calories * (this.fatRatio / 100) / 9)}g</span>
-              </div>
-            </div>
-          </div>
-          <button class="save-button" @click="${this._handleSave}">
-            ${this.translationsTexts["save"] || "Save"}
-          </button>
-        ` : ""}
-      </div>
-    `;
-    }
-  };
-  ComponentMaintenanceCalories.styles = [
-    Page.styles,
-    i`
-    :host {
-      display: block;
-      width: 100%;
-      padding: 16px;
-      box-sizing: border-box;
-    }
-
-    .form-container {
-      background: var(--card-background, #fff);
-      border: 1px solid var(--card-border, #4fb9ad);
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .header {
-      margin-bottom: 4px;
-    }
-
-    .header h2 {
-      margin: 0;
-      font-size: 1.25rem;
-      color: var(--primary-color, #4fb9ad);
-    }
-
-    .subtitle {
-      font-size: 0.85rem;
-      color: var(--text-color-secondary, #666);
-      margin-top: 4px;
-    }
-
-    .subtitle a {
-      color: var(--primary-color, #4fb9ad);
-      text-decoration: underline;
-      font-weight: 500;
-    }
-
-    .save-button {
-      margin-top: 16px;
-      padding: 12px;
-      background-color: var(--group-button-active-bg, var(--palette-green, #4fb9ad));
-      color: var(--group-button-active-text, #fff);
-      border: none;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: opacity 0.3s, transform 0.1s ease;
-      width: 100%;
-      font-size: 1rem;
-    }
-
-    .save-button:hover {
-      opacity: 0.9;
-    }
-
-    .save-button:active {
-      transform: scale(0.98);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    label {
-      font-weight: bold;
-      font-size: 0.9rem;
-      color: var(--text-color, #191c25);
-    }
-
-    input, select {
-      padding: 10px;
-      border: 1px solid var(--card-border, #4fb9ad);
-      border-radius: 8px;
-      background: var(--input-background, #fff);
-      color: var(--text-color);
-      font-size: 1rem;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .result-container {
-      margin-top: 10px;
-      padding: 16px;
-      background: var(--primary-color-light, #e0f2f1);
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .result-value {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary-color, #4fb9ad);
-    }
-
-    .result-label {
-      font-size: 0.8rem;
-      color: var(--text-color-secondary, #666);
-    }
-
-    .warning-message {
-      margin-top: 16px;
-      padding: 12px;
-      background: var(--warning-background, #fff3e0);
-      border: 1px solid var(--warning-border, #ffb74d);
-      border-radius: 8px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      color: var(--warning-text, #e65100);
-      text-align: justify;
-    }
-
-    .warning-icon {
-      font-size: 1rem;
-      margin-bottom: 4px;
-      display: block;
-      text-align: center;
-    }
-
-    .macro-display {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-      padding: 12px;
-      background: var(--card-background-secondary, #f5f5f5);
-      border-radius: 8px;
-    }
-
-    .macro-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .macro-label {
-      font-size: 0.75rem;
-      color: var(--text-color-secondary, #666);
-      font-weight: 500;
-    }
-
-    .macro-value {
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--text-color, #191c25);
-    }
-
-    .macro-protein { color: var(--protein-color, #4fb9ad); }
-    .macro-carbs { color: var(--carbs-color, #ffb74d); }
-    .macro-fat { color: var(--fat-color, #f44336); }
-  `
-  ];
-  __decorateClass([
-    n4({ type: Number })
-  ], ComponentMaintenanceCalories.prototype, "height", 2);
-  __decorateClass([
-    n4({ type: Number })
-  ], ComponentMaintenanceCalories.prototype, "weight", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentMaintenanceCalories.prototype, "gender", 2);
-  __decorateClass([
-    n4({ type: Number })
-  ], ComponentMaintenanceCalories.prototype, "age", 2);
-  __decorateClass([
-    n4({ type: Boolean })
-  ], ComponentMaintenanceCalories.prototype, "showWarning", 2);
-  __decorateClass([
-    n4({ type: String })
-  ], ComponentMaintenanceCalories.prototype, "translations", 1);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "_height", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "_weight", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "_gender", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "_age", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "activityLevel", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "dietType", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "proteinRatio", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "carbsRatio", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "fatRatio", 2);
-  __decorateClass([
-    r5()
-  ], ComponentMaintenanceCalories.prototype, "translationsTexts", 2);
-  ComponentMaintenanceCalories = __decorateClass([
-    t3("component-maintenance-calories")
-  ], ComponentMaintenanceCalories);
-
   // src/components/pageUser/pageUser.ts
   var PageUser = class extends Page {
     constructor() {
@@ -39198,8 +38791,7 @@ ${countMsg}`,
       <div class="modal-overlay">
         <div class="modal" style="width: 500px; max-width: 95%; position: relative;">
           <div class="modal-header">
-            <h3>${this.translations.calculateMaintenance || "Calculate Maintenance Calories"}</h3>
-            <button class="close-btn" @click="${() => this.showMaintenanceModal = false}">&times;</button>
+            <button class="close-btn" @click="${() => this.showMaintenanceModal = false}" style="margin-left: auto;">&times;</button>
           </div>
           
           <component-maintenance-calories
@@ -40226,6 +39818,399 @@ ${countMsg}`,
 
   // src/components/componentShapeChart/index.ts
   register("component-shape-chart", ComponentShapeChart);
+
+  // src/components/componentMaintenanceCalories/componentMaintenanceCalories.ts
+  var ComponentMaintenanceCalories = class extends i4 {
+    constructor() {
+      super(...arguments);
+      this.height = 0;
+      this.weight = 0;
+      this.gender = "";
+      this.age = 30;
+      this.showWarning = true;
+      this._height = 0;
+      this._weight = 0;
+      this._gender = "";
+      this._age = 30;
+      this.activityLevel = 1.2;
+      this.dietType = "balanced";
+      this.proteinRatio = 20;
+      this.carbsRatio = 50;
+      this.fatRatio = 30;
+      this.translationsTexts = {};
+    }
+    set translations(translations2) {
+      if (translations2) {
+        this.translationsTexts = JSON.parse(translations2);
+      }
+    }
+    static {
+      this.styles = [
+        Page.styles,
+        i`
+    :host {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header {
+      margin-bottom: 4px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--primary-color, #4fb9ad);
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--text-color-secondary, #666);
+      margin-top: 4px;
+    }
+
+    .subtitle a {
+      color: var(--primary-color, #4fb9ad);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .save-button {
+      margin-top: 16px;
+      padding: 12px;
+      background-color: var(--group-button-active-bg, var(--palette-green, #4fb9ad));
+      color: var(--group-button-active-text, #fff);
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.3s, transform 0.1s ease;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .save-button:hover {
+      opacity: 0.9;
+    }
+
+    .save-button:active {
+      transform: scale(0.98);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: var(--text-color, #191c25);
+    }
+
+
+    .result-container {
+      margin-top: 10px;
+      padding: 16px;
+      background: var(--primary-color-light, #e0f2f1);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .result-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color, #4fb9ad);
+    }
+
+    .result-label {
+      font-size: 0.8rem;
+      color: var(--text-color-secondary, #666);
+    }
+
+    .warning-message {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--warning-background, #fff3e0);
+      border: 1px solid var(--warning-border, #ffb74d);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--warning-text, #e65100);
+      text-align: justify;
+    }
+
+    .warning-icon {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      display: block;
+      text-align: center;
+    }
+
+    .macro-display {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--card-background, #f5f5f5);
+      border-radius: 8px;
+    }
+
+    .macro-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .macro-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .macro-value {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--text-color, #191c25);
+    }
+
+    .macro-protein { color: var(--protein-color, #4fb9ad); }
+    .macro-carbs { color: var(--carbs-color, #ffb74d); }
+    .macro-fat { color: var(--fat-color, #f44336); }
+  `
+      ];
+    }
+    updated(changedProperties) {
+      if (changedProperties.has("height")) this._height = this.height;
+      if (changedProperties.has("weight")) this._weight = this.weight;
+      if (changedProperties.has("gender")) this._gender = this.gender;
+      if (changedProperties.has("age")) this._age = this.age;
+    }
+    _calculateCalories() {
+      if (!this._height || !this._weight || !this._age || !this._gender) return 0;
+      let bmr = 0;
+      if (this._gender === "male") {
+        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age + 5;
+      } else {
+        bmr = 10 * this._weight + 6.25 * this._height - 5 * this._age - 161;
+      }
+      const totalCalories = Math.round(bmr * this.activityLevel);
+      this.dispatchEvent(new CustomEvent("calories-calculated", {
+        detail: {
+          calories: totalCalories,
+          protein: Math.round(totalCalories * (this.proteinRatio / 100) / 4),
+          carbs: Math.round(totalCalories * (this.carbsRatio / 100) / 4),
+          fat: Math.round(totalCalories * (this.fatRatio / 100) / 9)
+        },
+        bubbles: true,
+        composed: true
+      }));
+      return totalCalories;
+    }
+    _onDietTypeChange(e6) {
+      this.dietType = e6.target.value;
+      switch (this.dietType) {
+        case "balanced":
+          this.proteinRatio = 20;
+          this.carbsRatio = 50;
+          this.fatRatio = 30;
+          break;
+        case "lowCarb":
+          this.proteinRatio = 25;
+          this.carbsRatio = 45;
+          this.fatRatio = 30;
+          break;
+        case "lowFat":
+          this.proteinRatio = 15;
+          this.carbsRatio = 65;
+          this.fatRatio = 20;
+          break;
+        case "highProtein":
+          this.proteinRatio = 35;
+          this.carbsRatio = 45;
+          this.fatRatio = 20;
+          break;
+      }
+    }
+    _handleSave() {
+      const calories = this._calculateCalories();
+      this.dispatchEvent(new CustomEvent("save-calories", {
+        detail: {
+          calories,
+          height: this._height,
+          weight: this._weight,
+          gender: this._gender,
+          age: this._age,
+          activityLevel: this.activityLevel,
+          proteinRatio: this.proteinRatio,
+          carbsRatio: this.carbsRatio,
+          fatRatio: this.fatRatio
+        },
+        bubbles: true,
+        composed: true
+      }));
+    }
+    render() {
+      const calories = this._calculateCalories();
+      return b2`
+      <div class="form-container">
+        <div class="header">
+          <h2>${this.translationsTexts["maintenanceCaloriesTitle"] || "Basal Metabolic Rate"}</h2>
+          <div class="subtitle">
+            ${(this.translationsTexts["mifflinStJeorSubtitle"] || "Calculation based on the {link} method").split("{link}").map((part, index, array) => b2`${part}${index === array.length - 1 ? "" : b2`<a href="https://en.wikipedia.org/wiki/Basal_metabolic_rate#Mifflin-St_Jeor_equation" target="_blank" rel="noopener">Mifflin-St Jeor</a>`}`)}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>${this.translationsTexts["height"] || "Height"} (cm)</label>
+            <input type="number" .value="${String(this._height)}" @input="${(e6) => this._height = Number(e6.target.value)}">
+          </div>
+          <div class="form-group">
+            <label>${this.translationsTexts["weight"] || "Weight"} (kg)</label>
+            <input type="number" .value="${String(this._weight)}" @input="${(e6) => this._weight = Number(e6.target.value)}">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>${this.translationsTexts["gender"] || "Gender"}</label>
+            <select .value="${this._gender}" @change="${(e6) => this._gender = e6.target.value}">
+              <option value="" disabled>${this.translationsTexts["select"] || "Select..."}</option>
+              <option value="male">${this.translationsTexts["male"] || "Male"}</option>
+              <option value="female">${this.translationsTexts["female"] || "Female"}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>${this.translationsTexts["age"] || "Age"}</label>
+            <input type="number" .value="${String(this._age)}" @input="${(e6) => this._age = Number(e6.target.value)}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>${this.translationsTexts["activityLevel"] || "Activity Level"}</label>
+          <select .value="${this.activityLevel}" @change="${(e6) => this.activityLevel = e6.target.value}">
+            <option value="1.2">${this.translationsTexts["sedentary"] || "Sedentary (little or no exercise)"}</option>
+            <option value="1.375">${this.translationsTexts["lightlyActive"] || "Lightly active (light exercise/sports 1-3 days/week)"}</option>
+            <option value="1.55">${this.translationsTexts["moderatelyActive"] || "Moderately active (moderate exercise/sports 3-5 days/week)"}</option>
+            <option value="1.725">${this.translationsTexts["veryActive"] || "Very active (hard exercise/sports 6-7 days a week)"}</option>
+            <option value="1.9">${this.translationsTexts["extraActive"] || "Extra active (very hard exercise/sports & physical job)"}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>${this.translationsTexts["dietType"] || "Diet Type"}</label>
+          <select .value="${this.dietType}" @change="${this._onDietTypeChange}">
+            <option value="balanced">${this.translationsTexts["balanced"] || "Balanced"}</option>
+            <option value="lowCarb">${this.translationsTexts["lowCarb"] || "Low Carb"}</option>
+            <option value="lowFat">${this.translationsTexts["lowFat"] || "Low Fat"}</option>
+            <option value="highProtein">${this.translationsTexts["highProtein"] || "High Protein"}</option>
+          </select>
+        </div>
+
+        ${calories > 0 ? b2`
+          ${this.showWarning ? b2`
+            <div class="warning-message">
+              <span class="warning-icon"> <component-emoji text="warning"></component-emoji></span>
+              ${this.translationsTexts["metabolicWarning"] || "Important considerations: This metabolic estimation relies on statistical models for the general population and does not account for individual variations in body composition (muscle vs. fat). These calculations should be used as general guidance only. For a precise and safe nutritional approach, we strongly recommend professional medical or dietetic supervision, as self-directed calorie monitoring can be associated with the development of disordered eating patterns."}
+            </div>
+          ` : ""}
+          <div class="result-container">
+            <div class="result-label">${this.translationsTexts["dailyCalories"] || "Maintenance Calories"}</div>
+            <div class="result-value">${calories} ${this.translationsTexts["kcal"] || "kcal"}</div>
+            
+            <div class="macro-display">
+              <div class="macro-item">
+                <span class="macro-label">${this.translationsTexts["protein"] || "Protein"}</span>
+                <span class="macro-value macro-protein">${this.proteinRatio}%</span>
+                <span class="macro-label">${Math.round(calories * (this.proteinRatio / 100) / 4)}g</span>
+              </div>
+              <div class="macro-item">
+                <span class="macro-label">${this.translationsTexts["carbs"] || "Carbs"}</span>
+                <span class="macro-value macro-carbs">${this.carbsRatio}%</span>
+                <span class="macro-label">${Math.round(calories * (this.carbsRatio / 100) / 4)}g</span>
+              </div>
+              <div class="macro-item">
+                <span class="macro-label">${this.translationsTexts["fat"] || "Fat"}</span>
+                <span class="macro-value macro-fat">${this.fatRatio}%</span>
+                <span class="macro-label">${Math.round(calories * (this.fatRatio / 100) / 9)}g</span>
+              </div>
+            </div>
+          </div>
+          <button class="save-button" @click="${this._handleSave}">
+            ${this.translationsTexts["save"] || "Save"}
+          </button>
+        ` : ""}
+      </div>
+    `;
+    }
+  };
+  __decorateClass([
+    n4({ type: Number })
+  ], ComponentMaintenanceCalories.prototype, "height", 2);
+  __decorateClass([
+    n4({ type: Number })
+  ], ComponentMaintenanceCalories.prototype, "weight", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentMaintenanceCalories.prototype, "gender", 2);
+  __decorateClass([
+    n4({ type: Number })
+  ], ComponentMaintenanceCalories.prototype, "age", 2);
+  __decorateClass([
+    n4({ type: Boolean })
+  ], ComponentMaintenanceCalories.prototype, "showWarning", 2);
+  __decorateClass([
+    n4({ type: String })
+  ], ComponentMaintenanceCalories.prototype, "translations", 1);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "_height", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "_weight", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "_gender", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "_age", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "activityLevel", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "dietType", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "proteinRatio", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "carbsRatio", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "fatRatio", 2);
+  __decorateClass([
+    r5()
+  ], ComponentMaintenanceCalories.prototype, "translationsTexts", 2);
+
+  // src/components/componentMaintenanceCalories/index.ts
+  register("component-maintenance-calories", ComponentMaintenanceCalories);
 
   // src/components/pageUser/index.ts
   register("page-user", PageUser);
@@ -41797,21 +41782,16 @@ ${countMsg}`,
         display: block;
         margin: 16px 0;
       }
-      .tip-card {
-        background: var(--card-background);
-        border: 2px dashed var(--card-border);
-        border-radius: 8px;
-        padding: 16px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        box-sizing: border-box;
+      .card {
+        box-shadow: 0 0 10px var(--carbs-color), inset 0 0 20px rgba(184, 255, 61, 0.1);
       }
       .tip-title {
         font-weight: bold;
         color: var(--palette-purple);
         font-size: 0.9rem;
+        padding-bottom: 16px;
+        width: 100%;
+        text-align: center;
         text-transform: uppercase;
       }
       :host-context([data-theme="light"]) .tip-title {
@@ -41848,7 +41828,7 @@ ${countMsg}`,
         de: "Tipp des Tages"
       }[this.language] || "Tip of the day";
       return b2`
-      <div class="tip-card">
+      <div class="card">
         <div class="tip-title">${tipTitle}</div>
         <div class="tip-text">${this.selectedTip}</div>
       </div>
