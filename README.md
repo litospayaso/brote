@@ -17,7 +17,7 @@ Brote is a modern, privacy-focused calorie and macronutrient tracking applicatio
 </a>
 
 <a href="https://github.com/litospayaso/brote/releases">
-   <img src="/assets/get-it-on-github.png" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
+   <img src="/assets/getit-gb-badge.png" alt="Get it on GitHub Store" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
 </a>
 
 ## Core Technology Stack
