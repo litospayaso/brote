@@ -33901,7 +33901,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.40",
+    version: "1.0.41",
     type: "module",
     scripts: {
       dev: "vite",
@@ -35915,7 +35915,7 @@ body {
     const lang = localStorage.getItem("language") || "en";
     if (!cachedPopularProducts[lang]) {
       try {
-        const response = await fetch(`https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/assets/data/popular_${lang}.json`);
+        const response = await fetch(`https://raw.githubusercontent.com/litospayaso/brote/refs/heads/main/assets/data/products_${lang}.json`);
         if (response.ok) {
           cachedPopularProducts[lang] = await response.json();
         } else {
@@ -35929,22 +35929,35 @@ body {
     const popularProducts = cachedPopularProducts[lang];
     const lowerQuery = query.toLowerCase();
     const filtered = popularProducts.filter((item) => item.toLowerCase().includes(lowerQuery));
-    const products = filtered.slice(0, 35).map((item) => {
-      const parts = item.split(" :: ");
-      const code = parts[0];
-      const rest = parts[1] || "";
-      const lastDashIndex = rest.lastIndexOf(" - ");
-      let productName = rest;
+    const products = filtered.map((item) => {
+      const code = item.split(" :: ")[0];
+      const lastDashIndex = item.lastIndexOf(" - ");
+      const colonIndex = item.indexOf(" :: ");
+      const firstBracketsIndex = item.lastIndexOf("[");
+      const lastBracketsIndex = item.lastIndexOf("]");
+      let productName = "";
       let brands = "";
-      if (lastDashIndex !== -1) {
-        productName = rest.substring(0, lastDashIndex);
-        brands = rest.substring(lastDashIndex + 3);
+      let kcal;
+      if (lastDashIndex !== -1 && firstBracketsIndex !== -1) {
+        productName = item.substring(colonIndex + 4, lastDashIndex);
+        brands = item.substring(lastDashIndex + 3, firstBracketsIndex);
+        kcal = item.substring(firstBracketsIndex + 1, lastBracketsIndex);
+      } else if (lastDashIndex !== -1) {
+        productName = item.substring(colonIndex + 4, lastDashIndex);
+        brands = item.substring(lastDashIndex + 3);
+      } else if (lastBracketsIndex !== -1) {
+        productName = item.substring(colonIndex + 4, firstBracketsIndex);
+        kcal = item.substring(firstBracketsIndex + 1, lastBracketsIndex);
+      } else {
+        productName = item.substring(colonIndex + 4);
       }
       return {
         code,
         product_name: productName,
         brands,
-        nutriments: {},
+        nutriments: {
+          "energy-kcal": Number(kcal)
+        },
         nutrition_data: "",
         nutrition_data_per: "",
         nutrition_data_prepared_per: ""
@@ -36268,7 +36281,7 @@ body {
                   name="${product.product_name}" 
                   code="${product.code}" 
                   brands="${product.brands || ""}"
-                  calories="${product.nutriments && product.nutriments["energy-kcal"] ? product.nutriments["energy-kcal"] : -1}" 
+                  calories="${product.nutriments && product.nutriments["energy-kcal"] !== void 0 && product.nutriments["energy-kcal"] !== null ? product.nutriments["energy-kcal"] : -1}" 
                   favorite="${product.isFavorite}"
                   @favorite-click="${this._handleFavoriteClick}"
                   @element-click="${this._handleElementClick}"
@@ -36613,7 +36626,7 @@ body {
           ${this.brands ? b2`<div class="brand-section">${this.brands}</div>` : ""}
           ${this.quantity ? b2`<div class="quantity-section">${this.quantity}</div>` : ""}
         </div>
-        ${this.calories && Number(this.calories) > 0 ? b2`
+        ${this.calories && Number(this.calories) >= 0 ? b2`
           <div class="calories-section">
             ${Math.trunc(Number(this.calories))} Kcal
           </div>
@@ -40467,8 +40480,9 @@ ${countMsg}`,
       };
     }
     changeDate(days) {
-      const date = new Date(this.currentDate);
-      date.setDate(date.getDate() + days);
+      const [year, month, day] = this.currentDate.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+      date.setUTCDate(date.getUTCDate() + days);
       this.currentDate = date.toISOString().split("T")[0];
       this.loadData();
     }
