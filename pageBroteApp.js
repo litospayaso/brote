@@ -31863,7 +31863,9 @@
       statisticsWarningTitle: "Advertencia sobre el seguimiento estad\xEDstico",
       statisticsWarningMessage: "Cuidado: el uso continuo del seguimiento diario puede desencadenar actitudes obsesivas y de control que, pueden favorecer el desarrollo de trastornos psicol\xF3gicos o de conducta alimentaria. Utiliza esta herramienta con cuidado y responsabilidad. Se recomienda consultar con un especialista (psic\xF3logo y/o nutricionista) para establecer h\xE1bitos de seguimiento saludables. Considere desactivar esta funci\xF3n si te abruma, tu valor no disminuye por no llevar un registro.",
       aboutApp: "Acerca de Brote",
-      aboutMessage: "Brote es una aplicaci\xF3n gratuita y de c\xF3digo abierto dise\xF1ada para ayudarte a realizar un seguimiento de tu ingesta nutricional de manera consciente. Utiliza datos de OpenFoodFacts para brindarte informaci\xF3n clara. Tu privacidad es fundamental: todos los datos se almacenan localmente en tu dispositivo bajo tu control absoluto y no se comparten. El conocimiento sobre la alimentaci\xF3n propia se considera un derecho humano y una pr\xE1ctica de responsabilidad para con la salud que debe ser accesible y libre. Se aconseja utilizar esta herramienta con precauci\xF3n: el seguimiento riguroso de calor\xEDas y los comportamientos hipervigilantes pueden desencadenar trastornos psicol\xF3gicos y nutricionales. Por favor, considera pedir apoyo profesional si lo necesitas. La aplicaci\xF3n incluye recordatorios peri\xF3dicos de esta recomendaci\xF3n, puesto que cuidar de tu mente es una parte esencial del cuidado de tu cuerpo."
+      aboutMessage: "Brote es una aplicaci\xF3n gratuita y de c\xF3digo abierto dise\xF1ada para ayudarte a realizar un seguimiento de tu ingesta nutricional de manera consciente. Utiliza datos de OpenFoodFacts para brindarte informaci\xF3n clara. Tu privacidad es fundamental: todos los datos se almacenan localmente en tu dispositivo bajo tu control absoluto y no se comparten. El conocimiento sobre la alimentaci\xF3n propia se considera un derecho humano y una pr\xE1ctica de responsabilidad para con la salud que debe ser accesible y libre. Se aconseja utilizar esta herramienta con precauci\xF3n: el seguimiento riguroso de calor\xEDas y los comportamientos hipervigilantes pueden desencadenar trastornos psicol\xF3gicos y nutricionales. Por favor, considera pedir apoyo profesional si lo necesitas. La aplicaci\xF3n incluye recordatorios peri\xF3dicos de esta recomendaci\xF3n, puesto que cuidar de tu mente es una parte esencial del cuidado de tu cuerpo.",
+      axisCalories: "Calor\xEDas ({unit})",
+      axisLevelHours: "Nivel / Horas (0-{max})"
     },
     en: {
       search: "Search",
@@ -32045,7 +32047,9 @@
       statisticsWarningTitle: "Warning regarding statistical tracking",
       statisticsWarningMessage: "Be careful: continuous use of daily tracking can trigger obsessive and controlling attitudes which may favor the development of psychological or eating disorders. Use this tool with care and responsibility. It is recommended to consult with a specialist (psychologist and/or nutritionist) to establish healthy tracking habits. Consider disabling this feature if it overwhelms you, your value does not diminish by not keeping a record.",
       aboutApp: "About Brote",
-      aboutMessage: "Brote is a free, open-source application designed to help you track your nutritional intake mindfully. It uses OpenFoodFacts to provide clear food data. Your privacy is paramount: all information is stored locally on your device under your complete control and is never shared. Knowledge about the food consumed is considered a human right and a health responsibility that MUST be accessible and free. This tool should be used with caution: rigorous calorie tracking and hypervigilant behavior can trigger psychological and eating disorders. Please consider seeking professional psychological or nutritional help if you feel you need it. The app includes periodic reminders of this message, as taking care of your mind is an essential part of taking care of yourself."
+      aboutMessage: "Brote is a free, open-source application designed to help you track your nutritional intake mindfully. It uses OpenFoodFacts to provide clear food data. Your privacy is paramount: all information is stored locally on your device under your complete control and is never shared. Knowledge about the food consumed is considered a human right and a health responsibility that MUST be accessible and free. This tool should be used with caution: rigorous calorie tracking and hypervigilant behavior can trigger psychological and eating disorders. Please consider seeking professional psychological or nutritional help if you feel you need it. The app includes periodic reminders of this message, as taking care of your mind is an essential part of taking care of yourself.",
+      axisCalories: "Calories ({unit})",
+      axisLevelHours: "Level / Hours (0-{max})"
     },
     fr: {
       search: "Rechercher",
@@ -32216,7 +32220,9 @@
       statisticsWarningTitle: "Avertissement concernant le suivi statistique",
       statisticsWarningMessage: "Attention : l'utilisation continue du suivi quotidien peut d\xE9clencher des attitudes obsessionnelles et de contr\xF4le qui peuvent favoriser le d\xE9veloppement de troubles psychologiques ou du comportement alimentaire. Utilisez cet outil avec soin et responsabilit\xE9. Il est recommand\xE9 de consulter un sp\xE9cialiste (psychologue et/ou nutritionniste) pour \xE9tablir de saines habitudes de suivi. Pensez \xE0 d\xE9sactiver cette fonctionnalit\xE9 si elle vous submerge, votre valeur ne diminue pas si vous ne tenez pas de registre.",
       aboutApp: "\xC0 propos de Brote",
-      aboutMessage: "Brote est une application gratuite et open-source con\xE7ue pour vous aider \xE0 suivre votre apport nutritionnel de mani\xE8re consciente. Elle utilise OpenFoodFacts pour fournir des donn\xE9es claires sur les aliments. Votre vie priv\xE9e est primordiale : toutes les informations sont stock\xE9es localement sur votre appareil sous votre contr\xF4le total et ne sont jamais partag\xE9es. La connaissance des aliments consomm\xE9s est consid\xE9r\xE9e comme un droit fondamental et une responsabilit\xE9 en mati\xE8re de sant\xE9 qui doit \xEAtre accessible et gratuite. Cet outil doit \xEAtre utilis\xE9 avec prudence : le suivi rigoureux des calories et les comportements hypervigilants peuvent d\xE9clencher des troubles psychologiques et alimentaires. N'h\xE9sitez pas \xE0 demander une aide psychologique ou nutritionnelle si vous en ressentez le besoin. L'application inclut des rappels p\xE9riodiques de ce message, car prendre soin de son esprit est une part essentielle du prendre soin de soi."
+      aboutMessage: "Brote est une application gratuite et open-source con\xE7ue pour vous aider \xE0 suivre votre apport nutritionnel de mani\xE8re consciente. Elle utilise OpenFoodFacts pour fournir des donn\xE9es claires sur les aliments. Votre vie priv\xE9e est primordiale : toutes les informations sont stock\xE9es localement sur votre appareil sous votre contr\xF4le total et ne sont jamais partag\xE9es. La connaissance des aliments consomm\xE9s est consid\xE9r\xE9e comme un droit fondamental et une responsabilit\xE9 en mati\xE8re de sant\xE9 qui doit \xEAtre accessible et gratuite. Cet outil doit \xEAtre utilis\xE9 avec prudence : le suivi rigoureux des calories et les comportements hypervigilants peuvent d\xE9clencher des troubles psychologiques et alimentaires. N'h\xE9sitez pas \xE0 demander une aide psychologique ou nutritionnelle si vous en ressentez le besoin. L'application inclut des rappels p\xE9riodiques de ce message, car prendre soin de son esprit est une part essentielle du prendre soin de soi.",
+      axisCalories: "Calories ({unit})",
+      axisLevelHours: "Niveau / Heures (0-{max})"
     },
     de: {
       search: "Suche",
@@ -32387,7 +32393,9 @@
       statisticsWarningTitle: "Warnung bez\xFCglich der statistischen Erfassung",
       statisticsWarningMessage: "Achtung: Die kontinuierliche Nutzung des t\xE4glichen Trackings kann zwanghafte und kontrollierende Verhaltensweisen ausl\xF6sen, die die Entwicklung von psychischen oder Essst\xF6rungen beg\xFCnstigen k\xF6nnen. Nutzen Sie dieses Tool mit Sorgfalt und Verantwortung. Es wird empfohlen, einen Spezialisten (Psychologe und/oder Ern\xE4hrungsberater) zu konsultieren, um gesunde Tracking-Gewohnheiten zu etablieren. Erw\xE4gen Sie die Deaktivierung dieser Funktion, wenn sie Sie \xFCberfordert, Ihr Wert verringert sich nicht dadurch, dass Sie keine Aufzeichnungen f\xFChren.",
       aboutApp: "\xDCber Brote",
-      aboutMessage: "Brote ist eine kostenlose Open-Source-Anwendung, die Ihnen helfen soll, Ihre Nahrungsaufnahme achtsam zu verfolgen. Sie nutzt OpenFoodFacts, um klare Lebensmitteldaten bereitzustellen. Ihre Privatsph\xE4re steht an erster Stelle: Alle Informationen werden lokal auf Ihrem Ger\xE4t unter Ihrer vollst\xE4ndigen Kontrolle gespeichert und niemals weitergegeben. Das Wissen \xFCber die konsumierten Lebensmittel wird als grundlegendes Menschenrecht und als gesundheitliche Verantwortung betrachtet, die zug\xE4nglich und kostenlos sein muss. Dieses Tool sollte mit Vorsicht genutzt werden: Ein strenges Kalorientracking und hypervigilantes Verhalten k\xF6nnen psychische und Essst\xF6rungen ausl\xF6sen. Bitte ziehen Sie fachkundige psychologische oder ern\xE4hrungsspezifische Hilfe in Betracht, wenn Sie das Gef\xFChl haben, diese zu ben\xF6tigen. Die App enth\xE4lt regelm\xE4\xDFige Erinnerungen an diese Botschaft, da die Pflege Ihres Geistes ein wesentlicher Bestandteil der Selbstf\xFCrsorge ist."
+      aboutMessage: "Brote ist eine kostenlose Open-Source-Anwendung, die Ihnen helfen soll, Ihre Nahrungsaufnahme achtsam zu verfolgen. Sie nutzt OpenFoodFacts, um klare Lebensmitteldaten bereitzustellen. Ihre Privatsph\xE4re steht an erster Stelle: Alle Informationen werden lokal auf Ihrem Ger\xE4t unter Ihrer vollst\xE4ndigen Kontrolle gespeichert und niemals weitergegeben. Das Wissen \xFCber die konsumierten Lebensmittel wird als grundlegendes Menschenrecht und als gesundheitliche Verantwortung betrachtet, die zug\xE4nglich und kostenlos sein muss. Dieses Tool sollte mit Vorsicht genutzt werden: Ein strenges Kalorientracking und hypervigilantes Verhalten k\xF6nnen psychische und Essst\xF6rungen ausl\xF6sen. Bitte ziehen Sie fachkundige psychologische oder ern\xE4hrungsspezifische Hilfe in Betracht, wenn Sie das Gef\xFChl haben, diese zu ben\xF6tigen. Die App enth\xE4lt regelm\xE4\xDFige Erinnerungen an diese Botschaft, da die Pflege Ihres Geistes ein wesentlicher Bestandteil der Selbstf\xFCrsorge ist.",
+      axisCalories: "Kalorien ({unit})",
+      axisLevelHours: "Level / Stunden (0-{max})"
     },
     it: {
       search: "Cerca",
@@ -32558,7 +32566,9 @@
       statisticsWarningTitle: "Avvertenza sul tracciamento statistico",
       statisticsWarningMessage: "Attenzione: l'uso continuo del tracciamento giornaliero pu\xF2 innescare atteggiamenti ossessivi e di controllo che possono favorire lo sviluppo di disturbi psicologici o alimentari. Usa questo strumento con cura e responsabilit\xE0. Si consiglia di consultare uno specialista (psicologo e/o nutrizionista) per stabilire abitudini di tracciamento sane. Considera la disattivazione di questa funzione se ti opprime, il tuo valore non diminuisce non tenendo un registro.",
       aboutApp: "Informazioni su Brote",
-      aboutMessage: "Brote \xE8 un'applicazione gratuita e open-source progettata per aiutarti a monitorare il tuo apporto nutrizionale in modo consapevole. Utilizza OpenFoodFacts per fornire dati chiari sugli alimenti. La tua privacy \xE8 fondamentale: tutte le informazioni sono memorizzate localmente sul tuo dispositivo sotto il tuo totale controllo e non vengono mai condivise. La conoscenza del cibo che si consuma \xE8 considerata un diritto umano e una responsabilit\xE0 sanitaria che deve essere accessibile e gratuita. Questo strumento dovrebbe essere utilizzato con cautela: un rigoroso monitoraggio delle calorie e comportamenti ipervigilanti possono innescare disturbi psicologici e alimentari. Ti preghiamo di considerare di cercare un aiuto psicologico o nutrizionale professionale se ne senti il bisogno. L'app include promemoria periodici di questo messaggio, poich\xE9 prendersi cura della propria mente \xE8 una parte essenziale del prendersi cura di s\xE9."
+      aboutMessage: "Brote \xE8 un'applicazione gratuita e open-source progettata per aiutarti a monitorare il tuo apporto nutrizionale in modo consapevole. Utilizza OpenFoodFacts per fornire dati chiari sugli alimenti. La tua privacy \xE8 fondamentale: tutte le informazioni sono memorizzate localmente sul tuo dispositivo sotto il tuo completo controllo e non vengono mai condivise. La conoscenza degli alimenti consumati \xE8 considerata un diritto fondamentale e una responsabilit\xE0 per la salute che deve essere accessibile e gratuita. Questo strumento dovrebbe essere utilizzato con cautela: il monitoraggio rigoroso delle calorie e comportamenti ipervigilanti possono scatenare disturbi psicologici e alimentari. Ti preghiamo di considerare la ricerca di un aiuto psicologico o nutrizionale professionale se ritieni di averne bisogno. L'app include promemoria periodici di questo messaggio, poich\xE9 prendersi cura della propria mente \xE8 una parte essenziale della cura di s\xE9.",
+      axisCalories: "Calorie ({unit})",
+      axisLevelHours: "Livello / Ore (0-{max})"
     }
   };
 
@@ -33901,7 +33911,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.41",
+    version: "1.0.42",
     type: "module",
     scripts: {
       dev: "vite",
@@ -33910,6 +33920,7 @@ body {
       test: "web-test-runner --config wtr.config.mjs --coverage",
       "test:watch": "web-test-runner --config wtr.config.mjs --watch --chromium",
       "deploy:pages": "npm run build && node scripts/gh-pages.js",
+      deploy: "node scripts/update_badges.js && npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js",
       preview: "vite preview",
       changeset: "changeset",
       "changeset:version": "changeset version",
@@ -33919,13 +33930,14 @@ body {
       "cap:open:android": "npx cap open android",
       "cap:copy:android": "npx cap copy android",
       "cap:add:android": "npx cap add android",
+      "sign:apk": ".sign\\sign.bat",
       "build:apk": "node scripts/apk_release.js",
+      "build:apk:assemble": "npm run build && npx cap copy android && node scripts/fix_java_version.js && cd android && .\\gradlew bundleRelease && cd .. && npm run sign:apk",
       "build:apk:windows": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && gradlew.bat assembleDebug",
       "build:apk:linux": "npm run deploy:pages && npm run cap:sync && node scripts/fix_java_version.js && cd android && chmod +x gradlew && ANDROID_HOME=$HOME/Android/Sdk ./gradlew assembleDebug",
       "run:android:windows": 'npm run build && npm run cap:sync && node -e "setTimeout(() => {}, 1000)" && node scripts/fix_java_version.js && npx cap run android -l',
       "emulator:start:windows": 'start "" "%LOCALAPPDATA%\\Android\\Sdk\\emulator\\emulator.exe" -avd Pixel_8_Pro_API_36 -no-snapshot-load',
       "emulator:install:windows": "npm run build:apk:windows && adb install -r android/app/build/outputs/apk/debug/app-debug.apk",
-      deploy: "node scripts/update_badges.js && npm run deploy:pages && node scripts/apk_release.js && node scripts/release.js",
       lint: "tsc --noEmit"
     },
     dependencies: {
@@ -38073,7 +38085,11 @@ body {
             yAxisID: "y1",
             dotted: true
           }
-        ]
+        ],
+        yAxisLabels: {
+          left: this.translations.axisCalories || "Calor\xEDas ({unit})",
+          right: this.translations.axisLevelHours || "Nivel / Horas (0-{max})"
+        }
       };
       this.radarChartData = {
         labels: [
@@ -39415,13 +39431,15 @@ ${countMsg}`,
         textY1.textContent = i5.toString();
         svg156.appendChild(textY1);
       }
+      const leftText = this.chartData.yAxisLabels?.left || "Calor\xEDas ({unit})";
+      const rightText = this.chartData.yAxisLabels?.right || "Nivel / Horas (0-{max})";
       const leftLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
       leftLabel.setAttribute("x", "15");
       leftLabel.setAttribute("y", (height / 2).toString());
       leftLabel.setAttribute("transform", `rotate(-90, 15, ${height / 2})`);
       leftLabel.setAttribute("text-anchor", "middle");
       leftLabel.setAttribute("class", "axis-label");
-      leftLabel.textContent = "Calor\xEDas (kcal)";
+      leftLabel.textContent = leftText.replace("{unit}", "kcal");
       svg156.appendChild(leftLabel);
       const rightLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
       rightLabel.setAttribute("x", (width - 15).toString());
@@ -39429,7 +39447,7 @@ ${countMsg}`,
       rightLabel.setAttribute("transform", `rotate(90, ${width - 15}, ${height / 2})`);
       rightLabel.setAttribute("text-anchor", "middle");
       rightLabel.setAttribute("class", "axis-label");
-      rightLabel.textContent = `Nivel / Horas (0-${y1Range.max})`;
+      rightLabel.textContent = rightText.replace("{max}", y1Range.max.toString());
       svg156.appendChild(rightLabel);
       const barDatasets = this.chartData.datasets.filter((d3) => d3.type === "bar");
       const totalBars = barDatasets.length;
@@ -40510,7 +40528,7 @@ ${countMsg}`,
       const dToday = resetTime(today);
       const dDate = resetTime(date);
       const diffTime = dDate.getTime() - dToday.getTime();
-      const diffDays = Math.ceil(diffTime / (1e3 * 60 * 60 * 24));
+      const diffDays = Math.round(diffTime / (1e3 * 60 * 60 * 24));
       if (diffDays === 0) return this.translations.today;
       if (diffDays === 1) return this.translations.tomorrow;
       if (diffDays === -1) return this.translations.yesterday;
