@@ -81,7 +81,6 @@ export default class ComponentUserStatus extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
       z-index: 1;
     }
     .modal-content {
@@ -195,7 +194,7 @@ export default class ComponentUserStatus extends LitElement {
   render() {
     return html`
       <div class="status-card" @click="${this.openModal}">
-        ${this.thoughts ? html`<div class="thoughts-icon" title="${this.thoughts}">📝</div>` : ''}
+        ${this.thoughts ? html`<div class="thoughts-icon" title="${this.thoughts}"><component-emoji text="note" size="s"></component-emoji></div>` : ''}
         <div class="status-item" title="${this.translationsTexts['basalCalories']}">
           <span class="emoji"><component-emoji text="fire" size="s"></component-emoji></span>
           ${this.basalCalories > 0 ? html`<span class="value">${this.basalCalories} ${this.translationsTexts['kcal']}</span>` : ''}

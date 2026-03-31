@@ -136,6 +136,47 @@ export default class PageHome extends Page {
           min-height: calc(100vh - 500px);
       }
 
+      .tabs-slider {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .tab-content-wrapper {
+        grid-area: 1 / 1 / 2 / 2;
+        width: 100%;
+        background-color: var(--back-color, transparent);
+      }
+      .tab-enter-forward {
+        animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-forward {
+        animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-enter-backward {
+        animation: slideInLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-backward {
+        animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      @keyframes slideInLeft {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
+      }
+
       @media (max-width: 600px) {
         .summary-cards {
             grid-template-columns: 1fr 1fr;
@@ -157,6 +198,38 @@ export default class PageHome extends Page {
   @state() enableWarnings: boolean = true;
   @state() enableStatistics: boolean = false;
   @state() openStatusModal: boolean = false;
+
+  @state() previousDate: string | null = null;
+  @state() transitionDirection: 'forward' | 'backward' | null = null;
+  @state() previousDailyLog: DailyLog | null = null;
+  @state() previousUserStatus: UserStatus | null = null;
+  @state() previousTotals: any = null;
+  @state() previousLoading: boolean = false;
+  private _transitionTimeout: any = null;
+
+  private _animateIfNeeded(newDateStr: string) {
+    if (this.currentDate !== newDateStr) {
+      const oldTime = new Date(this.currentDate).getTime();
+      const newTime = new Date(newDateStr).getTime();
+      
+      this.transitionDirection = newTime > oldTime ? 'forward' : 'backward';
+      this.previousDate = this.currentDate;
+      this.previousDailyLog = this.dailyLog;
+      this.previousUserStatus = this.userStatus;
+      this.previousTotals = { ...this.totals };
+      this.previousLoading = this.loading;
+
+      if (this._transitionTimeout) clearTimeout(this._transitionTimeout);
+      this._transitionTimeout = setTimeout(() => {
+        this.previousDate = null;
+        this.transitionDirection = null;
+        this.previousDailyLog = null;
+        this.previousUserStatus = null;
+        this.previousTotals = null;
+        this.requestUpdate();
+      }, 300);
+    }
+  }
 
   protected handleSwipe(diffX: number, _diffY: number, e: TouchEvent): void {
     let isHeader = false;
@@ -271,13 +344,16 @@ export default class PageHome extends Page {
     const [year, month, day] = this.currentDate.split('-').map(Number);
     const date = new Date(Date.UTC(year, month - 1, day));
     date.setUTCDate(date.getUTCDate() + days);
-    this.currentDate = date.toISOString().split('T')[0];
+    const newDateStr = date.toISOString().split('T')[0];
+    this._animateIfNeeded(newDateStr);
+    this.currentDate = newDateStr;
     this.loadData();
   }
 
   _handleDateChange(e: Event) {
     const input = e.target as HTMLInputElement;
     if (input.value) {
+      this._animateIfNeeded(input.value);
       this.currentDate = input.value;
       this.loadData();
     }
@@ -313,6 +389,81 @@ export default class PageHome extends Page {
     return this.currentDate.split('-').reverse().join('/');
   }
 
+  _renderDayContent(log: DailyLog | null, status: UserStatus | null, totals: any) {
+    return html`
+      ${this.enableStatistics ? html`
+      <component-user-status
+        .exerciseCalories=${status?.exerciseCalories || 0}
+        .basalCalories=${status?.basalCalories || this.userGoals.defaultBasalCalories || 0}
+        .steps=${status?.steps || 0}
+        .sleepHours=${status?.sleepHours || 0}
+        .energyLevel=${status?.energyLevel || 0}
+        .hungerLevel=${status?.hungerLevel || 0}
+        .thoughts=${status?.thoughts || ''}
+        .translations=${JSON.stringify(this.translations)}
+        .open=${this.openStatusModal}
+        @status-changed="${this._handleStatusChanged}"
+      ></component-user-status>` : ''}
+
+      <div class="progress-container">
+        <component-progress-bar
+            .dailyCaloriesGoal=${this.userGoals.calories}
+            .caloriesEaten=${totals.calories}
+            .fatEaten=${totals.fat}
+            .carbsEaten=${totals.carbs}
+            .proteinEaten=${totals.protein}
+            .fatGoalPercent=${this.userGoals.macros.fat}
+            .carbsGoalPercent=${this.userGoals.macros.carbs}
+            .proteinGoalPercent=${this.userGoals.macros.protein}
+            .fatEatenPercent=${((totals.fat * 9) / ((totals.fat * 9 + totals.carbs * 4 + totals.protein * 4) || 1)) * 100}
+            .carbsEatenPercent=${((totals.carbs * 4) / ((totals.fat * 9 + totals.carbs * 4 + totals.protein * 4) || 1)) * 100}
+            .proteinEatenPercent=${((totals.protein * 4) / ((totals.fat * 9 + totals.carbs * 4 + totals.protein * 4) || 1)) * 100}
+            .translations=${JSON.stringify(this.translations)}
+        ></component-progress-bar>
+      </div>
+
+      <div class="summary-cards">
+        <div class="summary-card calories">
+          <span class="value">${totals.calories}</span>
+          <span class="label">${this.translations.calories}</span>
+        </div>
+        <div class="summary-card carbs">
+          <span class="value">${totals.carbs}g</span>
+          <span class="label">${this.translations.carbs}</span>
+        </div>
+        <div class="summary-card fat">
+          <span class="value">${totals.fat}g</span>
+          <span class="label">${this.translations.fat}</span>
+        </div>
+        <div class="summary-card protein">
+          <span class="value">${totals.protein}g</span>
+          <span class="label">${this.translations.protein}</span>
+        </div>
+      </div>
+
+      <div class="category-container">
+        ${this.renderCategory(this.translations.breakfast, 'breakfast', log)}
+        ${this.renderCategory(this.translations.snackMorning, 'snack1', log)}
+        ${this.renderCategory(this.translations.lunch, 'lunch', log)}
+        ${this.renderCategory(this.translations.snackAfternoon, 'snack2', log)}
+        ${this.renderCategory(this.translations.dinner, 'dinner', log)}
+        ${this.renderCategory(this.translations.snackEvening, 'snack3', log)}
+  
+        ${!log || (
+        log.breakfast.length === 0 &&
+        log.snack1.length === 0 &&
+        log.lunch.length === 0 &&
+        log.snack2.length === 0 &&
+        log.dinner.length === 0 &&
+        log.snack3.length === 0
+      ) ? html`
+          ${this.enableWarnings ? html`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ''}
+          <button class="btn" @click="${() => this.triggerPageNavigation({ page: 'search' })}">${this.translations.addFood}</button>
+        ` : ''}
+      </div>
+    `;
+  }
+
   render() {
     return html`
       <div class="header">
@@ -326,77 +477,16 @@ export default class PageHome extends Page {
         </div>
       </div>
 
-      ${this.enableStatistics ? html`
-      <component-user-status
-        .exerciseCalories=${this.userStatus?.exerciseCalories || 0}
-        .basalCalories=${this.userStatus?.basalCalories || this.userGoals.defaultBasalCalories || 0}
-        .steps=${this.userStatus?.steps || 0}
-        .sleepHours=${this.userStatus?.sleepHours || 0}
-        .energyLevel=${this.userStatus?.energyLevel || 0}
-        .hungerLevel=${this.userStatus?.hungerLevel || 0}
-        .thoughts=${this.userStatus?.thoughts || ''}
-        .translations=${JSON.stringify(this.translations)}
-        .open=${this.openStatusModal}
-        @status-changed="${this._handleStatusChanged}"
-      ></component-user-status>` : ''}
-
-      <div class="progress-container">
-        <component-progress-bar
-            .dailyCaloriesGoal=${this.userGoals.calories}
-            .caloriesEaten=${this.totals.calories}
-            .fatEaten=${this.totals.fat}
-            .carbsEaten=${this.totals.carbs}
-            .proteinEaten=${this.totals.protein}
-            .fatGoalPercent=${this.userGoals.macros.fat}
-            .carbsGoalPercent=${this.userGoals.macros.carbs}
-            .proteinGoalPercent=${this.userGoals.macros.protein}
-            .fatEatenPercent=${((this.totals.fat * 9) / ((this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4) || 1)) * 100}
-            .carbsEatenPercent=${((this.totals.carbs * 4) / ((this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4) || 1)) * 100}
-            .proteinEatenPercent=${((this.totals.protein * 4) / ((this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4) || 1)) * 100}
-            .translations=${JSON.stringify(this.translations)}
-        ></component-progress-bar>
-      </div>
-
-      <div class="summary-cards">
-        <div class="summary-card calories">
-          <span class="value">${this.totals.calories}</span>
-          <span class="label">${this.translations.calories}</span>
-        </div>
-        <div class="summary-card carbs">
-          <span class="value">${this.totals.carbs}g</span>
-          <span class="label">${this.translations.carbs}</span>
-        </div>
-        <div class="summary-card fat">
-          <span class="value">${this.totals.fat}g</span>
-          <span class="label">${this.translations.fat}</span>
-        </div>
-        <div class="summary-card protein">
-          <span class="value">${this.totals.protein}g</span>
-          <span class="label">${this.translations.protein}</span>
-        </div>
-      </div>
-
-      <div class="category-container">
-        ${this.renderCategory(this.translations.breakfast, 'breakfast')}
-        ${this.renderCategory(this.translations.snackMorning, 'snack1')}
-        ${this.renderCategory(this.translations.lunch, 'lunch')}
-        ${this.renderCategory(this.translations.snackAfternoon, 'snack2')}
-        ${this.renderCategory(this.translations.dinner, 'dinner')}
-        ${this.renderCategory(this.translations.snackEvening, 'snack3')}
-  
-        ${!this.dailyLog || (
-        this.dailyLog.breakfast.length === 0 &&
-        this.dailyLog.snack1.length === 0 &&
-        this.dailyLog.lunch.length === 0 &&
-        this.dailyLog.snack2.length === 0 &&
-        this.dailyLog.dinner.length === 0 &&
-        this.dailyLog.snack3.length === 0
-      ) ? html`
-          ${this.enableWarnings ? html`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ''}
-          <button class="btn" @click="${() => this.triggerPageNavigation({ page: 'search' })}">${this.translations.addFood}</button>
+      <div class="tabs-slider">
+        ${this.previousDate ? html`
+          <div class="tab-content-wrapper tab-leave-${this.transitionDirection}">
+            ${this._renderDayContent(this.previousDailyLog, this.previousUserStatus, this.previousTotals)}
+          </div>
         ` : ''}
+        <div class="tab-content-wrapper ${this.previousDate ? `tab-enter-${this.transitionDirection}` : ''}">
+          ${this._renderDayContent(this.dailyLog, this.userStatus, this.totals)}
+        </div>
       </div>
-
     `;
   }
 
@@ -440,8 +530,8 @@ export default class PageHome extends Page {
     }
   }
 
-  renderCategory(title: string, category: MealCategory) {
-    const items = this.dailyLog ? this.dailyLog[category] : [];
+  renderCategory(title: string, category: MealCategory, log: DailyLog | null) {
+    const items = log ? log[category] : [];
 
     if (items.length === 0) return html``;
 
