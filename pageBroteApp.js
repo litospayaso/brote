@@ -33911,7 +33911,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.42",
+    version: "1.0.43",
     type: "module",
     scripts: {
       dev: "vite",
@@ -33999,6 +33999,9 @@ body {
       super(...arguments);
       this._notificationTimeout = null;
       this.page = "home";
+      this.previousPage = null;
+      this.transitionDirection = null;
+      this._transitionTimeout = null;
       this.groupButtonOptions = [
         { text: "home", id: "home", active: true, emoji: true, forcedsvg: true },
         { text: "search", id: "search", active: false, emoji: true, forcedsvg: true },
@@ -34024,9 +34027,46 @@ body {
         width: fit-content;
       }
       .app-container {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
         padding-top: env(safe-area-inset-top);
         padding-bottom: 80px; 
         touch-action: pan-y;
+        overflow-x: hidden;
+      }
+      .page-wrapper {
+        grid-area: 1 / 1 / 2 / 2;
+        width: 100%;
+        background-color: var(--back-color, #fff); /* Fallback to prevent transparency issues */
+      }
+      .page-enter-forward {
+        animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .page-leave-forward {
+        animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .page-enter-backward {
+        animation: slideInLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .page-leave-backward {
+        animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      @keyframes slideInLeft {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
       }
     `
       ];
@@ -34034,13 +34074,33 @@ body {
     createRenderRoot() {
       return this;
     }
+    _getTabIndex(page) {
+      const tabs = ["home", "search", "user"];
+      return tabs.indexOf(page);
+    }
+    _animateIfNeeded(newPage) {
+      const oldIndex = this._getTabIndex(this.page);
+      const newIndex = this._getTabIndex(newPage);
+      if (this.page !== newPage && oldIndex !== -1 && newIndex !== -1) {
+        this.transitionDirection = newIndex > oldIndex ? "forward" : "backward";
+        this.previousPage = this.page;
+        if (this._transitionTimeout) clearTimeout(this._transitionTimeout);
+        this._transitionTimeout = setTimeout(() => {
+          this.previousPage = null;
+          this.transitionDirection = null;
+          this.requestUpdate();
+        }, 300);
+      }
+    }
     navigateToPage(params, maintainParams = true) {
       delete params.isTrusted;
       const currentParams = Object.fromEntries(this.getQueryParamsURL());
       maintainParams = params.maintainParams === "false" ? false : maintainParams;
       const oldPage = this.page;
+      const newPage = params.page || "home";
+      this._animateIfNeeded(newPage);
       if (params.page) {
-        this.page = params.page || "home";
+        this.page = newPage;
       }
       if (maintainParams) {
         params = { ...currentParams, ...params };
@@ -34048,6 +34108,7 @@ body {
       delete params.maintainParams;
       const usePushState = oldPage === "home" && this.page !== "home";
       this.setQueryParamsURL(params, usePushState);
+      this.updateGroupButtonOptions();
       this.requestUpdate();
     }
     onPageInit() {
@@ -34070,6 +34131,11 @@ body {
         this.navigateToPage({ page: "home", openStatus: "true" }, false);
       });
       window.addEventListener("popstate", () => {
+        const params = this.getQueryParamsURL();
+        const newPage = params.get("page") || "home";
+        this._animateIfNeeded(newPage);
+        this.page = newPage;
+        this.updateGroupButtonOptions();
         this.requestUpdate();
       });
     }
@@ -34154,10 +34220,19 @@ body {
       }
     }
     pageRender() {
-      const params = this.getQueryParamsURL();
-      this.page = params.get("page") || "home";
-      this.updateGroupButtonOptions();
-      switch (this.page) {
+      return b2`
+      ${this.previousPage ? b2`
+        <div class="page-wrapper page-leave-${this.transitionDirection}">
+          ${this._renderPageContent(this.previousPage)}
+        </div>
+      ` : ""}
+      <div class="page-wrapper ${this.previousPage ? `page-enter-${this.transitionDirection}` : ""}">
+        ${this._renderPageContent(this.page)}
+      </div>
+    `;
+    }
+    _renderPageContent(pageName) {
+      switch (pageName) {
         case "search":
           return b2`<page-search 
           @page-navigation="${({ detail }) => this.navigateToPage(detail)}"
@@ -34216,6 +34291,12 @@ body {
   __decorateClass([
     r5()
   ], _PageBroteApp.prototype, "page", 2);
+  __decorateClass([
+    r5()
+  ], _PageBroteApp.prototype, "previousPage", 2);
+  __decorateClass([
+    r5()
+  ], _PageBroteApp.prototype, "transitionDirection", 2);
   __decorateClass([
     r5()
   ], _PageBroteApp.prototype, "groupButtonOptions", 2);
@@ -34485,7 +34566,8 @@ body {
     { emoji: "\u26A0\uFE0F", keywords: ["warning"] },
     { emoji: "\u2696\uFE0F", keywords: ["balance"] },
     { emoji: "\u{1FAAB}", keywords: ["battery"] },
-    { emoji: "\u270F\uFE0F", keywords: ["pencil"] }
+    { emoji: "\u270F\uFE0F", keywords: ["pencil"] },
+    { emoji: "\u{1F4DD}", keywords: ["note"] }
   ];
 
   // src/assets/svg_emojis/grape.ts
@@ -35261,6 +35343,11 @@ body {
   <path d="M1103.52 166.02L1103.52 166.02Q1099.12 166.02 1092.77 164.55Q1086.43 163.09 1069.82 157.71L1069.82 157.71L804.20 68.85Q782.71 61.52 769.29 54.93Q755.86 48.34 746.58 39.06L746.58 39.06L351.07-357.42Q344.73-355.47 338.38-354.00Q332.03-352.54 324.71-351.07L324.71-351.07L195.80-480.96Q197.75-494.63 202.64-505.86L202.64-505.86L145.51-562.01Q110.84-595.70 110.84-634.28L110.84-634.28Q110.84-688.48 179.69-751.46L179.69-751.46L226.07-793.46Q288.09-849.61 345.21-849.61L345.21-849.61Q384.28-849.61 415.53-820.80L415.53-820.80L476.56-762.70Q480.47-764.65 489.99-768.07Q499.51-771.48 506.84-773.44L506.84-773.44L635.74-644.53Q634.28-638.18 632.57-632.08Q630.86-625.98 628.91-619.63L628.91-619.63L1020.02-227.54Q1030.27-217.29 1039.79-200.44Q1049.32-183.59 1054.69-168.95L1054.69-168.95L1148.44 76.66Q1155.27 95.21 1156.98 102.05Q1158.69 108.89 1158.69 113.28L1158.69 113.28Q1158.69 134.28 1142.33 150.15Q1125.98 166.02 1103.52 166.02ZM391.11-373.05L763.67 1.46Q787.60 5.37 803.22-4.39Q818.85-14.16 823.73-32.23L823.73-32.23L450.68-406.74Q422.36-386.23 391.11-373.05L391.11-373.05ZM149.41-629.88L149.41-629.88Q180.18-643.07 205.57-660.64Q230.96-678.22 263.67-709.47L263.67-709.47Q294.43-739.26 314.45-762.94Q334.47-786.62 347.17-809.57L347.17-809.57Q326.66-811.52 302.73-800.05Q278.81-788.57 252.44-764.65L252.44-764.65L206.05-722.66Q145.51-667.97 149.41-629.88ZM167.97-594.24L251.95-513.18Q285.16-525.88 312.74-544.43Q340.33-562.99 375.98-597.17L375.98-597.17Q413.09-633.30 434.81-660.64Q456.54-687.99 468.75-716.31L468.75-716.31L384.28-796.39Q369.14-769.04 346.68-741.46Q324.22-713.87 290.53-681.15L290.53-681.15Q255.37-647.95 228.27-628.42Q201.17-608.89 167.97-594.24L167.97-594.24ZM259.77-475.10L335.94-394.04Q376.95-405.27 411.38-427.00Q445.80-448.73 490.23-490.72L490.23-490.72Q534.18-532.71 556.88-564.21Q579.59-595.70 591.31-632.32L591.31-632.32L508.30-709.47Q493.65-674.32 468.99-641.36Q444.34-608.40 402.83-568.85L402.83-568.85Q364.26-531.74 331.54-510.50Q298.83-489.26 259.77-475.10L259.77-475.10ZM797.36 25.39L1001.46 92.77Q1022.95 88.38 1034.91 83.01Q1046.88 77.64 1054.69 69.82L1054.69 69.82Q1062.99 61.52 1069.58 48.10Q1076.17 34.67 1080.57 10.25L1080.57 10.25L1012.70-168.95L1033.69-177.25Q1033.20-166.02 1030.03-156.98Q1026.86-147.95 1019.04-140.63L1019.04-140.63Q1009.77-131.35 996.09-125.98Q982.42-120.61 966.31-118.16L966.31-118.16Q968.75-93.26 962.16-74.22Q955.57-55.18 940.43-41.02L940.43-41.02Q923.83-25.88 904.30-20.26Q884.77-14.65 857.42-16.60L857.42-16.60Q854.98-5.37 849.37 4.15Q843.75 13.67 836.91 21.48L836.91 21.48Q829.10 29.79 819.58 34.18Q810.06 38.57 795.90 41.99L795.90 41.99L797.36 25.39ZM481.93-431.15L854.98-56.15Q877.44-53.71 890.63-56.88Q903.81-60.06 914.06-69.82L914.06-69.82Q923.34-78.61 926.51-90.33Q929.69-102.05 926.27-120.12L926.27-120.12L551.27-496.09Q543.46-488.28 535.16-479.74Q526.86-471.19 517.09-461.91L517.09-461.91Q507.32-452.64 498.78-445.31Q490.23-437.99 481.93-431.15L481.93-431.15ZM577.15-525.88L946.78-154.30Q978.03-154.30 989.50-167.72Q1000.98-181.15 988.28-203.61L988.28-203.61L612.30-581.05Q598.63-553.22 577.15-525.88L577.15-525.88Z"/>
 </svg>`;
 
+  // src/assets/svg_emojis/note.ts
+  var svg156 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="3.125 -973.4375 1263.28125 1263.28125" width="100%" height="100%">
+  <path d="M897.95 166.02L108.40 166.02L108.40-849.61L897.95-849.61L897.95-698.73L858.89-658.20L858.89-810.55L147.46-810.55L147.46 126.95L858.89 126.95L858.89-223.14L897.95-256.35L897.95 166.02ZM486.33 40.04L486.33 40.04Q449.22 40.04 428.96 31.49Q408.69 22.95 388.18 22.95L388.18 22.95Q375 22.95 363.77 29.30Q352.54 35.64 333.98 35.64L333.98 35.64Q322.75 35.64 304.69 29.54Q286.62 23.44 275.39 23.44L275.39 23.44Q261.72 23.44 249.51 30.27L249.51 30.27L238.28 8.30Q256.35-0.98 275.39-0.98L275.39-0.98Q288.09-0.98 306.40 5.13Q324.71 11.23 333.98 11.23L333.98 11.23Q345.21 11.23 358.64 4.88Q372.07-1.46 388.18-1.46L388.18-1.46Q412.60-1.46 434.08 7.08Q455.57 15.63 486.33 15.63L486.33 15.63Q499.02 15.63 518.07 11.23Q537.11 6.84 551.27 1.95L551.27 1.95L559.57 24.41Q541.50 31.25 520.75 35.64Q500 40.04 486.33 40.04ZM352.54-124.51L352.54-124.51Q334.47-124.51 315.19-130.37Q295.90-136.23 284.67-136.23L284.67-136.23Q270.02-136.23 257.32-129.88L257.32-129.88L246.09-151.86Q263.67-160.64 284.67-160.64L284.67-160.64Q298.34-160.64 317.87-154.79Q337.40-148.93 352.54-148.93L352.54-148.93Q368.16-148.93 393.07-157.23Q417.97-165.53 438.48-166.02L438.48-166.02L438.48-141.60Q426.76-141.11 410.64-136.96Q394.53-132.81 378.91-128.66Q363.28-124.51 352.54-124.51ZM684.08-44.92L577.15 15.63L528.32-18.07L550.78-128.91Q560.55-83.50 580.32-62.74Q600.10-41.99 634.28-41.99L634.28-41.99Q643.55-41.99 655.76-42.72Q667.97-43.46 684.08-44.92L684.08-44.92ZM255.37-245.61L255.37-245.61L244.14-267.58Q262.21-276.37 281.25-276.37L281.25-276.37Q292.48-276.37 303.96-273.68Q315.43-271.00 323.24-271.00L323.24-271.00Q334.47-271.00 351.07-278.81Q367.68-286.62 384.28-286.62L384.28-286.62Q406.74-286.62 429.44-282.47Q452.15-278.32 483.89-278.32L483.89-278.32Q510.74-278.32 544.68-281.25Q578.61-284.18 603.52-288.57L603.52-288.57L608.40-265.14Q582.52-260.25 547.12-257.08Q511.72-253.91 483.89-253.91L483.89-253.91Q448.73-253.91 425.78-258.06Q402.83-262.21 384.28-262.21L384.28-262.21Q371.58-262.21 356.20-254.39Q340.82-246.58 323.24-246.58L323.24-246.58Q312.01-246.58 302.25-249.27Q292.48-251.95 281.25-251.95L281.25-251.95Q268.07-251.95 255.37-245.61ZM335.45-367.19L335.45-367.19Q312.50-367.19 304.20-375Q295.90-382.81 284.67-382.81L284.67-382.81Q270.02-382.81 257.32-376.46L257.32-376.46L246.09-398.44Q263.67-407.23 284.67-407.23L284.67-407.23Q300.29-407.23 310.79-399.41Q321.29-391.60 335.45-391.60L335.45-391.60Q345.70-391.60 362.55-397.95Q379.39-404.30 394.53-404.30L394.53-404.30Q414.55-404.30 435.06-393.55L435.06-393.55L422.85-372.56Q409.18-379.88 394.53-379.88L394.53-379.88Q381.35-379.88 366.94-373.54Q352.54-367.19 335.45-367.19ZM559.08 25.39L559.08 25.39Q542.48 25.39 530.27 14.65Q518.07 3.91 518.07-12.21L518.07-12.21Q518.07-15.63 519.04-20.51L519.04-20.51L558.11-213.87Q560.55-225.10 564.45-237.06Q568.36-249.02 574.71-258.79L574.71-258.79L599.12-234.86Q596.19-228.52 593.75-221.92Q591.31-215.33 589.84-207.52L589.84-207.52L558.11-49.32L589.84-21.97L744.63-108.40Q754.88-113.77 762.94-119.87Q771.00-125.98 774.41-130.37L774.41-130.37L797.85-107.42Q789.55-95.21 760.74-79.10L760.74-79.10L578.13 21.00Q569.82 25.39 559.08 25.39ZM335.45-487.30L335.45-487.30Q312.50-487.30 304.20-495.12Q295.90-502.93 284.67-502.93L284.67-502.93Q270.02-502.93 257.32-496.58L257.32-496.58L246.09-518.55Q263.67-527.34 284.67-527.34L284.67-527.34Q300.29-527.34 310.79-519.53Q321.29-511.72 335.45-511.72L335.45-511.72Q346.68-511.72 365.23-518.07Q383.79-524.41 399.41-524.41L399.41-524.41Q419.43-524.41 432.37-519.29Q445.31-514.16 461.91-514.16L461.91-514.16Q488.77-514.16 513.67-522.95L513.67-522.95L522.95-500Q496.09-489.75 461.91-489.75L461.91-489.75Q437.99-489.75 427.25-494.87Q416.50-500 399.41-500L399.41-500Q385.74-500 368.90-493.65Q352.05-487.30 335.45-487.30ZM625.49-367.19L625.49-367.19Q602.54-367.19 594.24-375Q585.94-382.81 574.71-382.81L574.71-382.81Q560.06-382.81 547.36-376.46L547.36-376.46L536.13-398.44Q553.71-407.23 574.71-407.23L574.71-407.23Q590.33-407.23 600.83-399.41Q611.33-391.60 625.49-391.60L625.49-391.60Q635.25-391.60 651.86-397.71Q668.46-403.81 687.01-404.30L687.01-404.30L687.01-379.88Q670.90-379.39 656.49-373.29Q642.09-367.19 625.49-367.19ZM440.43-640.14L440.43-640.14Q416.99-640.14 402.10-649.17Q387.21-658.20 370.12-658.20L370.12-658.20Q356.45-658.20 346.92-652.83Q337.40-647.46 318.85-647.46L318.85-647.46Q306.64-647.46 297.85-650.63Q289.06-653.81 277.83-653.81L277.83-653.81Q264.65-653.81 251.95-647.46L251.95-647.46L240.72-669.43Q258.79-678.22 277.83-678.22L277.83-678.22Q289.55-678.22 301.51-675.05Q313.48-671.88 318.85-671.88L318.85-671.88Q329.10-671.88 341.80-677.25Q354.49-682.62 370.12-682.62L370.12-682.62Q390.14-682.62 407.96-673.58Q425.78-664.55 440.43-664.55L440.43-664.55Q457.52-664.55 477.29-676.03Q497.07-687.50 526.86-687.50L526.86-687.50Q552.73-687.50 583.25-681.40Q613.77-675.29 637.70-680.18L637.70-680.18L643.07-656.74Q614.26-650.39 585.69-656.74Q557.13-663.09 526.86-663.09L526.86-663.09Q508.79-663.09 495.85-657.47Q482.91-651.86 470.46-646.00Q458.01-640.14 440.43-640.14ZM761.23-97.66L761.23-97.66Q744.14-97.66 731.20-106.69Q718.26-115.72 712.89-129.88L712.89-129.88Q705.08-128.42 699.22-127.44Q693.36-126.46 688.48-126.46L688.48-126.46Q669.43-126.46 651.86-137.70L651.86-137.70Q627.93-152.83 625-187.01L625-187.01Q598.14-186.52 583.50-198.24Q568.85-209.96 568.85-230.96L568.85-230.96Q568.85-243.65 574.71-258.79L574.71-258.79L804.69-578.61L831.54-559.57L604.49-243.65Q603.03-240.23 603.03-236.82L603.03-236.82Q603.03-229.00 609.13-223.39Q615.23-217.77 623.54-217.77L623.54-217.77Q631.35-217.77 637.21-222.17L637.21-222.17L851.56-521.97L877.93-502.93L656.74-194.34Q657.23-177.73 665.53-168.70Q673.83-159.67 688.48-159.67L688.48-159.67Q692.38-159.67 697.27-160.64Q702.15-161.62 708.01-163.09L708.01-163.09L929.69-472.66L956.54-453.61L746.58-160.16Q744.14-155.27 744.14-149.90L744.14-149.90Q744.14-142.09 750.24-136.47Q756.35-130.86 764.65-130.86L764.65-130.86Q772.46-130.86 778.32-135.25L778.32-135.25L1004.39-451.66L1031.25-433.11L797.85-107.42Q778.81-97.66 761.23-97.66ZM1119.14-525.88L1042.48-422.36Q1003.91-423.34 970.95-435.30Q937.99-447.27 895.02-475.10L895.02-475.10Q852.54-502.93 829.35-528.32Q806.15-553.71 791.02-587.89L791.02-587.89L868.65-692.38L898.44-689.45L893.55-656.25L885.25-657.71L829.10-583.98Q841.80-561.52 860.60-543.21Q879.39-524.90 913.57-502.44L913.57-502.44Q948.24-479.98 973.63-469.48Q999.02-458.98 1026.86-456.54L1026.86-456.54L1081.54-529.30Q1080.08-532.23 1079.59-533.45Q1079.10-534.67 1078.13-535.64L1078.13-535.64L1106.93-552.25L1119.14-525.88ZM1104.00-541.50L1081.54-510.25Q1050.78-514.65 1021.97-526.86Q993.16-539.06 959.96-561.52L959.96-561.52Q922.85-586.43 901.12-607.91Q879.39-629.39 865.23-654.30L865.23-654.30L887.70-683.59Q899.41-656.74 919.43-635.74Q939.45-614.75 978.03-588.87L978.03-588.87Q1015.14-563.96 1042.97-553.47Q1070.80-542.97 1104.00-541.50L1104.00-541.50ZM1145.51-585.94L1088.38-510.74L1062.01-530.76L1118.65-605.47Q1127.44-617.19 1127.44-629.88L1127.44-629.88Q1127.44-656.25 1079.10-687.01L1079.10-687.01L1039.06-712.40Q1006.35-733.40 981.93-733.40L981.93-733.40Q959.96-733.40 946.78-715.82L946.78-715.82L889.16-637.70L862.79-657.23L920.41-735.35Q943.36-766.11 981.45-766.11L981.45-766.11Q1016.60-766.11 1056.64-739.75L1056.64-739.75L1096.19-713.87Q1161.13-671.88 1161.13-627.93L1161.13-627.93Q1161.13-606.45 1145.51-585.94L1145.51-585.94ZM1146.48-632.81L1136.23-600.59Q1108.40-605.96 1081.30-618.16Q1054.20-630.37 1022.46-651.37L1022.46-651.37Q993.16-671.39 973.39-688.96Q953.61-706.54 939.45-725.59L939.45-725.59L961.43-752.44Q973.63-733.40 991.94-716.31Q1010.25-699.22 1041.02-678.22L1041.02-678.22Q1072.27-657.23 1096.68-646.97Q1121.09-636.72 1146.48-632.81L1146.48-632.81Z"/>
+</svg>`;
+
   // src/components/componentEmoji/componentEmoji.ts
   var emojiSvgMap = {
     "\u{1F347}": svg,
@@ -35417,7 +35504,8 @@ body {
     "\u26A0\uFE0F": svg152,
     "\u2696\uFE0F": svg153,
     "\u{1FAAB}": svg154,
-    "\u270F\uFE0F": svg155
+    "\u270F\uFE0F": svg155,
+    "\u{1F4DD}": svg156
   };
   var ComponentEmoji = class extends i4 {
     constructor() {
@@ -35507,12 +35595,12 @@ body {
       if (displayColorEmojis && !this.forcedsvg) {
         return b2`<span class="emoji" role="img" aria-label="${this.text}" style="${style}; font-size: calc(var(--emoji-size, 2rem) * 0.75);">${emoji}</span>`;
       }
-      const svg156 = this._getSvg(emoji);
-      return b2`<span class="emoji" role="img" aria-label="${this.text}" style="${style}">${this._unsafeSvg(svg156)}</span>`;
+      const svg157 = this._getSvg(emoji);
+      return b2`<span class="emoji" role="img" aria-label="${this.text}" style="${style}">${this._unsafeSvg(svg157)}</span>`;
     }
-    _unsafeSvg(svg156) {
+    _unsafeSvg(svg157) {
       const template = document.createElement("template");
-      template.innerHTML = svg156;
+      template.innerHTML = svg157;
       return template.content.cloneNode(true);
     }
   };
@@ -36002,6 +36090,11 @@ body {
       this.mealId = null;
       this.query = "";
       this.viewMode = "cached";
+      this.previousViewMode = null;
+      this.previousSearchResult = [];
+      this.previousLoading = false;
+      this.transitionDirection = null;
+      this._transitionTimeout = null;
       this.groupButtonOptions = [
         { text: this.translations.recents, id: "cached", active: true },
         { text: this.translations.favorites, id: "favorites", active: false },
@@ -36193,6 +36286,22 @@ body {
       this._switchMode(e6.detail.id);
     }
     _switchMode(mode) {
+      const modes = ["cached", "favorites", "search", "meals"];
+      const oldIndex = modes.indexOf(this.viewMode);
+      const newIndex = modes.indexOf(mode);
+      if (this.viewMode !== mode && oldIndex !== -1 && newIndex !== -1) {
+        this.transitionDirection = newIndex > oldIndex ? "forward" : "backward";
+        this.previousViewMode = this.viewMode;
+        this.previousSearchResult = [...this.searchResult];
+        this.previousLoading = this.loading;
+        if (this._transitionTimeout) clearTimeout(this._transitionTimeout);
+        this._transitionTimeout = setTimeout(() => {
+          this.previousViewMode = null;
+          this.transitionDirection = null;
+          this.previousSearchResult = [];
+          this.requestUpdate();
+        }, 300);
+      }
       this.viewMode = mode;
       this.groupButtonOptions = this.groupButtonOptions.map((opt) => ({
         ...opt,
@@ -36239,6 +36348,50 @@ body {
         }
       }
     }
+    _renderTabContent(mode, resultItems, isLoading) {
+      return b2`
+      ${mode === "meals" ? b2`
+        <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "meal", mealId: this._generateId() })}">
+            ${this.translations.createNewMeal}
+        </button>
+      ` : b2``}
+
+      <div class="search-result-container">
+      ${isLoading ? b2`
+        <component-spinner class="loading-spinner"></component-spinner>
+      ` : b2`
+        ${resultItems.length > 0 ? b2`
+          ${mode === "search" ? b2`
+            <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
+              ${this.translations.createNewProduct}
+            </button>
+          ` : ""}
+          <div>
+            ${resultItems.map((product) => b2`
+              <component-search-result 
+                name="${product.product_name}" 
+                code="${product.code}" 
+                brands="${product.brands || ""}"
+                calories="${product.nutriments && product.nutriments["energy-kcal"] !== void 0 && product.nutriments["energy-kcal"] !== null ? product.nutriments["energy-kcal"] : -1}" 
+                favorite="${product.isFavorite}"
+                @favorite-click="${this._handleFavoriteClick}"
+                @element-click="${this._handleElementClick}"
+              ></component-search-result>
+            `)}
+          </div>
+        ` : ""}
+        ${resultItems.length === 0 && this.query.length > 0 ? b2`
+          <p>${this.translations.noResultsFound}</p>
+          ${mode === "search" ? b2`
+            <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
+              ${this.translations.createNewProduct}
+            </button>
+          ` : ""}
+        ` : ""}
+      `}
+      </div>
+    `;
+    }
     render() {
       return b2`
       <div class="page-container">
@@ -36271,46 +36424,15 @@ body {
              ></component-group-button>
         </div>
 
-        ${this.viewMode === "meals" ? b2`
-          <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "meal", mealId: this._generateId() })}">
-              ${this.translations.createNewMeal}
-          </button>
-        ` : b2``}
-
-        <div class="search-result-container">
-        ${this.loading ? b2`
-          <component-spinner class="loading-spinner"></component-spinner>
-        ` : b2`
-          ${this.searchResult.length > 0 ? b2`
-            ${this.viewMode === "search" ? b2`
-              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
-                ${this.translations.createNewProduct}
-              </button>
-            ` : ""}
-            <div>
-              ${this.searchResult.map((product) => b2`
-                <component-search-result 
-                  name="${product.product_name}" 
-                  code="${product.code}" 
-                  brands="${product.brands || ""}"
-                  calories="${product.nutriments && product.nutriments["energy-kcal"] !== void 0 && product.nutriments["energy-kcal"] !== null ? product.nutriments["energy-kcal"] : -1}" 
-                  favorite="${product.isFavorite}"
-                  @favorite-click="${this._handleFavoriteClick}"
-                  @element-click="${this._handleElementClick}"
-                ></component-search-result>
-              `)}
+        <div class="tabs-slider">
+          ${this.previousViewMode ? b2`
+            <div class="tab-content-wrapper tab-leave-${this.transitionDirection}">
+              ${this._renderTabContent(this.previousViewMode, this.previousSearchResult, this.previousLoading)}
             </div>
           ` : ""}
-          ${this.searchResult.length === 0 && this.query.length > 0 ? b2`
-            <p>${this.translations.noResultsFound}</p>
-            ${this.viewMode === "search" ? b2`
-              <button class="btn btn-create" @click="${() => this.triggerPageNavigation({ page: "food", code: this._generateId(), query: this.query })}">
-                ${this.translations.createNewProduct}
-              </button>
-            ` : ""}
-
-          ` : ""}
-        `}
+          <div class="tab-content-wrapper ${this.previousViewMode ? `tab-enter-${this.transitionDirection}` : ""}">
+            ${this._renderTabContent(this.viewMode, this.searchResult, this.loading)}
+          </div>
         </div>
       </div>
     `;
@@ -36381,6 +36503,46 @@ body {
       .search-result-container {
         min-height: calc(100vh - 450px);
       }
+      .tabs-slider {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .tab-content-wrapper {
+        grid-area: 1 / 1 / 2 / 2;
+        width: 100%;
+        background-color: var(--back-color, transparent);
+      }
+      .tab-enter-forward {
+        animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-forward {
+        animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-enter-backward {
+        animation: slideInLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-backward {
+        animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      @keyframes slideInLeft {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
+      }
       h1 {
         text-align: center;
       }
@@ -36401,6 +36563,18 @@ body {
   __decorateClass([
     r5()
   ], PageSearch.prototype, "viewMode", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "previousViewMode", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "previousSearchResult", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "previousLoading", 2);
+  __decorateClass([
+    r5()
+  ], PageSearch.prototype, "transitionDirection", 2);
   __decorateClass([
     r5()
   ], PageSearch.prototype, "groupButtonOptions", 2);
@@ -39076,13 +39250,13 @@ ${countMsg}`,
       this._chartContainer.innerHTML = "";
       const width = this._width || this.offsetWidth || 300;
       const height = this._height || this.offsetHeight || 200;
-      const svg156 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg156.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg156.setAttribute("preserveAspectRatio", "none");
-      svg156.style.width = "100%";
-      svg156.style.height = "100%";
-      svg156.style.overflow = "visible";
-      this._chartContainer.appendChild(svg156);
+      const svg157 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg157.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg157.setAttribute("preserveAspectRatio", "none");
+      svg157.style.width = "100%";
+      svg157.style.height = "100%";
+      svg157.style.overflow = "visible";
+      this._chartContainer.appendChild(svg157);
       if (!this.data || this.data.length === 0) return;
       const safeData = this.data.map((item) => ({ tag: item.tag, value: Number(item.value) }));
       const rawMin = Math.min(...safeData.map((d3) => d3.value));
@@ -39110,14 +39284,14 @@ ${countMsg}`,
       xAxis.setAttribute("x2", (width - this._padding).toString());
       xAxis.setAttribute("y2", (height - this._padding).toString());
       xAxis.setAttribute("class", "axis");
-      svg156.appendChild(xAxis);
+      svg157.appendChild(xAxis);
       const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
       yAxis.setAttribute("x1", (width - this._padding).toString());
       yAxis.setAttribute("y1", this._padding.toString());
       yAxis.setAttribute("x2", (width - this._padding).toString());
       yAxis.setAttribute("y2", (height - this._padding).toString());
       yAxis.setAttribute("class", "axis");
-      svg156.appendChild(yAxis);
+      svg157.appendChild(yAxis);
       for (let i5 = 0; i5 < numLabels; i5++) {
         const val = yAxisMax - i5 * step;
         const y3 = this._padding + i5 * ((height - this._padding * 2) / (numLabels - 1));
@@ -39130,7 +39304,7 @@ ${countMsg}`,
         text.setAttribute("font-size", "11px");
         text.setAttribute("fill", "var(--card-text, #333)");
         text.textContent = val.toString();
-        svg156.appendChild(text);
+        svg157.appendChild(text);
         const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
         gridLine.setAttribute("x1", this._padding.toString());
         gridLine.setAttribute("y1", y3.toString());
@@ -39139,7 +39313,7 @@ ${countMsg}`,
         gridLine.setAttribute("stroke", "var(--chart-axis-color, var(--palette-grey, #ccc))");
         gridLine.setAttribute("stroke-width", "0.5");
         gridLine.setAttribute("stroke-dasharray", "4,4");
-        svg156.appendChild(gridLine);
+        svg157.appendChild(gridLine);
       }
       if (safeData.length > 0) {
         const firstText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -39149,7 +39323,7 @@ ${countMsg}`,
         firstText.setAttribute("font-size", "11px");
         firstText.setAttribute("fill", "var(--card-text, #333)");
         firstText.textContent = safeData[0].tag;
-        svg156.appendChild(firstText);
+        svg157.appendChild(firstText);
         if (safeData.length > 1) {
           const lastText = document.createElementNS("http://www.w3.org/2000/svg", "text");
           lastText.setAttribute("x", (width - this._padding).toString());
@@ -39158,7 +39332,7 @@ ${countMsg}`,
           lastText.setAttribute("font-size", "11px");
           lastText.setAttribute("fill", "var(--card-text, #333)");
           lastText.textContent = safeData[safeData.length - 1].tag;
-          svg156.appendChild(lastText);
+          svg157.appendChild(lastText);
         }
       }
       const coords = safeData.map((item, index) => {
@@ -39179,7 +39353,7 @@ ${countMsg}`,
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d", pathData);
       path.setAttribute("class", "line");
-      svg156.appendChild(path);
+      svg157.appendChild(path);
       safeData.forEach((item, index) => {
         const x2 = this._padding + index * stepX;
         const y3 = height - this._padding - (item.value - yAxisMin) / valRange * availableHeight;
@@ -39190,7 +39364,7 @@ ${countMsg}`,
         circle.setAttribute("class", "point");
         circle.addEventListener("mouseenter", () => this._handleMouseEnter(item.tag, item.value, x2, y3));
         circle.addEventListener("mouseleave", () => this._handleMouseLeave());
-        svg156.appendChild(circle);
+        svg157.appendChild(circle);
       });
     }
     render() {
@@ -39347,11 +39521,11 @@ ${countMsg}`,
       const width = this._width || 300;
       const height = this._height || 250;
       const padding = this._padding;
-      const svg156 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg156.setAttribute("viewBox", `0 0 ${width} ${height}`);
-      svg156.style.width = "100%";
-      svg156.style.height = "100%";
-      this._chartContainer.appendChild(svg156);
+      const svg157 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg157.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg157.style.width = "100%";
+      svg157.style.height = "100%";
+      this._chartContainer.appendChild(svg157);
       const yAxisDatasets = this.chartData.datasets.filter((ds) => (ds.yAxisID === "y" || !ds.yAxisID) && !ds.hidden);
       const y1AxisDatasets = this.chartData.datasets.filter((ds) => ds.yAxisID === "y1" && !ds.hidden);
       const getYRange = (datasets, isLeft) => {
@@ -39409,7 +39583,7 @@ ${countMsg}`,
         grid.setAttribute("x2", (width - padding.right).toString());
         grid.setAttribute("y2", y3.toString());
         grid.setAttribute("class", "grid-line");
-        svg156.appendChild(grid);
+        svg157.appendChild(grid);
         const textY = document.createElementNS("http://www.w3.org/2000/svg", "text");
         textY.setAttribute("x", (padding.left - 10).toString());
         textY.setAttribute("y", y3.toString());
@@ -39417,7 +39591,7 @@ ${countMsg}`,
         textY.setAttribute("alignment-baseline", "middle");
         textY.setAttribute("class", "tick-text");
         textY.textContent = valY.toString();
-        svg156.appendChild(textY);
+        svg157.appendChild(textY);
       }
       for (let i5 = 0; i5 <= y1Range.max; i5 += y1Range.step) {
         const ratio = i5 / y1Range.max;
@@ -39429,7 +39603,7 @@ ${countMsg}`,
         textY1.setAttribute("alignment-baseline", "middle");
         textY1.setAttribute("class", "tick-text");
         textY1.textContent = i5.toString();
-        svg156.appendChild(textY1);
+        svg157.appendChild(textY1);
       }
       const leftText = this.chartData.yAxisLabels?.left || "Calor\xEDas ({unit})";
       const rightText = this.chartData.yAxisLabels?.right || "Nivel / Horas (0-{max})";
@@ -39440,7 +39614,7 @@ ${countMsg}`,
       leftLabel.setAttribute("text-anchor", "middle");
       leftLabel.setAttribute("class", "axis-label");
       leftLabel.textContent = leftText.replace("{unit}", "kcal");
-      svg156.appendChild(leftLabel);
+      svg157.appendChild(leftLabel);
       const rightLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
       rightLabel.setAttribute("x", (width - 15).toString());
       rightLabel.setAttribute("y", (height / 2).toString());
@@ -39448,7 +39622,7 @@ ${countMsg}`,
       rightLabel.setAttribute("text-anchor", "middle");
       rightLabel.setAttribute("class", "axis-label");
       rightLabel.textContent = rightText.replace("{max}", y1Range.max.toString());
-      svg156.appendChild(rightLabel);
+      svg157.appendChild(rightLabel);
       const barDatasets = this.chartData.datasets.filter((d3) => d3.type === "bar");
       const totalBars = barDatasets.length;
       const groupPadding = stepX * 0.2;
@@ -39461,7 +39635,7 @@ ${countMsg}`,
         xText.setAttribute("text-anchor", "middle");
         xText.setAttribute("class", "tick-text");
         xText.textContent = label;
-        svg156.appendChild(xText);
+        svg157.appendChild(xText);
         barDatasets.forEach((ds, dsIndex) => {
           const val = ds.data[i5] || 0;
           const x2 = padding.left + i5 * stepX + groupPadding / 2 + dsIndex * individualBarWidth;
@@ -39491,7 +39665,7 @@ ${countMsg}`,
                 }
                 rect.setAttribute("fill", fillColor);
                 rect.setAttribute("rx", "2");
-                svg156.appendChild(rect);
+                svg157.appendChild(rect);
               }
               currentYValue += stackVal;
             });
@@ -39505,7 +39679,7 @@ ${countMsg}`,
             rect.setAttribute("height", Math.max(0, barHeight).toString());
             rect.setAttribute("fill", ds.color || (ds.yAxisID === "y" ? "var(--calories-color)" : "var(--palette-blue)"));
             rect.setAttribute("rx", "2");
-            svg156.appendChild(rect);
+            svg157.appendChild(rect);
           }
         });
       });
@@ -39527,7 +39701,7 @@ ${countMsg}`,
           const defaultLineColor2 = ds.dashed || ds.dotted ? "var(--satiety-color)" : "var(--energy-color)";
           circle.setAttribute("stroke", ds.color || defaultLineColor2);
           circle.setAttribute("class", "point");
-          svg156.appendChild(circle);
+          svg157.appendChild(circle);
           return;
         }
         let d3 = `M ${points[0].x} ${points[0].y}`;
@@ -39548,7 +39722,7 @@ ${countMsg}`,
         path.setAttribute("stroke-linejoin", "round");
         if (ds.dashed) path.setAttribute("stroke-dasharray", "5,5");
         if (ds.dotted) path.setAttribute("stroke-dasharray", "2,4");
-        svg156.appendChild(path);
+        svg157.appendChild(path);
         points.forEach((p3) => {
           const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           circle.setAttribute("cx", p3.x.toString());
@@ -39557,7 +39731,7 @@ ${countMsg}`,
           const defaultLineColor2 = ds.dashed || ds.dotted ? "var(--satiety-color)" : "var(--energy-color)";
           circle.setAttribute("stroke", ds.color || defaultLineColor2);
           circle.setAttribute("class", "point");
-          svg156.appendChild(circle);
+          svg157.appendChild(circle);
         });
       });
     }
@@ -39749,12 +39923,12 @@ ${countMsg}`,
         return;
       }
       const size = Math.min(this._width, this._height);
-      const svg156 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg156.setAttribute("viewBox", `0 0 ${size} ${size}`);
-      svg156.style.width = `${size}px`;
-      svg156.style.height = `${size}px`;
-      svg156.style.margin = "0 auto";
-      svg156.style.display = "block";
+      const svg157 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg157.setAttribute("viewBox", `0 0 ${size} ${size}`);
+      svg157.style.width = `${size}px`;
+      svg157.style.height = `${size}px`;
+      svg157.style.margin = "0 auto";
+      svg157.style.display = "block";
       const numAxes = labels.length;
       const angleStep = Math.PI * 2 / numAxes;
       const maxValue = this.maxValue;
@@ -39767,7 +39941,7 @@ ${countMsg}`,
         }).join(" ");
         polygon.setAttribute("points", points);
         polygon.setAttribute("class", "radar-grid");
-        svg156.appendChild(polygon);
+        svg157.appendChild(polygon);
       });
       labels.forEach((label, i5) => {
         const angle = i5 * angleStep;
@@ -39779,7 +39953,7 @@ ${countMsg}`,
         line.setAttribute("x2", x2.toString());
         line.setAttribute("y2", y22.toString());
         line.setAttribute("class", "radar-axis");
-        svg156.appendChild(line);
+        svg157.appendChild(line);
         const { x: xl, y: yl } = this._getCoordinates(angle, maxValue + 0.8, maxValue, size);
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", xl.toString());
@@ -39788,7 +39962,7 @@ ${countMsg}`,
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("dominant-baseline", "middle");
         text.textContent = label;
-        svg156.appendChild(text);
+        svg157.appendChild(text);
       });
       datasets.forEach((dataset) => {
         const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -39798,7 +39972,7 @@ ${countMsg}`,
         }).join(" ");
         polygon.setAttribute("points", points);
         polygon.setAttribute("class", "radar-area");
-        svg156.appendChild(polygon);
+        svg157.appendChild(polygon);
         dataset.data.forEach((val, i5) => {
           const { x: x2, y: y3 } = this._getCoordinates(i5 * angleStep, val, maxValue, size);
           const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -39806,10 +39980,10 @@ ${countMsg}`,
           circle.setAttribute("cy", y3.toString());
           circle.setAttribute("r", "3");
           circle.setAttribute("fill", "var(--chart-line-color)");
-          svg156.appendChild(circle);
+          svg157.appendChild(circle);
         });
       });
-      this._chartContainer.appendChild(svg156);
+      this._chartContainer.appendChild(svg157);
     }
     render() {
       const showLegend = this.chartData.datasets.length > 1 || this.chartData.datasets.length === 1 && this.chartData.datasets[0].label;
@@ -40263,6 +40437,13 @@ ${countMsg}`,
       this.enableWarnings = true;
       this.enableStatistics = false;
       this.openStatusModal = false;
+      this.previousDate = null;
+      this.transitionDirection = null;
+      this.previousDailyLog = null;
+      this.previousUserStatus = null;
+      this.previousTotals = null;
+      this.previousLoading = false;
+      this._transitionTimeout = null;
     }
     static {
       this.styles = [
@@ -40397,6 +40578,47 @@ ${countMsg}`,
           min-height: calc(100vh - 500px);
       }
 
+      .tabs-slider {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 100%;
+        position: relative;
+        overflow-x: hidden;
+      }
+      .tab-content-wrapper {
+        grid-area: 1 / 1 / 2 / 2;
+        width: 100%;
+        background-color: var(--back-color, transparent);
+      }
+      .tab-enter-forward {
+        animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-forward {
+        animation: slideOutLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-enter-backward {
+        animation: slideInLeft 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      .tab-leave-backward {
+        animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0); }
+        to { transform: translateX(-100%); }
+      }
+      @keyframes slideInLeft {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); }
+        to { transform: translateX(100%); }
+      }
+
       @media (max-width: 600px) {
         .summary-cards {
             grid-template-columns: 1fr 1fr;
@@ -40404,6 +40626,27 @@ ${countMsg}`,
       }
     `
       ];
+    }
+    _animateIfNeeded(newDateStr) {
+      if (this.currentDate !== newDateStr) {
+        const oldTime = new Date(this.currentDate).getTime();
+        const newTime = new Date(newDateStr).getTime();
+        this.transitionDirection = newTime > oldTime ? "forward" : "backward";
+        this.previousDate = this.currentDate;
+        this.previousDailyLog = this.dailyLog;
+        this.previousUserStatus = this.userStatus;
+        this.previousTotals = { ...this.totals };
+        this.previousLoading = this.loading;
+        if (this._transitionTimeout) clearTimeout(this._transitionTimeout);
+        this._transitionTimeout = setTimeout(() => {
+          this.previousDate = null;
+          this.transitionDirection = null;
+          this.previousDailyLog = null;
+          this.previousUserStatus = null;
+          this.previousTotals = null;
+          this.requestUpdate();
+        }, 300);
+      }
     }
     handleSwipe(diffX, _diffY, e6) {
       let isHeader = false;
@@ -40501,12 +40744,15 @@ ${countMsg}`,
       const [year, month, day] = this.currentDate.split("-").map(Number);
       const date = new Date(Date.UTC(year, month - 1, day));
       date.setUTCDate(date.getUTCDate() + days);
-      this.currentDate = date.toISOString().split("T")[0];
+      const newDateStr = date.toISOString().split("T")[0];
+      this._animateIfNeeded(newDateStr);
+      this.currentDate = newDateStr;
       this.loadData();
     }
     _handleDateChange(e6) {
       const input = e6.target;
       if (input.value) {
+        this._animateIfNeeded(input.value);
         this.currentDate = input.value;
         this.loadData();
       }
@@ -40534,6 +40780,73 @@ ${countMsg}`,
       if (diffDays === -1) return this.translations.yesterday;
       return this.currentDate.split("-").reverse().join("/");
     }
+    _renderDayContent(log, status, totals) {
+      return b2`
+      ${this.enableStatistics ? b2`
+      <component-user-status
+        .exerciseCalories=${status?.exerciseCalories || 0}
+        .basalCalories=${status?.basalCalories || this.userGoals.defaultBasalCalories || 0}
+        .steps=${status?.steps || 0}
+        .sleepHours=${status?.sleepHours || 0}
+        .energyLevel=${status?.energyLevel || 0}
+        .hungerLevel=${status?.hungerLevel || 0}
+        .thoughts=${status?.thoughts || ""}
+        .translations=${JSON.stringify(this.translations)}
+        .open=${this.openStatusModal}
+        @status-changed="${this._handleStatusChanged}"
+      ></component-user-status>` : ""}
+
+      <div class="progress-container">
+        <component-progress-bar
+            .dailyCaloriesGoal=${this.userGoals.calories}
+            .caloriesEaten=${totals.calories}
+            .fatEaten=${totals.fat}
+            .carbsEaten=${totals.carbs}
+            .proteinEaten=${totals.protein}
+            .fatGoalPercent=${this.userGoals.macros.fat}
+            .carbsGoalPercent=${this.userGoals.macros.carbs}
+            .proteinGoalPercent=${this.userGoals.macros.protein}
+            .fatEatenPercent=${totals.fat * 9 / (totals.fat * 9 + totals.carbs * 4 + totals.protein * 4 || 1) * 100}
+            .carbsEatenPercent=${totals.carbs * 4 / (totals.fat * 9 + totals.carbs * 4 + totals.protein * 4 || 1) * 100}
+            .proteinEatenPercent=${totals.protein * 4 / (totals.fat * 9 + totals.carbs * 4 + totals.protein * 4 || 1) * 100}
+            .translations=${JSON.stringify(this.translations)}
+        ></component-progress-bar>
+      </div>
+
+      <div class="summary-cards">
+        <div class="summary-card calories">
+          <span class="value">${totals.calories}</span>
+          <span class="label">${this.translations.calories}</span>
+        </div>
+        <div class="summary-card carbs">
+          <span class="value">${totals.carbs}g</span>
+          <span class="label">${this.translations.carbs}</span>
+        </div>
+        <div class="summary-card fat">
+          <span class="value">${totals.fat}g</span>
+          <span class="label">${this.translations.fat}</span>
+        </div>
+        <div class="summary-card protein">
+          <span class="value">${totals.protein}g</span>
+          <span class="label">${this.translations.protein}</span>
+        </div>
+      </div>
+
+      <div class="category-container">
+        ${this.renderCategory(this.translations.breakfast, "breakfast", log)}
+        ${this.renderCategory(this.translations.snackMorning, "snack1", log)}
+        ${this.renderCategory(this.translations.lunch, "lunch", log)}
+        ${this.renderCategory(this.translations.snackAfternoon, "snack2", log)}
+        ${this.renderCategory(this.translations.dinner, "dinner", log)}
+        ${this.renderCategory(this.translations.snackEvening, "snack3", log)}
+  
+        ${!log || log.breakfast.length === 0 && log.snack1.length === 0 && log.lunch.length === 0 && log.snack2.length === 0 && log.dinner.length === 0 && log.snack3.length === 0 ? b2`
+          ${this.enableWarnings ? b2`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ""}
+          <button class="btn" @click="${() => this.triggerPageNavigation({ page: "search" })}">${this.translations.addFood}</button>
+        ` : ""}
+      </div>
+    `;
+    }
     render() {
       return b2`
       <div class="header">
@@ -40547,70 +40860,16 @@ ${countMsg}`,
         </div>
       </div>
 
-      ${this.enableStatistics ? b2`
-      <component-user-status
-        .exerciseCalories=${this.userStatus?.exerciseCalories || 0}
-        .basalCalories=${this.userStatus?.basalCalories || this.userGoals.defaultBasalCalories || 0}
-        .steps=${this.userStatus?.steps || 0}
-        .sleepHours=${this.userStatus?.sleepHours || 0}
-        .energyLevel=${this.userStatus?.energyLevel || 0}
-        .hungerLevel=${this.userStatus?.hungerLevel || 0}
-        .thoughts=${this.userStatus?.thoughts || ""}
-        .translations=${JSON.stringify(this.translations)}
-        .open=${this.openStatusModal}
-        @status-changed="${this._handleStatusChanged}"
-      ></component-user-status>` : ""}
-
-      <div class="progress-container">
-        <component-progress-bar
-            .dailyCaloriesGoal=${this.userGoals.calories}
-            .caloriesEaten=${this.totals.calories}
-            .fatEaten=${this.totals.fat}
-            .carbsEaten=${this.totals.carbs}
-            .proteinEaten=${this.totals.protein}
-            .fatGoalPercent=${this.userGoals.macros.fat}
-            .carbsGoalPercent=${this.userGoals.macros.carbs}
-            .proteinGoalPercent=${this.userGoals.macros.protein}
-            .fatEatenPercent=${this.totals.fat * 9 / (this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4 || 1) * 100}
-            .carbsEatenPercent=${this.totals.carbs * 4 / (this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4 || 1) * 100}
-            .proteinEatenPercent=${this.totals.protein * 4 / (this.totals.fat * 9 + this.totals.carbs * 4 + this.totals.protein * 4 || 1) * 100}
-            .translations=${JSON.stringify(this.translations)}
-        ></component-progress-bar>
-      </div>
-
-      <div class="summary-cards">
-        <div class="summary-card calories">
-          <span class="value">${this.totals.calories}</span>
-          <span class="label">${this.translations.calories}</span>
-        </div>
-        <div class="summary-card carbs">
-          <span class="value">${this.totals.carbs}g</span>
-          <span class="label">${this.translations.carbs}</span>
-        </div>
-        <div class="summary-card fat">
-          <span class="value">${this.totals.fat}g</span>
-          <span class="label">${this.translations.fat}</span>
-        </div>
-        <div class="summary-card protein">
-          <span class="value">${this.totals.protein}g</span>
-          <span class="label">${this.translations.protein}</span>
-        </div>
-      </div>
-
-      <div class="category-container">
-        ${this.renderCategory(this.translations.breakfast, "breakfast")}
-        ${this.renderCategory(this.translations.snackMorning, "snack1")}
-        ${this.renderCategory(this.translations.lunch, "lunch")}
-        ${this.renderCategory(this.translations.snackAfternoon, "snack2")}
-        ${this.renderCategory(this.translations.dinner, "dinner")}
-        ${this.renderCategory(this.translations.snackEvening, "snack3")}
-  
-        ${!this.dailyLog || this.dailyLog.breakfast.length === 0 && this.dailyLog.snack1.length === 0 && this.dailyLog.lunch.length === 0 && this.dailyLog.snack2.length === 0 && this.dailyLog.dinner.length === 0 && this.dailyLog.snack3.length === 0 ? b2`
-          ${this.enableWarnings ? b2`<component-day-tip .language="${this.getLanguage()}"></component-day-tip>` : ""}
-          <button class="btn" @click="${() => this.triggerPageNavigation({ page: "search" })}">${this.translations.addFood}</button>
+      <div class="tabs-slider">
+        ${this.previousDate ? b2`
+          <div class="tab-content-wrapper tab-leave-${this.transitionDirection}">
+            ${this._renderDayContent(this.previousDailyLog, this.previousUserStatus, this.previousTotals)}
+          </div>
         ` : ""}
+        <div class="tab-content-wrapper ${this.previousDate ? `tab-enter-${this.transitionDirection}` : ""}">
+          ${this._renderDayContent(this.dailyLog, this.userStatus, this.totals)}
+        </div>
       </div>
-
     `;
     }
     async _handleRemoveItem(category, index) {
@@ -40647,8 +40906,8 @@ ${countMsg}`,
         this.triggerPageNavigation({ page: "food", code: item.product.code });
       }
     }
-    renderCategory(title, category) {
-      const items = this.dailyLog ? this.dailyLog[category] : [];
+    renderCategory(title, category, log) {
+      const items = log ? log[category] : [];
       if (items.length === 0) return b2``;
       return b2`
       <div class="category-section">
@@ -40703,6 +40962,24 @@ ${countMsg}`,
   __decorateClass([
     r5()
   ], PageHome.prototype, "openStatusModal", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "previousDate", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "transitionDirection", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "previousDailyLog", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "previousUserStatus", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "previousTotals", 2);
+  __decorateClass([
+    r5()
+  ], PageHome.prototype, "previousLoading", 2);
 
   // src/components/componentProgressBar/componentProgressBar.ts
   var ComponentProgressBar = class extends i4 {
@@ -41003,7 +41280,6 @@ ${countMsg}`,
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
       z-index: 1;
     }
     .modal-content {
@@ -41110,7 +41386,7 @@ ${countMsg}`,
     render() {
       return b2`
       <div class="status-card" @click="${this.openModal}">
-        ${this.thoughts ? b2`<div class="thoughts-icon" title="${this.thoughts}">📝</div>` : ""}
+        ${this.thoughts ? b2`<div class="thoughts-icon" title="${this.thoughts}"><component-emoji text="note" size="s"></component-emoji></div>` : ""}
         <div class="status-item" title="${this.translationsTexts["basalCalories"]}">
           <span class="emoji"><component-emoji text="fire" size="s"></component-emoji></span>
           ${this.basalCalories > 0 ? b2`<span class="value">${this.basalCalories} ${this.translationsTexts["kcal"]}</span>` : ""}
