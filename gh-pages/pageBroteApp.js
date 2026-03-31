@@ -33911,7 +33911,7 @@ body {
   var package_default = {
     name: "brote",
     private: true,
-    version: "1.0.44",
+    version: "1.0.45",
     type: "module",
     scripts: {
       dev: "vite",
@@ -34042,6 +34042,7 @@ body {
       .page-wrapper {
         grid-area: 1 / 1 / 2 / 2;
         width: 100%;
+        margin-bottom: 24px;
         background-color: var(--background-color, #fff); /* Fallback to prevent transparency issues */
       }
       .page-enter-forward {

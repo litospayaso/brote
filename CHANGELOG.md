@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.45
+
+### Patch Changes
+
+- 899e064: fixing small visual error on group-button navigation
+
 ## 1.0.44
 
 ### Patch Changes

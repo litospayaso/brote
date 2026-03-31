@@ -1,5 +1,11 @@
 # brote-app
 
+## 0.0.19
+
+### Patch Changes
+
+- 899e064: fixing small visual error on group-button navigation
+
 ## 0.0.18
 
 ### Patch Changes
