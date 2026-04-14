@@ -255,6 +255,13 @@ export default class PageUser extends Page {
   @state() showExportModal: boolean = false;
   @state() exportFormat: 'json' | 'csv' = 'json';
   @state() exportStores: Set<string> = new Set(['daily_consumption', 'user_data', 'meals', 'products', 'favorites', 'user_status']);
+  @state() exportBetweenDates: boolean = false;
+  @state() exportStartDate: string = (() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return d.toISOString().split('T')[0];
+  })();
+  @state() exportEndDate: string = new Date().toISOString().split('T')[0];
   @state() private weeklyChartData: BarLineChartData | null = null;
   @state() private radarChartData: ShapeChartData | null = null;
   @state() showImportModal: boolean = false;
@@ -738,7 +745,12 @@ export default class PageUser extends Page {
   }
 
   private async _handleExport() {
-    const { content, extension } = await this.db.getExportData(Array.from(this.exportStores), this.exportFormat);
+    const filterOptions = {
+      exportBetweenDates: this.exportBetweenDates,
+      startDate: this.exportStartDate,
+      endDate: this.exportEndDate
+    };
+    const { content, extension } = await this.db.getExportData(Array.from(this.exportStores), this.exportFormat, filterOptions);
 
     // Filename: BroteData_YYYY-mm-dd_hh-mm-ss.[json|csv]
     const now = new Date();
@@ -1372,6 +1384,26 @@ export default class PageUser extends Page {
               <input type="checkbox" ?checked="${this.exportStores.has('user_status')}" @change="${() => this._toggleExportStore('user_status')}">
               ${this.translations.dailyStatus}
             </label>
+
+                        
+            <div style="margin-left: 24px; margin-bottom: 15px; opacity: ${this.exportStores.has('daily_consumption') || this.exportStores.has('user_status') ? 1 : 0.5}; pointer-events: ${this.exportStores.has('daily_consumption') || this.exportStores.has('user_status') ? 'auto' : 'none'};">
+               <label class="checkbox-label" style="font-size: 0.9em;">
+                 <input type="checkbox" ?checked="${this.exportBetweenDates}" @change="${(e: any) => this.exportBetweenDates = e.target.checked}">
+                 ${this.translations.exportBetweenDates || 'Export between dates'}
+               </label>
+               ${this.exportBetweenDates ? html`
+                 <div style="display: flex; gap: 10px; flex-direction: column; margin-top: 10px; margin-left: 10px;">
+                    <div style="display:flex; align-items:center; gap: 10px;">
+                       <label style="font-size: 0.85em; width: 60px;">${this.translations.startDate || 'Start'}:</label>
+                       <input type="date" .value="${this.exportStartDate}" @change="${(e: any) => this.exportStartDate = e.target.value}" style="flex:1;">
+                    </div>
+                    <div style="display:flex; align-items:center; gap: 10px;">
+                       <label style="font-size: 0.85em; width: 60px;">${this.translations.endDate || 'End'}:</label>
+                       <input type="date" .value="${this.exportEndDate}" @change="${(e: any) => this.exportEndDate = e.target.value}" style="flex:1;">
+                    </div>
+                 </div>
+               ` : ''}
+            </div>
 
             <p style="font-weight: bold; margin: 20px 0 10px;">${this.translations.selectExportFormat}:</p>
             

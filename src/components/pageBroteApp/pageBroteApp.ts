@@ -137,7 +137,7 @@ export default class PageBroteApp extends Page {
     const isTab = ['home', 'search', 'user'].includes(newPage);
     const wasTab = ['home', 'search', 'user'].includes(oldPage);
     let usePushState = (!isTab && wasTab) || (!isTab && !wasTab && oldPage !== newPage);
-    
+
     if (params.replaceState === 'true') {
       usePushState = false;
       delete params.replaceState;
@@ -190,7 +190,8 @@ export default class PageBroteApp extends Page {
         console.log('forcing status bar opacity...');
         await new Promise(resolve => setTimeout(resolve, 500));
         await StatusBar.setOverlaysWebView({ overlay: false });
-        await StatusBar.setBackgroundColor({ color: '#000000' });
+
+        await StatusBar.setBackgroundColor({ color: localStorage.getItem('theme') === 'dark' ? '#212429' : '#ebebeb' });
       }
     } catch (e) {
       console.error('Error configuring StatusBar', e);

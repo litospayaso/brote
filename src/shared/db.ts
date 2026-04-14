@@ -83,7 +83,7 @@ export interface IDBService {
   updateProductInMeals?(product: SearchProductItemInterface): Promise<void>;
   updateProductInLogs?(product: SearchProductItemInterface): Promise<void>;
   deleteMealReference?(mealId: string): Promise<void>;
-  getExportData?(selectedStores: string[], format: 'json' | 'csv'): Promise<{ content: string, extension: string }>;
+  getExportData?(selectedStores: string[], format: 'json' | 'csv', filterOptions?: { exportBetweenDates?: boolean, startDate?: string, endDate?: string }): Promise<{ content: string, extension: string }>;
   importData?(data: any, override: boolean): Promise<number>;
 }
 
@@ -605,7 +605,7 @@ export class DBService implements IDBService {
     });
   }
 
-  async getExportData(selectedStores: string[], format: 'json' | 'csv'): Promise<{ content: string, extension: string }> {
+  async getExportData(selectedStores: string[], format: 'json' | 'csv', filterOptions?: { exportBetweenDates?: boolean, startDate?: string, endDate?: string }): Promise<{ content: string, extension: string }> {
     await this.ensureInit();
     const exportData: any = {};
 
@@ -616,7 +616,11 @@ export class DBService implements IDBService {
     }
 
     if (selectedStores.includes('daily_consumption')) {
-      exportData.daily_consumption = await this._getAllFromStore(STORE_NAME);
+      let data = await this._getAllFromStore(STORE_NAME);
+      if (filterOptions?.exportBetweenDates && filterOptions.startDate && filterOptions.endDate) {
+        data = data.filter((log: any) => log.date >= filterOptions.startDate! && log.date <= filterOptions.endDate!);
+      }
+      exportData.daily_consumption = data;
     }
     if (selectedStores.includes('products')) {
       exportData.products = await this._getAllFromStore(STORE_PRODUCTS);
@@ -628,7 +632,11 @@ export class DBService implements IDBService {
       exportData.meals = await this._getAllFromStore(STORE_MEALS);
     }
     if (selectedStores.includes('user_status')) {
-      exportData.user_status = await this._getAllFromStore(STORE_USER_STATUS);
+      let data = await this._getAllFromStore(STORE_USER_STATUS);
+      if (filterOptions?.exportBetweenDates && filterOptions.startDate && filterOptions.endDate) {
+        data = data.filter((log: any) => log.date >= filterOptions.startDate! && log.date <= filterOptions.endDate!);
+      }
+      exportData.user_status = data;
     }
 
     if (format === 'json') {
