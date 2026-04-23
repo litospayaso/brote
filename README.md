@@ -12,26 +12,29 @@ Brote is a modern, privacy-focused calorie and macronutrient tracking applicatio
 
 ## Download
 
-<a href="https://github-store.org/app?repo=litospayaso/brote" rel="nofollow">
-  <img src="/assets/ghs_download_badge.png" alt="Get it on GitHub Store" height="64" style="max-width: 100%; height: auto; max-height: 64px;">
-</a>
+<div style="display: flex; flex-direction: row; gap: 10px; align-items: center; justify-content: center;">
+  <a href="https://github-store.org/app?repo=litospayaso/brote" rel="nofollow">
+    <img src="/assets/ghs_download_badge.png" alt="Get it on GitHub Store" height="64" style="max-width: 100%; height: auto; max-height: 64px;">
+  </a>
 
-<a href="https://github.com/litospayaso/brote/releases">
-   <img src="/assets/getit-gb-badge.png" alt="Get it on GitHub Store" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-</a>
+  <a href="https://github.com/litospayaso/brote/releases">
+    <img src="/assets/getit-gb-badge.png" alt="Get it on GitHub Store" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
+  </a>
 
-<a href="https://play.google.com/store/apps/details?id=angelitapp.brote">
-   <img src="/assets/getit-gp-badge.png" alt="Get it on Google Play" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-</a>
+  <a href="https://play.google.com/store/apps/details?id=angelitapp.brote">
+    <img src="/assets/getit-gp-badge.png" alt="Get it on Google Play" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
+  </a>
+</div>
+
 
 ## Screenshoots
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-   <img src="/assets/screenshots/image1.jpeg" alt="image 1" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-   <img src="/assets/screenshots/image2.jpeg" alt="image 2" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-   <img src="/assets/screenshots/image3.jpeg" alt="image 3" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-   <img src="/assets/screenshots/image4.jpeg" alt="image 4" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
-   <img src="/assets/screenshots/image5.jpeg" alt="image 5" height="70" style="max-width: 100%; height: auto; max-height: 70px;">
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;">
+   <img src="/assets/screenshots/image1.jpeg" alt="image 1" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
+   <img src="/assets/screenshots/image2.jpeg" alt="image 2" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
+   <img src="/assets/screenshots/image3.jpeg" alt="image 3" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
+   <img src="/assets/screenshots/image4.jpeg" alt="image 4" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
+   <img src="/assets/screenshots/image5.jpeg" alt="image 5" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
 </div>
 
 ## Core Technology Stack
