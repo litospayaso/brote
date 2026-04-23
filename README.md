@@ -30,11 +30,11 @@ Brote is a modern, privacy-focused calorie and macronutrient tracking applicatio
 ## Screenshoots
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center;">
-   <img src="/assets/screenshots/image1.jpeg" alt="image 1" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
-   <img src="/assets/screenshots/image2.jpeg" alt="image 2" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
-   <img src="/assets/screenshots/image3.jpeg" alt="image 3" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
-   <img src="/assets/screenshots/image4.jpeg" alt="image 4" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
-   <img src="/assets/screenshots/image5.jpeg" alt="image 5" height="100" style="max-width: 100%; height: auto; max-height: 100px;">
+   <img src="/assets/screenshots/image1.jpeg" alt="image 1" height="200" style="max-width: 100%; height: auto; max-height: 200px;">
+   <img src="/assets/screenshots/image2.jpeg" alt="image 2" height="200" style="max-width: 100%; height: auto; max-height: 200px;">
+   <img src="/assets/screenshots/image3.jpeg" alt="image 3" height="200" style="max-width: 100%; height: auto; max-height: 200px;">
+   <img src="/assets/screenshots/image4.jpeg" alt="image 4" height="200" style="max-width: 100%; height: auto; max-height: 200px;">
+   <img src="/assets/screenshots/image5.jpeg" alt="image 5" height="200" style="max-width: 100%; height: auto; max-height: 200px;">
 </div>
 
 ## Core Technology Stack
