@@ -1,7 +1,7 @@
 # Brote
 
 <!-- BADGES_START -->
-![version](https://img.shields.io/badge/version-1.0.47-blue) ![test core](https://img.shields.io/badge/test_core-failing-red) ![coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
+![version](https://img.shields.io/badge/version-1.0.48-blue) ![test core](https://img.shields.io/badge/test_core-failing-red) ![coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
 <!-- BADGES_END -->
 
 <p align="center">

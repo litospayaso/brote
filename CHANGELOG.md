@@ -1,5 +1,11 @@
 # brote
 
+## 1.0.48
+
+### Patch Changes
+
+- 1561fbe: updating translations for exporting between dates
+
 ## 1.0.47
 
 ### Patch Changes
